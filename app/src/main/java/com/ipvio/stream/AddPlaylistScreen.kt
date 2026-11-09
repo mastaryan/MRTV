@@ -54,7 +54,7 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
     var stalker by remember { mutableStateOf(pendS != null) }
     var portal by remember { mutableStateOf(pendS?.portal ?: "") }
     var mac by remember { mutableStateOf(pendS?.mac ?: "00:1A:79:") }
-    // Optional: some providers also want serial number and device IDs (as in TiviMate / STB Emu)
+    // Optional: some providers also want serial number and device IDs
     var sn by remember { mutableStateOf(pendS?.sn ?: "") }
     var devId by remember { mutableStateOf(pendS?.id1 ?: "") }
     var devId2 by remember { mutableStateOf(pendS?.id2 ?: "") }
@@ -129,12 +129,14 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
     }
     BackHandler(enabled = canCancel) { PlaylistStore.clearPending(ctx); onDone() }
 
-    // Interrupted in the middle of loading last time: continue automatically without entering anything again
+    // Interrupted in the middle of loading last time: the entries are prefilled (MR TV 2: no automatic restart)
     LaunchedEffect(Unit) {
         val p = pend ?: return@LaunchedEffect
         if (locked && !pendOk) return@LaunchedEffect
         when {
-            p.autoResume && !PlaylistStore.loading -> { if (PlaylistStore.load(ctx, p.url, true, resumed = true)) onDone() }
+            // MR TV 2: an interrupted load (crash, app killed) is never restarted by itself – the fields stay filled in and
+            // the user taps Sign in again, so a load that crashes the app cannot loop at every start
+            p.interrupted && locked -> {}
             p.interrupted -> PlaylistStore.error = "Das Laden wurde mehrmals unterbrochen. Deine Angaben sind gespeichert – drücke „Hinzufügen“, um es erneut zu versuchen."
             p.msg != null -> PlaylistStore.error = p.msg
         }
@@ -221,7 +223,7 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
                     Field(devId, { devId = it }, "Device ID (optional)", Modifier.weight(1f))
                     Field(devId2, { devId2 = it }, "Device ID 2 (optional)", Modifier.weight(1f))
                 }
-                Text("Seriennummer und Device IDs nur eintragen, wenn dein Anbieter sie verlangt (wie bei TiviMate oder STB Emu). Leer = die App erzeugt eigene Werte.", color = Muted, fontSize = 12.sp, lineHeight = 16.sp)
+                Text("Seriennummer und Device IDs nur eintragen, wenn dein Anbieter sie verlangt. Leer = die App erzeugt eigene Werte.", color = Muted, fontSize = 12.sp, lineHeight = 16.sp)
             } else if (!xtream) {
                 Field(url, { url = it }, "http://…/playlist.m3u")
                 Row(Modifier.horizontalScroll(rememberScrollState()).padding(horizontal = 8.dp, vertical = 5.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {

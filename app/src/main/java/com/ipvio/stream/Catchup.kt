@@ -22,7 +22,8 @@ import java.util.TimeZone
  * Stored per playlist in pl_*.cu so the start from the cache works without network. Logic in [CatchupLogic].
  */
 object Catchup {
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    // MR TV 2: an error in the background (also out of memory on a huge panel) must never crash the app
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO + kotlinx.coroutines.CoroutineExceptionHandler { _, _ -> })
     private val client = Net.withTimeouts(15, 90)
     private const val REFRESH_MS = 24 * 3600_000L
 
@@ -219,6 +220,9 @@ object Catchup {
                 return out
             }
         } catch (e: Exception) {
+            return null
+        } catch (e: OutOfMemoryError) {
+            // MR TV 2: a very large channel list does not fit: no archive info instead of a crash
             return null
         }
     }

@@ -605,7 +605,7 @@ private fun LiveHome(live: List<Item>, genres: Map<String, List<Item>>, favs: Li
     for ((k, l) in genres) rows.add((LiveGenre.byKey(k)?.label ?: k) to l.take(40))
     if (rows.isEmpty()) rows.add("Alle Sender" to live.take(40))
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = 48.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        itemsIndexed(rows, key = { _, r -> r.first }) { ri, r ->
+        itemsIndexed(rows, key = { i, r -> "$i|" + r.first }) { ri, r ->
             Column {
                 Text(r.first, color = Color.White, fontSize = 22.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 8.dp, top = 12.dp))
                 androidx.compose.foundation.lazy.LazyRow(

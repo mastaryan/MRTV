@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Build
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.Request
@@ -47,8 +46,11 @@ object CrashReporter {
         crumb("screen $name")
     }
 
-    /** Call once at start, after other handlers are installed: this one runs first, then hands over to them. */
-    fun install(ctx: Context) {
+    /**
+     * Call once at start (MR TV 2: from [MrtvApp.onCreate]), after other handlers are installed: this one runs first,
+     * then hands over to them. Reports saved by an earlier crash are sent right away on a background thread.
+     */
+    fun install(ctx: Context, upload: Boolean = true) {
         if (dir != null) return
         val app = ctx.applicationContext
         dir = File(app.filesDir, "crash").apply { mkdirs() }
@@ -58,8 +60,7 @@ object CrashReporter {
             runCatching { write(t, e) }
             prev?.uncaughtException(t, e)
         }
-        if (enabled) CoroutineScope(Dispatchers.IO).launch {
-            delay(8_000)
+        if (enabled && upload) CoroutineScope(Dispatchers.IO).launch {
             runCatching { uploadPending() }
         }
     }
@@ -106,7 +107,11 @@ object CrashReporter {
     }
 
     /** Sends saved reports; each accepted one is deleted, the rest stays for the next start. */
-    fun uploadPending() {
+    private val uploadLock = Any()
+
+    fun uploadPending() = synchronized(uploadLock) { uploadPendingLocked() }
+
+    private fun uploadPendingLocked() {
         val d = dir ?: return
         if (!enabled) return
         for (f in d.listFiles()?.filter { it.name.endsWith(".json") }?.sortedBy { it.name } ?: emptyList()) {

@@ -17,7 +17,7 @@ import java.security.MessageDigest
  */
 object StalkerLogic {
     /**
-     * [sn] = serial number, [id1] = device ID, [id2] = device ID 2 (as in TiviMate / STB Emu). Optional: some providers
+     * [sn] = serial number, [id1] = device ID, [id2] = device ID 2. Optional: some providers
      * identify the box by them in addition to the MAC. Empty = the app derives its own values from the MAC (as before).
      */
     data class Source(val portal: String, val mac: String, val sn: String = "", val id1: String = "", val id2: String = "") {

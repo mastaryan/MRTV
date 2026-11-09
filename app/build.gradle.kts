@@ -55,8 +55,8 @@ android {
         minSdk = 24
         targetSdk = 37
         // Raise both for every release; the GitHub release tag must match versionName (e.g. tag "v1.1").
-        versionCode = 2
-        versionName = "2.0.1"
+        versionCode = 3
+        versionName = "2.0.2"
         // Name unter dem Symbol; der Debug-Build überschreibt ihn (siehe buildTypes)
         manifestPlaceholders["appLabel"] = "MR TV 2"
         // In-app updater: small JSON file on watchmrtv.com ({"versionCode":2,"versionName":"1.0.1","apk":"MRTV2-1.0.1.apk","notes":"..."}).

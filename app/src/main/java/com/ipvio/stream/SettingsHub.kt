@@ -62,13 +62,11 @@ private val CATS = listOf(
     Cat(AIcon.Download, "Listen importieren", "Letterboxd, MyAnimeList, Trakt"),
     Cat(AIcon.Live, "Boomer Mode", "Ganz einfach: große Kacheln zum Auswählen"),
     Cat(AIcon.Sliders, "Startseite anpassen", "Reihen und Widgets wählen und ordnen"),
-    Cat(AIcon.Info, "Über IPVIO Stream", "Version, Quellen, Zurücksetzen"),
-    // Donate is always the very last entry
-    Cat(AIcon.HeartFilled, "Spende", "Unterstütze IPVIO Stream")
+    Cat(AIcon.Info, "Über IPVIO Stream", "Version, Quellen, Zurücksetzen")
 )
 
-/** MR TV 2: 11 = removed API keys page, 19 = donation link of the upstream developer. */
-private fun hiddenSettingsPages(): Set<Int> = setOf(11, 19)
+/** MR TV 2: 11 = removed API keys page (the slot keeps the page numbers). */
+private fun hiddenSettingsPages(): Set<Int> = setOf(11)
 
 /** Open a settings page directly (e.g. profile circle at the top with only one profile: page "Profiles"). */
 object SettingsNav {
@@ -148,7 +146,6 @@ fun SettingsHub(onAdd: () -> Unit, reload: () -> Unit) {
                 16 -> BoomerPage(ctx) { page = -1 }
                 17 -> HomeLayoutPage(ctx)
                 15 -> ListImportPage(ctx)
-                19 -> DonateSection(ctx)
                 else -> AboutPage(ctx)   // 18
             }
             // Every setting page ends with a way back to the defaults

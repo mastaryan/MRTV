@@ -74,7 +74,11 @@ object Mem {
 object CrashLog {
     private const val PREFS = "ipvio_crash"
 
+    @Volatile private var installed = false
+
     fun install(ctx: Context) {
+        if (installed) return   // MR TV 2: installed in MrtvApp and again in MainActivity – only once
+        installed = true
         val app = ctx.applicationContext
         val prev = Thread.getDefaultUncaughtExceptionHandler()
         Thread.setDefaultUncaughtExceptionHandler { t, e ->

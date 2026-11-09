@@ -151,6 +151,7 @@ fun PlayerScreen(req: PlayReq, zapList: List<Item>, liveAll: List<Item>, seriesI
     // and gives up after 10 s connect time or 15 s read time instead of waiting forever.
     val player = remember {
         val http = DefaultHttpDataSource.Factory()
+            .setUserAgent(Rebrand.USER_AGENT)
             .setAllowCrossProtocolRedirects(true)
             .setConnectTimeoutMs(10_000)
             .setReadTimeoutMs(15_000)

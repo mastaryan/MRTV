@@ -77,7 +77,10 @@ object Xmltv {
     var channelCount by mutableStateOf(0)
     private val progs = ConcurrentHashMap<String, List<EpgEntry>>()
     private val client = Net.withTimeouts(20, 180)
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    // MR TV 2: an error in the background (also out of memory with a huge guide) must never crash the app
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO + kotlinx.coroutines.CoroutineExceptionHandler { _, e ->
+        status = "Keine Programmdaten erhalten (" + e.javaClass.simpleName + ")"
+    })
     private var job: Job? = null
 
     private fun prefs(c: Context) = c.getSharedPreferences("ipvio_epg", Context.MODE_PRIVATE)
@@ -114,7 +117,8 @@ object Xmltv {
                 past[k] = maxOf(past[k] ?: 0, d.coerceAtMost(7))
             }
             for (u in all) {
-                try { parse(u, wanted, map, past) } catch (e: Exception) { err = if (e is PlaylistError) e.message else e.javaClass.simpleName }
+                try { parse(u, wanted, map, past) } catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (e: Exception) { err = if (e is PlaylistError) e.message else e.javaClass.simpleName }
+                catch (e: OutOfMemoryError) { truncated = true; map.values.forEach { if (it.size > 20) it.subList(20, it.size).clear() }; break }
             }
             progs.clear()
             for ((k, v) in map) progs[k] = v.sortedBy { it.start }

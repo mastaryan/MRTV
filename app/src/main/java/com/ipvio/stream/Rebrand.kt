@@ -17,6 +17,9 @@ object Rebrand {
     const val UPSTREAM_URL = "https://github.com/Emrodev/IPVIO-Stream"
     const val SOURCE_URL = "https://github.com/mastaryan/MRTV"
 
+    /** User-Agent for every request to the panel (API, guide, catch-up, playback), like MR TV 1.3's "MRTV/<version>". */
+    val USER_AGENT: String = "MRTV2/" + BuildConfig.VERSION_NAME.filter { it.isLetterOrDigit() || it in ".-_" }.ifEmpty { "2" }
+
     /**
      * MR TV 2: the MR TV Xtream server, built in at build time (BuildConfig.SERVER_URL from the git-ignored
      * server.properties, -PMRTV2_SERVER_URL or the MRTV2_SERVER_URL environment variable). Empty = normal IPVIO login.

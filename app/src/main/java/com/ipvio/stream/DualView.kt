@@ -59,6 +59,7 @@ internal fun SecondStream(item: Item, split: Boolean, audioOn: Boolean, modifier
     val p = remember {
         runCatching {
             val http = DefaultHttpDataSource.Factory()
+                .setUserAgent(Rebrand.USER_AGENT)
                 .setAllowCrossProtocolRedirects(true)
                 .setConnectTimeoutMs(10_000)
                 .setReadTimeoutMs(15_000)

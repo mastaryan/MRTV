@@ -220,13 +220,9 @@ Auf dem Handy im Querformat¦Op de telefoon in landschapsstand
 Die App ist für den Fernseher gebaut und wirkt quer am besten. Aus: dreht mit dem Gerät. Im Player: Tippen zeigt die Steuerung, Doppeltippen links/rechts spult, in der Mitte Pause.¦De app is gebouwd voor de tv en werkt het best in landschapsstand. Uit: draait mee met het apparaat. In de speler: tikken toont de bediening, dubbeltikken links/rechts spoelt, in het midden pauze.
 Oder mit der Handy-Kamera scannen¦Of scan met de camera van je telefoon
 QR-Code scannen¦QR-code scannen
-Spende¦Donatie
-Hallo, ich bin der nigerianische Prinz und brauche dringend deine Hilfe! Spaß beiseite: Die App kostet dich nichts, mich aber ein paar Nächte Schlaf und sehr viel Kaffee. Wenn du mir ein paar Euro schicken möchtest, tanzt mein Kontostand vor Freude. Kein Zwang: Die App bleibt kostenlos, werbefrei und GPL-lizenziert.¦Hallo, ik ben de Nigeriaanse prins en ik heb dringend je hulp nodig! Maar zonder gekheid: de app kost jou niets, maar mij wel een paar slapeloze nachten en HEEL veel koffie. Wil je me een paar euro sturen, dan danst mijn bankrekening van vreugde. Geen verplichting: de app blijft gratis, reclamevrij en onder GPL-licentie.
 Mit der Handy-Kamera scannen¦Scannen met de camera van je telefoon
 Folgen werden geladen …¦Afleveringen worden geladen …
 Die Folgen konnten nicht geladen werden. Verbindung oder Zugang prüfen.¦De afleveringen konden niet worden geladen. Controleer de verbinding of toegang.
-Dieser QR-Code ist der PayPal-Link für meine Spende. Mit der Handy-Kamera scannen, dann öffnet sich PayPal.¦Deze QR-code is de PayPal-link voor mijn donatie. Scan hem met de camera van je telefoon, dan opent PayPal.
-Unterstütze IPVIO Stream¦Steun IPVIO Stream
 Raster & Ansicht¦Raster & weergave
 American Football¦American football
 Basketball¦Basketbal

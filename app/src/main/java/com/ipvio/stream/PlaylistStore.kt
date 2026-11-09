@@ -158,12 +158,14 @@ object PlaylistStore {
     /** Last parse was too big: show the language selection on the next load with a UI. */
     @Volatile private var askNext = false
     @Volatile private var call: Call? = null
+    /** MR TV 2: the running API loader, so [cancel] can stop its requests. */
+    @Volatile private var apiLoader: XtreamApi? = null
 
     private val client = Net.withTimeouts(20, 120).newBuilder().addInterceptor(TlsFallback.interceptor()).build()
 
     private val XTREAM = Regex("""^(https?://[^/]+)/get\.php\?.*?username=([^&]+).*?password=([^&]+)""")
-    // Common player identifier: some providers throttle unknown identifiers heavily (browser/VLC then load much faster)
-    private const val UA = "VLC/3.0.21 LibVLC/3.0.21"
+    // MR TV 2: one identifier for every panel request, like MR TV 1.3 ("MRTV2/<version>", see Rebrand.USER_AGENT)
+    private val UA: String get() = Rebrand.USER_AGENT
     /** A fully downloaded but not yet parsed list is reused for this long. */
     private const val RAW_MAX_AGE = 12 * 3_600_000L
     /** Free space that should remain at least after the download. */
@@ -208,6 +210,7 @@ object PlaylistStore {
         askRequested = false
         langAsk?.choose(null)
         runCatching { call?.cancel() }
+        runCatching { apiLoader?.cancelAll() }
         job?.cancel()
     }
 
@@ -474,6 +477,8 @@ object PlaylistStore {
         }
         StalkerLogic.parse(u)?.let { return downloadStalker(c, u, it) }
         val acct = XtreamLogic.fromUrl(u) ?: return downloadList(c, u)
+        // MR TV 2: the built-in MR TV server refuses get.php (error 884) – go straight to its API, like MR TV 1.3
+        if (Rebrand.isBuiltInServer(u)) return downloadApi(c, u, acct)
         // If get.php has already failed once for this login, use the API right away
         if (useApi(c, u)) return downloadApi(c, u, acct)
         val got = try {
@@ -491,7 +496,10 @@ object PlaylistStore {
     private fun apiKey(u: String) = "xt_api_" + key(u)
     private fun useApi(c: Context, u: String) = prefs(c).getBoolean(apiKey(u), false)
 
-    /** get.php failed: load via player_api.php and remember that for this login. If that fails too, the clearer error counts. */
+    /**
+     * get.php failed: load via player_api.php and remember that for this login.
+     * MR TV 2: if that fails too, the API's own error is shown (not the get.php one, which hid the real cause).
+     */
     private fun apiInstead(c: Context, u: String, acct: XtreamLogic.Acct, first: PlaylistError): Pair<File, Charset> {
         if (cancelled()) throw CancellationException("abgebrochen")
         return try {
@@ -500,12 +508,8 @@ object PlaylistStore {
             r
         } catch (e: CancellationException) {
             throw e
-        } catch (e: PlaylistError) {
-            throw if (e.message?.startsWith("Zugang abgelehnt") == true) e else first
-        } catch (e: IOException) {
-            throw first
         } catch (e: Exception) {
-            throw first
+            throw e
         }
     }
 
@@ -524,6 +528,9 @@ object PlaylistStore {
         raw.delete(); part.delete()
         bytesRead = 0L; totalBytes = -1L; downloadDone = false
         val api = XtreamApi(client, UA)
+        // MR TV 2: the built-in server gets one request at a time (channels, movies, series)
+        api.parallel = !Rebrand.isBuiltInServer(u)
+        apiLoader = api
         api.onPhase = { phase = it }
         api.check = { if (cancelled()) throw CancellationException("abgebrochen") }
         val counter = CountingOut(FileOutputStream(part)) { bytesRead = it }
@@ -533,6 +540,8 @@ object PlaylistStore {
         } catch (e: Throwable) {
             part.delete()
             throw e
+        } finally {
+            apiLoader = null
         }
         info.writeText(LoadLogic.PartInfo(key(u), null, null, "UTF-8").encode())
         if (!part.renameTo(raw)) throw IOException("Datei konnte nicht umbenannt werden")
