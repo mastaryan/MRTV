@@ -17,6 +17,15 @@ fun secret(name: String): String =
 fun secretId(name: String): String =
     (secrets.getProperty(name) ?: System.getenv(name) ?: "").trim().filter { it.isLetterOrDigit() || it == '-' || it == '.' || it == '_' }
 
+// MR TV 2: crash webhook settings (see defaultConfig). Order: -P property, environment, crash.properties (git-ignored).
+val crashProps = Properties().apply {
+    val f = rootProject.file("crash.properties")
+    if (f.exists()) f.inputStream().use { load(it) }
+}
+fun buildSecret(name: String): String =
+    ((project.findProperty(name) as String?) ?: System.getenv(name) ?: crashProps.getProperty(name) ?: "")
+        .trim().replace("\\", "\\\\").replace("\"", "\\\"")
+
 // Release signing from "keystore.properties" (ignored by Git, see docs/RELEASE.md). Every release MUST be signed with the
 // same key: only then does Android install an update over the old version and keep history, favorites and settings.
 val keystore = Properties().apply {
@@ -47,6 +56,12 @@ android {
 
         // MR TV 2: third-party metadata services (TMDB, OMDb/IMDb/Rotten Tomatoes, TheIntroDB) are switched off.
         // The app only uses the provider's own data (Xtream/M3U/Stalker), so no API keys are needed or read.
+        // MR TV 2 crash reports: webhook URL and Authorization value come only from the build machine
+        // (env MRTV_CRASH_WEBHOOK_URL / MRTV_CRASH_WEBHOOK_KEY, -P properties, or the git-ignored crash.properties).
+        // The key is sent as "Authorization: Bearer <key>".
+        // Unset = reporter off. Never commit these values.
+        buildConfigField("String", "CRASH_WEBHOOK_URL", "\"${buildSecret("MRTV_CRASH_WEBHOOK_URL")}\"")
+        buildConfigField("String", "CRASH_WEBHOOK_KEY", "\"${buildSecret("MRTV_CRASH_WEBHOOK_KEY")}\"")
         val metadataServices = false
         buildConfigField("boolean", "METADATA_SERVICES", metadataServices.toString())
         buildConfigField("String", "TMDB_KEY", "\"${if (metadataServices) secret("TMDB_KEY") else ""}\"")
