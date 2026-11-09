@@ -136,7 +136,7 @@ fun HeroMetaLine(item: Item, m: Meta?, dots: Boolean = false) {
             }
             Text(p, color = Color(0xFFD4D4DA), fontSize = spx(if (dots) 15 else 16), raw = raw, maxLines = 1)
         }
-        if (!dots && m != null && (m.imdbRating != null || m.rtRating != null || m.rating != null)) {
+        if (!dots && m != null && m.rating != null) {
             if (parts.isNotEmpty()) Box(Modifier.width(1.dp).height(dpx(16)).background(Color(0x66FFFFFF)))
             ScoreRow(m, 17)
         }
@@ -151,23 +151,13 @@ fun seriesCountText(item: Item): String {
 }
 
 /**
- * Ratings: IMDb (yellow) and Rotten Tomatoes (tomato + percent) if available; otherwise the TMDB rating with a star.
+ * Rating from the provider with a star.
  * [sp] = font size in design pixels.
  */
 @Composable
 fun ScoreRow(m: Meta, sp: Int) {
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(dpx(sp * 0.6f))) {
-        m.imdbRating?.let {
-            Text(raw = true, text = "IMDb $it", color = Color.Black, fontSize = spx(sp * 0.9f), fontWeight = FontWeight.ExtraBold, maxLines = 1,
-                modifier = Modifier.clip(RoundedCornerShape(dpx(5))).background(Color(0xFFF5C518)).padding(horizontal = dpx(sp * 0.5f), vertical = dpx(sp * 0.12f)))
-        }
-        m.rtRating?.let {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(dpx(sp * 0.3f))) {
-                AppIcon(AIcon.Tomato, Color(0xFFFA320A), size = dpx(sp * 1.1f))
-                Text(raw = true, text = it, color = Color.White, fontSize = spx(sp), fontWeight = FontWeight.Bold, maxLines = 1)
-            }
-        }
-        if (m.imdbRating == null && m.rtRating == null) m.rating?.let { r ->
+        m.rating?.let { r ->
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(dpx(sp * 0.3f))) {
                 AppIcon(AIcon.Star, Accent1, size = dpx(sp * 1.1f))
                 Text(raw = true, text = String.format("%.1f", r), color = Accent1, fontSize = spx(sp), fontWeight = FontWeight.SemiBold)
@@ -180,7 +170,7 @@ fun ScoreRow(m: Meta, sp: Int) {
 @Composable
 fun rememberFullMeta(item: Item, base: Meta?, enabled: Boolean = true): Meta? {
     val ctx = LocalContext.current
-    val v by produceState(base, item.id, base?.tmdbId, enabled) {
+    val v by produceState(base, item.id, base?.metaId, enabled) {
         value = base
         if (enabled && item.kind != Kind.LIVE && (base != null || !MetaRepo.enabled() || MetaRepo.missed(item)) && MetaRepo.usable(item)) MetaRepo.extended(ctx, item)?.let { value = it }
     }

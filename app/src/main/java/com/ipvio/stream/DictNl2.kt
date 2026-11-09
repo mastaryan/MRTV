@@ -42,7 +42,6 @@ Wirklich? OK zum Bestätigen¦Zeker weten? OK om te bevestigen
 ‹ Zurück¦‹ Terug
 Automatisch (Gerät)¦Automatisch (apparaat)
 Sprache der App¦Taal van de app
-Alle Menüs und Hinweise erscheinen in dieser Sprache. Beschreibungen, Besetzung und Titel-Infos kommen von TMDB und werden in derselben Sprache geladen, sobald du einen Titel öffnest. Namen von Sendern, Filmen und Kategorien stammen von deinem Anbieter und bleiben unverändert.¦Alle menu's en meldingen verschijnen in deze taal. Beschrijvingen, cast en titelinfo komen van TMDB en worden in dezelfde taal geladen zodra je een titel opent. Namen van zenders, films en categorieën komen van je aanbieder en blijven ongewijzigd.
 Uhrzeit¦Tijd
 Zeitformat¦Tijdnotatie
 24 Stunden (14:30)¦24 uur (14:30)
@@ -123,7 +122,6 @@ Startet die nächste Folge nach dem Abspann von selbst.¦Start de volgende aflev
 Zeigt, um wie viel Uhr der Film voraussichtlich endet.¦Toont hoe laat de film naar verwachting eindigt.
 Intro automatisch überspringen¦Intro automatisch overslaan
 Überspringt bekannte Intros ohne Rückfrage.¦Slaat bekende intro's over zonder te vragen.
-Bedienung: OK = Pause, Links/Rechts = Sprung (Halten = weiter springen), mehrere Sprünge werden gesammelt, Zurück beim Spulen = abbrechen, Hoch = Zeitleiste, Runter = Steuerleiste. Intro-Zeiten stammen aus der Community-Datenbank TheIntroDB und gibt es nicht für jede Serie. Die Stream-Info erscheint nur bei Filmen und Serien.¦Bediening: OK = pauze, links/rechts = sprong (ingedrukt houden = verder springen), meerdere sprongen worden verzameld, Terug tijdens het spoelen = annuleren, omhoog = tijdlijn, omlaag = bedieningsbalk. Introtijden komen uit de communitydatabase TheIntroDB en zijn er niet voor elke serie. De streaminfo verschijnt alleen bij films en series.
 Farbthema¦Kleurthema
 Eigene Farbe¦Eigen kleur
 Übernehmen¦Toepassen
@@ -155,7 +153,6 @@ Ladezustand¦Laadstatus
 Programm (EPG)¦Programma (EPG)
 {0} · {1} Sender¦{0} · {1} zenders
 lädt {0}/{1}¦laadt {0}/{1}
-kein TMDB-Schlüssel¦geen TMDB-sleutel
 Letzter Fehler¦Laatste fout
 Fehler seit Start¦Fouten sinds de start
 Playlist neu laden¦Playlist opnieuw laden
@@ -166,7 +163,6 @@ Tonspur¦Audiospoor
 Automatische Genres¦Automatische genres
 Aus = Kategorien deines Anbieters¦Uit = categorieën van je aanbieder
 Automatische Genres sortieren Titel nach Genre (Anime = Animation aus Japan). Beim ersten Mal dauert das einige Minuten, danach ist alles gespeichert. Aus = die Kategorien deines Anbieters in der Reihenfolge deines Anbieters. In der Ansicht „Kategorien“ kannst du jederzeit zwischen beiden wechseln.¦Automatische genres sorteren titels op genre (anime = animatie uit Japan). De eerste keer duurt dat enkele minuten, daarna is alles opgeslagen. Uit = de categorieën van je aanbieder in de volgorde van je aanbieder. In de weergave „Categorieën” kun je op elk moment tussen beide wisselen.
-Automatische Genres brauchen den TMDB-Schlüssel in Config.kt.¦Automatische genres hebben de TMDB-sleutel in Config.kt nodig.
 TV-Programm (EPG)¦Tv-programma (EPG)
 Programm bei {0} von {1} Sendern möglich¦Programma mogelijk bij {0} van {1} zenders
 XMLTV: {0}¦XMLTV: {0}
@@ -200,7 +196,6 @@ Nächste Aktualisierung:¦Volgende update:
 Zugangsdaten werden nur auf diesem Gerät gespeichert und hier nicht angezeigt. Es ist immer eine Playlist aktiv. Mit „Aktivieren“ wechselst du die Liste.¦Inloggegevens worden alleen op dit apparaat opgeslagen en hier niet getoond. Er is altijd één playlist actief. Met „Activeren” wissel je van lijst.
 IPVIO Stream · Version¦IPVIO Stream · Versie
 IPVIO Stream ist ein Player und liefert selbst keine Inhalte. Nutze nur Quellen, für die du eine Berechtigung hast.¦IPVIO Stream is een speler en levert zelf geen inhoud. Gebruik alleen bronnen waarvoor je toestemming hebt.
-Dieses Produkt verwendet die TMDB-API, wird aber nicht von TMDB unterstützt oder zertifiziert. Intro-Zeiten: TheIntroDB.¦Dit product gebruikt de TMDB-API, maar wordt niet door TMDB ondersteund of gecertificeerd. Introtijden: TheIntroDB.
 Systemeinstellungen der App¦Systeeminstellingen van de app
 Setzt Ansicht, Design, Menü, Player, Ton und Start auf die Standardwerte. Playlists, Favoriten, Verlauf und Fortsetzen-Positionen bleiben erhalten. Zwischenspeicher leerst du unter „Speicher“.¦Zet weergave, ontwerp, menu, speler, geluid en start terug op de standaardwaarden. Playlists, favorieten, geschiedenis en hervatposities blijven behouden. De cache maak je leeg onder „Opslag”.
 Directing¦Regie

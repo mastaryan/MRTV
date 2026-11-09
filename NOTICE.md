@@ -10,13 +10,17 @@ GNU General Public License v3 (see `LICENSE`). Third-party components and their 
 
 Changes made to IPVIO Stream 1.2 (upstream commit `b65e838`):
 
-- New name **MR TV 2**, new app ID `com.watchmrtv.tv2`, version 1.0.0 (versionCode 1).
+- New name **MR TV 2**, new app ID `com.watchmrtv.tv2`, version 1.0.0 (versionCode 1); current version 2.0.1 (versionCode 2).
 - MR TV logo as launcher icon, adaptive icon, Android TV / Fire TV banner, splash screen and in-app brand mark
   (`branding/`).
 - Default design uses the watchmrtv.com colors (silver `#C9CED6` / `#E2E6EC` on charcoal `#0D0E10`).
-- Third-party metadata services switched off: TMDB, OMDb (IMDb / Rotten Tomatoes ratings) and TheIntroDB.
-  The app uses only the provider's own data (Xtream / M3U / Stalker). No API keys are needed.
-  (`BuildConfig.METADATA_SERVICES`, see `app/build.gradle.kts`.)
+- Third-party metadata services removed (version 2.0.1; switched off in 1.0.0): the TMDB, OMDb (IMDb / Rotten Tomatoes
+  ratings) and TheIntroDB code, its settings page, API keys and network calls were deleted (`Meta.kt`, `Credits.kt`,
+  `Config.kt`, `Trending.kt`, `Epg.kt`, `SettingsHub.kt` and others). The app uses only the provider's own data.
+- Built-in MR TV server (version 2.0.1): when a server address is given at build time (git-ignored
+  `server.properties`, see `server.properties.example`), the login only asks for username and password and the
+  address is not shown in the app (`Rebrand.kt`, `AddPlaylistScreen.kt`, `PhoneImport.kt`, `PlaylistStore.kt`).
+  Without it the normal IPVIO login (server, M3U, Stalker) is used.
 - The in-app updater checks `https://watchmrtv.com/mrtv2-version.json` instead of IPVIO's GitHub releases.
 - The upstream donation page is hidden; the upstream credit is shown in Settings > About.
 - Visible "IPVIO" texts are shown as "MR TV 2" (`Rebrand.kt`, `DictMrtv.kt`).

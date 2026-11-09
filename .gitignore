@@ -28,3 +28,6 @@ mrtv2-release/
 
 # MR TV 2 crash webhook (URL + key) – never commit
 crash.properties
+
+# MR TV 2 built-in server address – never commit
+server.properties

@@ -42,7 +42,9 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
     // Last entered playlist that has not finished loading (crash, power loss, abort): prefill
     val pend = remember { PlaylistStore.pending(ctx) }
     val pendX = remember { pend?.let { LoadLogic.xtreamParts(it.url) } }
-    var xtream by remember { mutableStateOf(pendX != null) }
+    // MR TV 2: built-in server (see Rebrand.SERVER_URL): only username and password, no server field, no M3U/Stalker
+    val locked = Rebrand.SERVER_LOCKED
+    var xtream by remember { mutableStateOf(locked || pendX != null) }
     // Runde 20: Stalker-Portal (Portal-Adresse + MAC-Adresse)
     val pendS = remember { pend?.url?.let { StalkerLogic.parse(it) } }
     var stalker by remember { mutableStateOf(pendS != null) }
@@ -53,15 +55,17 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
     var devId by remember { mutableStateOf(pendS?.id1 ?: "") }
     var devId2 by remember { mutableStateOf(pendS?.id2 ?: "") }
     var url by remember { mutableStateOf(if (pend != null && pendX == null && pendS == null) pend.url else "") }
-    var host by remember { mutableStateOf(pendX?.first ?: "") }
-    var user by remember { mutableStateOf(pendX?.second ?: "") }
-    var pass by remember { mutableStateOf(pendX?.third ?: "") }
+    val pendOk = pendX != null && (!locked || Rebrand.isBuiltInServer(pendX.first))
+    var host by remember { mutableStateOf(if (locked) Rebrand.SERVER_URL else pendX?.first ?: "") }
+    var user by remember { mutableStateOf(if (pendOk) pendX?.second ?: "" else "") }
+    var pass by remember { mutableStateOf(if (pendOk) pendX?.third ?: "" else "") }
     var showPass by remember { mutableStateOf(false) }
     // Send from the phone: local mini server as long as this screen is open
     val ip = remember { PhoneImport.localIp() }
     val receiver = remember {
         PhoneImport { inp ->
             Handler(Looper.getMainLooper()).post {
+                if (locked && !inp.isXtream) { PlaylistStore.error = "Bitte Benutzername und Passwort eingeben."; return@post }
                 val u = if (inp.isXtream) PlaylistStore.xtreamUrl(inp.host, inp.user, inp.pass) else inp.url
                 stalker = false
                 if (inp.isXtream) { xtream = true; host = inp.host; user = inp.user; pass = inp.pass } else { xtream = false; url = inp.url }
@@ -73,8 +77,11 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
     var serving by remember { mutableStateOf(false) }
     DisposableEffect(Unit) {
         // Runde 20: Playlist-Datei vom Handy hochladen, Absturzbericht am Handy lesen
-        receiver.uploadDir = ImportFiles.tmpDir(ctx)
-        receiver.saveUpload = { name, f -> ImportFiles.save(ctx, name, f) }
+        if (locked) receiver.loginServer = Rebrand.SERVER_URL
+        else {
+            receiver.uploadDir = ImportFiles.tmpDir(ctx)
+            receiver.saveUpload = { name, f -> ImportFiles.save(ctx, name, f) }
+        }
         receiver.crash = { ImportFiles.crashText(ctx) }
         // Full transfer from another device (settings, history, playlists with logins): also possible from the phone page
         receiver.restore = { t ->
@@ -121,6 +128,7 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
     // Interrupted in the middle of loading last time: continue automatically without entering anything again
     LaunchedEffect(Unit) {
         val p = pend ?: return@LaunchedEffect
+        if (locked && !pendOk) return@LaunchedEffect
         when {
             p.autoResume && !PlaylistStore.loading -> { if (PlaylistStore.load(ctx, p.url, true, resumed = true)) onDone() }
             p.interrupted -> PlaylistStore.error = "Das Laden wurde mehrmals unterbrochen. Deine Angaben sind gespeichert – drücke „Hinzufügen“, um es erneut zu versuchen."
@@ -161,10 +169,10 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 BrandMark(Modifier.size(36.dp))
                 Text(Rebrand.APP_NAME, raw = true, color = Color.White, fontSize = 28.sp, fontWeight = FontWeight.ExtraBold)
-                Text("Playlist hinzufügen", color = Color.White, fontSize = 22.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 14.dp))
+                if (!locked) Text("Playlist hinzufügen", color = Color.White, fontSize = 22.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 14.dp))
             }
             // Many new users ask which link to enter: say clearly that the app brings no content of its own
-            Column(
+            if (!locked) Column(
                 Modifier.fillMaxWidth().clip(RoundedCornerShape(DS.RadiusM)).background(Color(0x14FFFFFF)).border(1.dp, Surf2, RoundedCornerShape(DS.RadiusM)).padding(10.dp),
                 verticalArrangement = Arrangement.spacedBy(2.dp)
             ) {
@@ -173,7 +181,7 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
                     color = Muted, fontSize = 12.sp, lineHeight = 16.sp)
             }
             // The padding sits inside the scrolling row: an enlarged (focused) button must not be cut off at its edge
-            Row(Modifier.horizontalScroll(rememberScrollState()).padding(horizontal = 8.dp, vertical = 5.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            if (!locked) Row(Modifier.horizontalScroll(rememberScrollState()).padding(horizontal = 8.dp, vertical = 5.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 FocusButton("M3U-Link", Modifier.focusRequester(startFocus), primary = !xtream && !stalker, compact = true) { xtream = false; stalker = false }
                 FocusButton("Xtream-Login", primary = xtream && !stalker, compact = true) { xtream = true; stalker = false }
                 FocusButton("Stalker-Portal", primary = stalker, compact = true) { stalker = true; xtream = false }
@@ -203,7 +211,7 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
                     }
                 }
             } else {
-                Field(host, { host = it }, "Server (z. B. http://server.tld:8080)")
+                if (!locked) Field(host, { host = it }, "Server (z. B. http://server.tld:8080)")
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Field(user, { user = it }, "Benutzername", Modifier.weight(1f))
                     Field(pass, { pass = it }, "Passwort", Modifier.weight(1f), password = !showPass)
@@ -214,8 +222,14 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
             }
             PlaylistStore.error?.let { Text(it, color = DS.Danger, fontSize = 14.sp, lineHeight = 18.sp) }
             Row(Modifier.horizontalScroll(rememberScrollState()).padding(horizontal = 8.dp, vertical = 5.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                FocusButton(if (PlaylistStore.loading) "Lade…" else "Hinzufügen", primary = true, compact = true) {
+                FocusButton(if (PlaylistStore.loading) "Lade…" else if (locked) "Anmelden" else "Hinzufügen", modifier = if (locked) Modifier.focusRequester(startFocus) else Modifier, primary = true, compact = true) {
                     if (PlaylistStore.loading) return@FocusButton
+                    if (locked) {
+                        val lockedUrl = PlaylistStore.xtreamUrl(Rebrand.SERVER_URL, user, pass)
+                        if (lockedUrl == null) PlaylistStore.error = "Bitte Benutzername und Passwort eingeben."
+                        else scope.launch { if (PlaylistStore.load(ctx, lockedUrl, true)) onDone() }
+                        return@FocusButton
+                    }
                     val finalUrl = if (stalker) StalkerLogic.source(portal, mac, sn, devId, devId2)?.encode() else if (xtream) PlaylistStore.xtreamUrl(host, user, pass) else url
                     if (finalUrl == null) PlaylistStore.error = if (stalker) "Angaben unvollständig: Portal-Adresse und MAC-Adresse (z. B. 00:1A:79:12:34:56) nötig." else "Angaben unvollständig: Server, Benutzername und Passwort nötig."
                     else scope.launch { if (PlaylistStore.load(ctx, finalUrl, true)) onDone() }
@@ -225,8 +239,8 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
                 else FocusButton("Weiter ohne Playlist", compact = true) { PlaylistStore.clearPending(ctx); PlaylistStore.error = null; onDone() }
             }
             // Second device? Take everything over in one step
-            Text("Schon ein anderes Gerät mit IPVIO Stream? Spiele die Sicherung ein: Playlists, Zugangsdaten, Verlauf, Favoriten und Einstellungen sind danach sofort da.", color = Muted, fontSize = 12.sp, lineHeight = 16.sp)
-            Row(Modifier.padding(horizontal = 8.dp, vertical = 5.dp)) {
+            if (!locked) Text("Schon ein anderes Gerät mit IPVIO Stream? Spiele die Sicherung ein: Playlists, Zugangsdaten, Verlauf, Favoriten und Einstellungen sind danach sofort da.", color = Muted, fontSize = 12.sp, lineHeight = 16.sp)
+            if (!locked) Row(Modifier.padding(horizontal = 8.dp, vertical = 5.dp)) {
                 FocusButton("Sicherung von anderem Gerät einspielen", compact = true) {
                     try { pickBackup.launch(arrayOf("*/*")) }
                     catch (e: Exception) { PlaylistStore.error = "Auf diesem Gerät gibt es keine Dateiauswahl. Spiele die Sicherung über die Handy-Seite rechts ein." }
@@ -234,7 +248,7 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
             }
         }
         // Right: instructions for input on the phone
-        if (!compact) PhoneCard(Modifier.weight(1f), if (serving && ip != null) "http://" + ip + ":" + receiver.port else null, receiver.code)
+        if (!compact) PhoneCard(Modifier.weight(1f), if (serving && ip != null) "http://" + ip + ":" + receiver.port else null, receiver.code, locked)
     }
     }
 }
@@ -258,7 +272,7 @@ val InstantSpec = object : androidx.compose.foundation.gestures.BringIntoViewSpe
 
 /** Card with instructions: enter the playlist conveniently on the phone instead of with the remote. */
 @Composable
-private fun PhoneCard(modifier: Modifier, address: String?, code: String) {
+private fun PhoneCard(modifier: Modifier, address: String?, code: String, locked: Boolean = false) {
     val shape = RoundedCornerShape(DS.RadiusXl)
     var bigQr by remember { mutableStateOf(false) }
     // The card scrolls (the focused QR code brings the rest into view), so nothing is cut off on small screens
@@ -304,7 +318,7 @@ private fun PhoneCard(modifier: Modifier, address: String?, code: String) {
                 Text("Code", color = Muted, fontSize = 18.sp)
                 Text(code, color = Color.White, fontSize = 30.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 4.sp)
             }
-            Step(4, "Zugangsdaten eintragen oder eine M3U-Datei hochladen und senden. Die Playlist wird danach automatisch geladen.")
+            Step(4, if (locked) "Benutzername und Passwort eintragen und senden. Die Playlist wird danach automatisch geladen." else "Zugangsdaten eintragen oder eine M3U-Datei hochladen und senden. Die Playlist wird danach automatisch geladen.")
         }
     }
     if (bigQr && address != null) Dialog(onDismissRequest = { bigQr = false }, properties = DialogProperties(usePlatformDefaultWidth = false)) {

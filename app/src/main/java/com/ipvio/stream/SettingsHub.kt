@@ -55,7 +55,7 @@ private val CATS = listOf(
     Cat(AIcon.Live, "Live-TV & Guide", "TV-Programm, Senderlisten, Erinnerungen"),
     Cat(AIcon.Download, "Playlists", "Verwalten, Sprachen, Aktualisieren"),
     Cat(AIcon.Person, "Profile", "Verlauf, Favoriten, Jugendschutz je Person"),
-    Cat(AIcon.Star, "API-Schlüssel", "TMDB, IMDb und Rotten Tomatoes"),
+    Cat(AIcon.Star, "", ""),   // MR TV 2: upstream page 11 (API keys) was removed; the slot keeps the page numbers
     Cat(AIcon.Lock, "Jugendschutz", "PIN, Inhalte ab 18"),
     Cat(AIcon.Storage, "Speicher", "Cache, Verlauf, Fortsetzen"),
     Cat(AIcon.Pulse, "Diagnose", "Status und Fehlersuche"),
@@ -67,8 +67,8 @@ private val CATS = listOf(
     Cat(AIcon.HeartFilled, "Spende", "Unterstütze IPVIO Stream")
 )
 
-/** MR TV 2: 11 = API keys (no metadata services), 19 = donation link of the upstream developer. */
-private fun hiddenSettingsPages(): Set<Int> = if (Rebrand.METADATA_SERVICES) setOf(19) else setOf(11, 19)
+/** MR TV 2: 11 = removed API keys page, 19 = donation link of the upstream developer. */
+private fun hiddenSettingsPages(): Set<Int> = setOf(11, 19)
 
 /** Open a settings page directly (e.g. profile circle at the top with only one profile: page "Profiles"). */
 object SettingsNav {
@@ -142,7 +142,6 @@ fun SettingsHub(onAdd: () -> Unit, reload: () -> Unit) {
                 8 -> LivePage(ctx)
                 9 -> PlaylistPage(ctx, onAdd, reload)
                 10 -> ProfilesPage(ctx) { page = -1 }
-                11 -> ApiKeysPage(ctx)
                 12 -> ParentalPage(ctx) { page = -1 }
                 13 -> StoragePage(ctx)
                 14 -> DiagPage(ctx, reload)
@@ -394,8 +393,7 @@ private fun RegionPage(ctx: Context) {
     SelectRow("Sprache der App", if (li == 0) "Automatisch (Gerät)" else I18nCore.NATIVE[li - 1], langOpts, li) {
         General.setLang(ctx, if (it == 0) "" else I18nCore.CODES[it - 1])
     }
-    if (!Rebrand.METADATA_SERVICES) Hint("Alle Menüs und Hinweise erscheinen in dieser Sprache. Namen und Beschreibungen von Sendern, Filmen, Serien und Kategorien stammen von deinem Anbieter und bleiben unverändert.")
-    else Hint("Alle Menüs und Hinweise erscheinen in dieser Sprache. Beschreibungen, Besetzung und Titel-Infos kommen von TMDB und werden in derselben Sprache geladen, sobald du einen Titel öffnest. Namen von Sendern, Filmen und Kategorien stammen von deinem Anbieter und bleiben unverändert.")
+    Hint("Alle Menüs und Hinweise erscheinen in dieser Sprache. Namen und Beschreibungen von Sendern, Filmen, Serien und Kategorien stammen von deinem Anbieter und bleiben unverändert.")
     SectionTitle("Uhrzeit")
     val fmts = listOf("Automatisch (Gerät)", "24 Stunden (14:30)", "12 Stunden (2:30 PM)")
     SelectRow("Zeitformat", fmts[General.timeFmt], fmts, General.timeFmt) { General.setTimeFmt(ctx, it) }
@@ -655,21 +653,9 @@ private fun PlayerPage(ctx: Context) {
     ToggleRow("Endzeit anzeigen", "Zeigt, um wie viel Uhr der Film voraussichtlich endet.", AppSettings.showEndTime) {
         AppSettings.setPlayerExtra(ctx, AppSettings.autoNext, AppSettings.hideSec, it, AppSettings.autoSkipIntro)
     }
-    SectionTitle(if (Rebrand.METADATA_SERVICES) "Intro und nächste Folge" else "Nächste Folge")
-    // MR TV 2: intro times come from TheIntroDB (off), so the intro switches are hidden
-    if (Rebrand.METADATA_SERVICES) {
-    ToggleRow("Intro überspringen anbieten", "Zeigt bei Serien einen Knopf „Intro überspringen“, wenn Intro-Zeiten bekannt sind.", AppSettings.skipIntro) {
-        AppSettings.setPlayer(ctx, it, AppSettings.showInfo, AppSettings.seekStep)
-    }
-    ToggleRow("Intro automatisch überspringen", "Überspringt bekannte Intros ohne Rückfrage.", AppSettings.autoSkipIntro) {
-        AppSettings.setPlayerExtra(ctx, AppSettings.autoNext, AppSettings.hideSec, AppSettings.showEndTime, it)
-    }
-    }
+    SectionTitle("Nächste Folge")
     ToggleRow("Nächste Folge automatisch", "Startet die nächste Folge nach dem Abspann von selbst.", AppSettings.autoNext) {
         AppSettings.setPlayerExtra(ctx, it, AppSettings.hideSec, AppSettings.showEndTime, AppSettings.autoSkipIntro)
-    }
-    ToggleRow("Abspann automatisch überspringen", "Startet die nächste Folge, sobald der Abspann beginnt. Geht nur, wenn für die Serie Abspann-Zeiten bekannt sind (TheIntroDB); sonst bleibt es beim Hinweis in den letzten 30 Sekunden.", AppSettings.autoSkipOutro) {
-        AppSettings.setAutoOutro(ctx, it)
     }
     SectionTitle("Uhr im Bild")
     if (AppSettings.clockOn) { Text("Vorschau", color = Muted, fontSize = 14.sp); ClockSample() }
@@ -707,7 +693,7 @@ private fun PlayerPage(ctx: Context) {
     ToggleRow("Bildrate anpassen", "Passt die Bildwiederholrate des Fernsehers an den Film an (z. B. 24 Bilder), wenn der Fernseher das ohne Bildaussetzer kann. Bei Fire TV zusätzlich in den Geräteeinstellungen „Originale Bildrate anpassen“ prüfen.", AppSettings.autoFps) {
         AppSettings.setAutoFps(ctx, it)
     }
-    Hint("Intro-Zeiten stammen aus der Community-Datenbank TheIntroDB und gibt es nicht für jede Serie. Die Stream-Info erscheint nur bei Filmen und Serien.")
+    Hint("Die Stream-Info erscheint nur bei Filmen und Serien.")
     SectionTitle("Zusatzbild")
     DualPrefs.init(ctx)
     SelectRow("Anordnung", DualPrefs.ARRANGE_NAMES[DualPrefs.split], DualPrefs.ARRANGE_NAMES, DualPrefs.split) { DualPrefs.set(ctx, split = it) }
@@ -876,7 +862,7 @@ private fun DiagPage(ctx: Context, reload: () -> Unit) {
         "Inhalte" to "${counts.first} Sender · ${counts.second} Filme · ${counts.third} Serien",
         "Ladezustand" to (if (PlaylistStore.loading) "lädt …" else PlaylistStore.error ?: "bereit"),
         "Programm (EPG)" to "${Xmltv.status} · ${Xmltv.channelCount} Sender",
-        "Metadaten" to (if (MetaRepo.enabled()) (if (Classifier.running) "lädt ${Classifier.progress}/${Classifier.total}" else "aktiv") else if (Rebrand.METADATA_SERVICES) "kein TMDB-Schlüssel" else "Anbieter-Daten"),
+        "Metadaten" to "Anbieter-Daten",
         "Speicher" to (Mem.totalMb(ctx).toString() + " MB · " + listOf("wenig", "mittel", "viel")[Mem.tier(ctx)]),
         "Letzter Fehler" to err,
         "Fehler seit Start" to Diag.errorCount.toString(),
@@ -971,16 +957,6 @@ private val OUTLINE_OFFSETS = listOf(-1.5f to 0f, 1.5f to 0f, 0f to -1.5f, 0f to
 
 @Composable
 private fun FilterPage(ctx: Context, onLanguages: () -> Unit) {
-    // MR TV 2: automatic genres need TMDB, so the switch and its hints are only shown when metadata services are on
-    if (Rebrand.METADATA_SERVICES) {
-    ToggleRow("Automatische Genres", "Aus = Kategorien deines Anbieters (Standard). Umschalten geht auch direkt in der Ansicht „Kategorien“.", AppSettings.ipvioFilter) { AppSettings.set(ctx, it) }
-    val all = PlaylistStore.channels
-    val vod = remember(all) { all.count { it.kind != Kind.LIVE } }
-    if (!Classifier.supported(vod)) Hint("Deine Bibliothek ist für automatische Genres zu groß (über 60.000 Filme und Serien). Es werden die Kategorien deines Anbieters verwendet. Blende unter „Playlists“ > „Sprachen der Inhalte“ Sprachen aus, die du nicht brauchst – dann passt es wieder.")
-    Hint("Automatische Genres sortieren Titel nach Genre (Anime = Animation aus Japan). Beim ersten Mal dauert das einige Minuten, danach ist alles gespeichert. Aus = die Kategorien deines Anbieters in der Reihenfolge deines Anbieters. In der Ansicht „Kategorien“ kannst du jederzeit zwischen beiden wechseln.")
-    if (!MetaRepo.enabled()) Text("Automatische Genres brauchen einen TMDB-Schlüssel (Einstellungen > API-Schlüssel).", color = DS.Danger, fontSize = 15.sp)
-    if (Classifier.running) Text("${Classifier.phase} werden geladen … ${Classifier.progress} / ${Classifier.total}", color = Accent2, fontSize = 15.sp)
-    }
     SectionTitle("Sprachen der Inhalte")
     Hint("Welche Sprachen geladen werden, stellst du unter „Playlists“ ein – das bestimmt, was aus der Playlist geladen wird.")
     PillButton("Sprachen der Inhalte öffnen", icon = AIcon.Globe) { onLanguages() }
@@ -1260,55 +1236,10 @@ private fun ProfilesPage(ctx: Context, onExit: () -> Unit) {
     Hint("Beim Wechseln startet die App kurz neu.")
 }
 
-/**
- * Own API keys (open source: no key is built in). Without keys the app works, but shows
- * only what the playlist delivers.
- */
-@Composable
-private fun ApiKeysPage(ctx: Context) {
-    val scope = rememberCoroutineScope()
-    var tmdb by remember { mutableStateOf(Config.ownTmdb(ctx)) }
-    var omdb by remember { mutableStateOf(Config.ownOmdb(ctx)) }
-    var tmdbStatus by remember { mutableStateOf("") }
-    var omdbStatus by remember { mutableStateOf("") }
-    var busy by remember { mutableStateOf(false) }
-    Hint("Die App enthält keine eigenen Schlüssel. Mit deinen eigenen, kostenlosen Schlüsseln zeigt sie Poster, Beschreibungen, Besetzung, Trailer, automatische Genres sowie IMDb- und Rotten-Tomatoes-Wertungen. Ohne Schlüssel übernimmt sie Beschreibung, Cover und Bewertung von deinem Anbieter (bei Xtream-Zugängen).")
-
-    SectionTitle("TMDB (Film-Infos)")
-    Field(tmdb, { tmdb = it; tmdbStatus = "" }, "TMDB API-Schlüssel (v3)")
-    Hint("Kostenlos unter themoviedb.org: Konto anlegen, anmelden, dann Einstellungen > API > API-Schlüssel anfordern und den 32-stelligen „API Key“ eintragen. Dieses Produkt verwendet die TMDB-API, wird aber nicht von TMDB unterstützt oder zertifiziert.")
-    if (tmdbStatus.isNotBlank()) Text(tmdbStatus, color = if (tmdbStatus == "Schlüssel gültig") Accent2 else Muted, fontSize = 16.sp)
-
-    SectionTitle("OMDb (IMDb- und Rotten-Tomatoes-Wertung)")
-    Field(omdb, { omdb = it; omdbStatus = "" }, "OMDb API-Schlüssel")
-    Hint("Kostenlos unter omdbapi.com > API Key (FREE). Danach den Aktivierungslink in der E-Mail anklicken, sonst funktioniert der Schlüssel nicht. Geht auch ohne TMDB-Schlüssel.")
-    if (omdbStatus.isNotBlank()) Text(omdbStatus, color = if (omdbStatus == "Schlüssel gültig") Accent2 else Muted, fontSize = 16.sp)
-
-    Hint("Die Schlüssel bleiben nur auf diesem Gerät. Nach dem Eintragen die App einmal neu starten, damit alle Bereiche die Infos laden. Intro- und Abspann-Zeiten kommen von TheIntroDB und brauchen keinen Schlüssel.")
-    // Buttons last: text below the last focusable element was cut off at the bottom of the page
-    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-        PillButton(if (busy) "Bitte warten …" else "Speichern und prüfen", light = true, icon = AIcon.Check) {
-            if (busy) return@PillButton
-            busy = true
-            Config.save(ctx, tmdb, omdb)
-            tmdb = Config.ownTmdb(ctx); omdb = Config.ownOmdb(ctx)
-            scope.launch {
-                tmdbStatus = if (tmdb.isEmpty()) "" else KeyCheck.tmdb(tmdb) ?: "Schlüssel gültig"
-                omdbStatus = if (omdb.isEmpty()) "" else KeyCheck.omdb(omdb) ?: "Schlüssel gültig"
-                busy = false
-            }
-        }
-        if (tmdb.isNotEmpty() || omdb.isNotEmpty()) ConfirmPill("Schlüssel entfernen") {
-            tmdb = ""; omdb = ""; tmdbStatus = ""; omdbStatus = ""; Config.save(ctx, "", "")
-        }
-    }
-}
-
 @Composable
 private fun AboutPage(ctx: Context) {
     Text("IPVIO Stream · Version " + appVersion(ctx), color = Color.White, fontSize = 18.sp)
     Hint("IPVIO Stream ist ein Player und liefert selbst keine Inhalte. Nutze nur Quellen, für die du eine Berechtigung hast.")
-    if (Rebrand.METADATA_SERVICES) Hint("Dieses Produkt verwendet die TMDB-API, wird aber nicht von TMDB unterstützt oder zertifiziert. Wertungen: OMDb. Intro-Zeiten: TheIntroDB.")
     Hint("IPVIO Stream ist freie Software unter der GNU General Public License v3 (GPL-3.0). Verwendete Bibliotheken: AndroidX/Jetpack Compose, Media3 (Apache 2.0), OkHttp, Coil (Apache 2.0), Jellyfin FFmpeg-Decoder (GPL-3.0), Schriften Outfit und Inter (SIL Open Font License).")
     MrtvCredits()
     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -1338,7 +1269,6 @@ private fun UpdateSection(ctx: Context) {
     val scope = rememberCoroutineScope()
     Text("Installiert: Version " + AppUpdate.currentName(ctx), color = Muted, fontSize = 16.sp)
     ToggleRow("Automatisch nach Updates suchen", "Einmal am Tag. Ein neues Update erscheint in der Glocke oben rechts.", auto) { auto = it; AppUpdate.setAuto(ctx, it) }
-    if (Rebrand.METADATA_SERVICES) Hint("Die Schlüssel bleiben nur auf diesem Gerät. Nach dem Eintragen die App einmal neu starten, damit alle Bereiche die Infos laden. Intro- und Abspann-Zeiten kommen von TheIntroDB und brauchen keinen Schlüssel.")
     // Buttons last: text below the last focusable element was cut off at the bottom of the page
     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
         PillButton(if (busy) "Bitte warten …" else "Jetzt nach Update suchen") {

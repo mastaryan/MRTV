@@ -595,82 +595,17 @@ object Genres {
 
 object Classifier {
     /**
-     * Limit for automatic genres: with very large libraries (over 60,000 movies and series – counted after the language filter)
-     * querying all titles at TMDB would take hours and fill the working memory.
-     * Then the app uses the provider's categories – without matching, fast and stable.
+     * Automatic genres (upstream IPVIO) needed an outside metadata service. MR TV 2 removed that service, so the
+     * provider's own categories are always used and this never runs. The fields stay for the shared upstream screens.
      */
     const val MAX_TITLES = 60_000
     fun supported(n: Int) = n <= MAX_TITLES
-
-    /** True if the heap is more than 70 % full: then the matching is paused instead of crashing. */
-    private fun lowMemory(): Boolean = Mem.heapTight(0.70)
     var progress by mutableIntStateOf(0)
     var total by mutableIntStateOf(0)
     var version by mutableIntStateOf(0)
     var running by mutableStateOf(false)
     var phase by mutableStateOf("Metadaten")
 
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
-    private var job: Job? = null
-
-    /**
-     * Starts the detection for a (new) list. A running pass is first ended cleanly,
-     * so that after a filter change the old list never keeps running or the new one is skipped.
-     * Runs on a background thread, not on the main thread.
-     */
-    fun restart(ctx: Context, all: List<Item>) {
-        val app = ctx.applicationContext
-        val old = job
-        job = scope.launch {
-            old?.cancelAndJoin()
-            if (!MetaRepo.enabled() || all.isEmpty()) return@launch
-            run(app, all.filter { it.kind == Kind.SERIES } + all.filter { it.kind == Kind.MOVIE })
-        }
-    }
-
-    private suspend fun run(ctx: Context, items: List<Item>) {
-        if (!MetaRepo.enabled() || !supported(items.size)) return
-        running = true
-        try {
-            // Load stored results in one go (instead of one file per title): only really new titles are queried
-            MetaRepo.loadIndex(ctx)
-            phase = "Metadaten"
-            val todo = items.filter { MetaRepo.cached(it) == null && !MetaRepo.missed(it) }
-            total = items.size
-            progress = items.size - todo.size
-            if (todo.isNotEmpty()) version++   // nothing new: no home rebuild
-            var n = 0
-            for (chunk in todo.chunked(12)) {
-                if (lowMemory()) { MetaRepo.trim(); if (lowMemory()) { version++; return } }
-                coroutineScope { chunk.map { async { MetaRepo.basic(ctx, it) } }.awaitAll() }
-                progress += chunk.size
-                n++
-                if (n % 8 == 0) version++
-                // Gentle on weak boxes: short pause between batches, and none at all while something plays
-                kotlinx.coroutines.delay(150)
-                while (AppNav.playing) kotlinx.coroutines.delay(2000)
-                if (n % 200 == 0) MetaRepo.saveIndex(ctx)
-            }
-            if (todo.isNotEmpty()) { version++; MetaRepo.saveIndex(ctx) }
-            phase = "Länder"
-            val need = items.filter { MetaRepo.cached(it)?.countries?.isEmpty() == true }
-            total = need.size
-            progress = 0
-            n = 0
-            for (chunk in need.chunked(12)) {
-                if (lowMemory()) { MetaRepo.trim(); if (lowMemory()) { version++; return } }
-                coroutineScope { chunk.map { async { MetaRepo.fillCountry(ctx, it) } }.awaitAll() }
-                progress += chunk.size
-                n++
-                if (n % 8 == 0) version++
-                kotlinx.coroutines.delay(150)
-                while (AppNav.playing) kotlinx.coroutines.delay(2000)
-                if (n % 100 == 0) MetaRepo.saveIndex(ctx)
-            }
-            if (need.isNotEmpty()) version++
-        } finally {
-            running = false
-            kotlinx.coroutines.withContext(kotlinx.coroutines.NonCancellable) { MetaRepo.saveIndex(ctx) }
-        }
-    }
+    @Suppress("UNUSED_PARAMETER")
+    fun restart(ctx: Context, all: List<Item>) {}
 }

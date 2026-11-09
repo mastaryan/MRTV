@@ -307,6 +307,8 @@ object PlaylistStore {
     }
 
     fun hostOf(url: String): String {
+        // MR TV 2: the built-in server address is never shown in the app
+        if (Rebrand.isBuiltInServer(url)) return Rebrand.SHORT_NAME
         if (url.startsWith("file://")) return url.substringAfterLast('/').substringBeforeLast('.').ifBlank { "Playlist" }
         return try {
             val u = StalkerLogic.parse(url)?.portal ?: url

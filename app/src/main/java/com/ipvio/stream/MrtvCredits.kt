@@ -22,7 +22,8 @@ internal fun MrtvCredits() {
         Text(Rebrand.UPSTREAM_URL, raw = true, color = Accent2, fontSize = 15.sp)
         Text(
             "MR TV 2 is a modified version of IPVIO Stream, changed by MR TV (watchmrtv.com) in 2026: new name, logo, " +
-                "colors and app ID, third-party metadata services (TMDB, OMDb, TheIntroDB) switched off, own update address. " +
+                "colors and app ID, outside movie-info and rating services removed (all info comes from the provider), " +
+                "login locked to the MR TV server, own update address. " +
                 "It is free software under the GNU General Public License v3 (GPL-3.0) and comes with no warranty.",
             raw = true, color = Muted, fontSize = 14.sp, lineHeight = 20.sp
         )

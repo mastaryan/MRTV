@@ -44,7 +44,6 @@ class MainActivity : ComponentActivity() {
         Boomer.init(this)
         HomeLayout.init(this); BoomerLayout.init(this)
         SidebarPrefs.init(this)
-        Config.init(this)
         LiveSettings.init(this)
         Recorder.attach(this)
         MobilePrefs.apply(this)
@@ -249,7 +248,7 @@ private fun AppContent() {
         val sm = SE_RE.find(title)
         val season = sm?.groupValues?.get(1)?.toIntOrNull() ?: 0
         val ep = sm?.groupValues?.get(2)?.toIntOrNull() ?: 0
-        val tmdb = MetaRepo.cached(item)?.tmdbId?.takeIf { it > 0 } ?: 0
+        val metaId = MetaRepo.cached(item)?.metaId?.takeIf { it > 0 } ?: 0
         var playUrl = url
         var alts = emptyList<Variant>()
         var note: String? = null
@@ -280,7 +279,7 @@ private fun AppContent() {
                 }
             }
         }
-        playing = PlayReq(title, playUrl, item.id, item.kind == Kind.LIVE, startMs, tmdb, season, ep, alts, note)
+        playing = PlayReq(title, playUrl, item.id, item.kind == Kind.LIVE, startMs, metaId, season, ep, alts, note)
     }
 
     /** EPG (sidebar/tile): start the last watched channel (otherwise the first) and show the TV guide right away. */

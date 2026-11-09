@@ -8,4 +8,8 @@ MR TV Silber¦MR TV Silver¦MR TV Gümüş¦MR TV srebrna¦MR TV srebrna¦MR TV 
 MR TV Anthrazit¦MR TV Charcoal¦MR TV Antrasit¦MR TV antracit¦MR TV antracit¦MR TV antracit¦MR TV Antracita¦MR TV Anthracite¦MR TV Antracite¦MR TV Antraciet
 Anbieter-Daten¦Provider data
 Alle Menüs und Hinweise erscheinen in dieser Sprache. Namen und Beschreibungen von Sendern, Filmen, Serien und Kategorien stammen von deinem Anbieter und bleiben unverändert.¦All menus and hints appear in this language. Names and descriptions of channels, movies, series and categories come from your provider and stay unchanged.
+Anmelden¦Sign in
+Bitte Benutzername und Passwort eingeben.¦Please enter your username and password.
+Benutzername und Passwort eintragen und senden. Die Playlist wird danach automatisch geladen.¦Enter your username and password and send them. Your channels then load automatically.
+Die Stream-Info erscheint nur bei Filmen und Serien.¦The stream info only appears for movies and series.
 """

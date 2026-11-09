@@ -46,7 +46,7 @@ fun rememberMetaState(item: Item): MetaState {
     LaunchedEffect(item.id) {
         if (m == null && !done) { m = MetaRepo.basic(ctx, item); done = true }
         // The slim cache lacks the description: reload the full entry (memory or device)
-        else m?.let { cur -> if (cur.overview == null && cur.tmdbId > 0) MetaRepo.basic(ctx, item)?.let { m = it } }
+        else m?.let { cur -> if (cur.overview == null && cur.metaId > 0) MetaRepo.basic(ctx, item)?.let { m = it } }
     }
     return MetaState(m, done)
 }

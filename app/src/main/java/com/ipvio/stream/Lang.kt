@@ -43,11 +43,6 @@ object Lang {
         else -> Locale.forLanguageTag(code())
     }
 
-    /** Language code for TMDB requests, e.g. "de-DE". */
-    fun tmdb(): String = when (code()) {
-        "en" -> "en-US"; "tr" -> "tr-TR"; "bs" -> "bs-BA"; "hr" -> "hr-HR"; "sr" -> "sr-RS"
-        "es" -> "es-ES"; "fr" -> "fr-FR"; "it" -> "it-IT"; "nl" -> "nl-NL"; else -> "de-DE"
-    }
 
     fun tr(s: String): String {
         val i = index

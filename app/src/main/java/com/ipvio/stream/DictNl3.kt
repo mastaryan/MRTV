@@ -129,7 +129,6 @@ Die Playlist ist zu groß für den Speicher dieses Geräts.¦De playlist is te g
 Verbindung unterbrochen. Bitte erneut versuchen.¦Verbinding verbroken. Probeer het opnieuw.
 Verbindung wieder da – lade neu …¦Verbinding hersteld – opnieuw laden …
 Bildschirm kann nicht wach gehalten werden – der Bildschirmschoner kann starten.¦Het scherm kan niet worden wakker gehouden – de schermbeveiliging kan starten.
-Automatische Genres brauchen den TMDB-Schlüssel (Datei secrets.properties im Projektordner).¦Automatische genres hebben de TMDB-sleutel nodig (bestand secrets.properties in de projectmap).
 Bildschirm wach¦Scherm wakker
 an¦aan
 aus¦uit

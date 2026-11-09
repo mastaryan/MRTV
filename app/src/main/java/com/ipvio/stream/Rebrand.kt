@@ -18,10 +18,22 @@ object Rebrand {
     const val SOURCE_URL = "https://github.com/mastaryan/MRTV"
 
     /**
-     * false = no third-party metadata services (TMDB, OMDb/IMDb/Rotten Tomatoes, TheIntroDB): no API keys, no key
-     * settings page. The app then uses only the provider's own data (Xtream/M3U/Stalker panel).
+     * MR TV 2: the MR TV Xtream server, built in at build time (BuildConfig.SERVER_URL from the git-ignored
+     * server.properties, -PMRTV2_SERVER_URL or the MRTV2_SERVER_URL environment variable). Empty = normal IPVIO login.
+     * When set, the login screen only asks for username and password and the address is not shown in the app.
      */
-    val METADATA_SERVICES: Boolean get() = BuildConfig.METADATA_SERVICES
+    val SERVER_URL: String = BuildConfig.SERVER_URL.trim().trimEnd('/')
+    val SERVER_LOCKED: Boolean get() = SERVER_URL.isNotEmpty()
+
+    /** True if [url] (playlist/Xtream address) points to the built-in MR TV server. */
+    fun isBuiltInServer(url: String): Boolean {
+        if (!SERVER_LOCKED) return false
+        return try {
+            val a = android.net.Uri.parse(SERVER_URL)
+            val b = android.net.Uri.parse(url.trim())
+            a.host != null && a.host.equals(b.host, true) && a.port == b.port
+        } catch (e: Exception) { false }
+    }
 
     fun apply(s: String): String =
         if (s.indexOf("IPVIO") < 0) s

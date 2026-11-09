@@ -5,14 +5,11 @@ plugins {
     alias(libs.plugins.kotlin.compose)
 }
 
-// Optional developer API keys from "secrets.properties" (ignored by Git) or environment variables.
-// Normal users enter their own keys in the app (Settings > API keys); without keys the build contains none.
+// Optional developer values from "secrets.properties" (ignored by Git) or environment variables (Google Drive backup).
 val secrets = Properties().apply {
     val f = rootProject.file("secrets.properties")
     if (f.exists()) f.inputStream().use { load(it) }
 }
-fun secret(name: String): String =
-    (secrets.getProperty(name) ?: System.getenv(name) ?: "").trim().filter { it.isLetterOrDigit() }
 // Google sign-in for the optional Google Drive backup (see docs/GOOGLE_DRIVE.md); client IDs contain '-' and '.'
 fun secretId(name: String): String =
     (secrets.getProperty(name) ?: System.getenv(name) ?: "").trim().filter { it.isLetterOrDigit() || it == '-' || it == '.' || it == '_' }
@@ -25,6 +22,17 @@ val crashProps = Properties().apply {
 fun buildSecret(name: String): String =
     ((project.findProperty(name) as String?) ?: System.getenv(name) ?: crashProps.getProperty(name) ?: "")
         .trim().replace("\\", "\\\\").replace("\"", "\\\"")
+
+// MR TV 2: built-in Xtream server (users then only enter username and password). Order: -P property, environment,
+// "server.properties" (ignored by Git, see server.properties.example). Unset = normal IPVIO login with server field.
+// Never commit the address. Note: it can still be read out of a built APK.
+val serverProps = Properties().apply {
+    val f = rootProject.file("server.properties")
+    if (f.exists()) f.inputStream().use { load(it) }
+}
+val serverUrl: String =
+    ((project.findProperty("MRTV2_SERVER_URL") as String?) ?: System.getenv("MRTV2_SERVER_URL") ?: serverProps.getProperty("MRTV2_SERVER_URL") ?: "")
+        .trim().trimEnd('/').replace("\\", "").replace("\"", "")
 
 // Release signing from "keystore.properties" (ignored by Git, see docs/RELEASE.md). Every release MUST be signed with the
 // same key: only then does Android install an update over the old version and keep history, favorites and settings.
@@ -47,25 +55,21 @@ android {
         minSdk = 24
         targetSdk = 37
         // Raise both for every release; the GitHub release tag must match versionName (e.g. tag "v1.1").
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 2
+        versionName = "2.0.1"
         // Name unter dem Symbol; der Debug-Build überschreibt ihn (siehe buildTypes)
         manifestPlaceholders["appLabel"] = "MR TV 2"
         // In-app updater: small JSON file on watchmrtv.com ({"versionCode":2,"versionName":"1.0.1","apk":"MRTV2-1.0.1.apk","notes":"..."}).
         buildConfigField("String", "UPDATE_URL", "\"https://watchmrtv.com/mrtv2-version.json\"")
 
-        // MR TV 2: third-party metadata services (TMDB, OMDb/IMDb/Rotten Tomatoes, TheIntroDB) are switched off.
-        // The app only uses the provider's own data (Xtream/M3U/Stalker), so no API keys are needed or read.
+        // MR TV 2: outside movie-info and rating services were removed; the app only uses the provider's own data.
+        buildConfigField("String", "SERVER_URL", "\"$serverUrl\"")
         // MR TV 2 crash reports: webhook URL and Authorization value come only from the build machine
         // (env MRTV_CRASH_WEBHOOK_URL / MRTV_CRASH_WEBHOOK_KEY, -P properties, or the git-ignored crash.properties).
         // The key is sent as "Authorization: Bearer <key>".
         // Unset = reporter off. Never commit these values.
         buildConfigField("String", "CRASH_WEBHOOK_URL", "\"${buildSecret("MRTV_CRASH_WEBHOOK_URL")}\"")
         buildConfigField("String", "CRASH_WEBHOOK_KEY", "\"${buildSecret("MRTV_CRASH_WEBHOOK_KEY")}\"")
-        val metadataServices = false
-        buildConfigField("boolean", "METADATA_SERVICES", metadataServices.toString())
-        buildConfigField("String", "TMDB_KEY", "\"${if (metadataServices) secret("TMDB_KEY") else ""}\"")
-        buildConfigField("String", "OMDB_KEY", "\"${if (metadataServices) secret("OMDB_KEY") else ""}\"")
         buildConfigField("String", "GOOGLE_CLIENT_ID", "\"${secretId("GOOGLE_CLIENT_ID")}\"")
         buildConfigField("String", "GOOGLE_CLIENT_SECRET", "\"${secretId("GOOGLE_CLIENT_SECRET")}\"")
     }
