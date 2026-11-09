@@ -12,4 +12,26 @@ Anmelden¦Sign in
 Bitte Benutzername und Passwort eingeben.¦Please enter your username and password.
 Benutzername und Passwort eintragen und senden. Die Playlist wird danach automatisch geladen.¦Enter your username and password and send them. Your channels then load automatically.
 Die Stream-Info erscheint nur bei Filmen und Serien.¦The stream info only appears for movies and series.
+US-Lokalsender¦USA Locals
+Stadt aus Favoriten entfernen¦Remove city from Favorites
+Stadt aus Favoriten entfernt¦City removed from Favorites
+Stadt zu Favoriten hinzugefügt¦City added to Favorites
+Stadt gespeichert¦City saved
+Stadt speichern¦Save city
+Lokalsender werden gesucht …¦Finding local channels…
+Keine Lokalsender gefunden¦No local channels found
+Für diese Stadt wurden bei deinem Anbieter keine Lokalsender (ABC, NBC, CBS, FOX …) gefunden.¦No local channels (ABC, NBC, CBS, FOX…) were found for this city on your service.
+Auf einem Sender OK gedrückt halten (am Handy: lange tippen oder den Stern) und „Zu Favoriten“ wählen. Ganze Städte speicherst du unter „US-Lokalsender“.¦Hold OK on a channel (on a phone: long-press it or tap the star) and choose "Add to favorites". Save whole cities under "USA Locals".
+Gespeicherte Städte¦Saved cities
+Öffnen¦Open
+Weitere Favoriten¦Other favorites
+Bundesstaat wählen¦Choose a state
+Auf dem Handy immer im Querformat¦Always landscape on phones
+Aus (Standard): die App dreht mit dem Gerät (Hoch- und Querformat, die Bildschirmsperre des Systems gilt). An: immer quer. Im Player: Tippen zeigt die Steuerung, Doppeltippen links/rechts spult, in der Mitte Pause.¦Off (default): the app turns with the device (portrait and landscape; the system rotation lock applies). On: always landscape. In the player: tap shows the controls, double-tap left/right skips, in the middle pauses.
+Angemeldet¦Signed in
+TV-Programm wird geladen …¦Loading TV guide…
+TV-Programm nicht geladen¦TV guide not loaded
+Die App öffnet sich automatisch. Das Programm lädt sonst im Hintergrund weiter.¦The app opens automatically. If it takes longer, the guide keeps loading in the background.
+Überspringen¦Skip
+Fehler¦Error
 """

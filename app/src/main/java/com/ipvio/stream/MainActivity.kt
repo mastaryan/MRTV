@@ -102,6 +102,7 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onDestroy() {
+        MobilePrefs.stopListener()
         ScreenAwake.detach(this)
         super.onDestroy()
     }
@@ -183,6 +184,14 @@ private fun AppContent() {
     // Interrupted in the middle of adding last time (crash, power loss): the add screen automatically continues loading
     val resumeAdd = remember { PlaylistStore.pending(ctx)?.autoResume == true }
     var adding by remember { mutableStateOf(PlaylistStore.savedUrl(ctx) == null || resumeAdd) }
+    // MR TV 2 (phones): the first sign-in and its guide loading step are portrait; entering the app turns to landscape
+    // and then follows the device (see MobilePrefs). Fire TV / Android TV: no change.
+    val act = remember { generateSequence<android.content.Context>(ctx) { (it as? android.content.ContextWrapper)?.baseContext }.filterIsInstance<android.app.Activity>().firstOrNull() }
+    var portraitPhase by remember { mutableStateOf(adding && !MobilePrefs.firstLoginDone(ctx)) }
+    LaunchedEffect(adding) {
+        if (adding) MobilePrefs.loginPhase(act, true)
+        else if (portraitPhase) { portraitPhase = false; MobilePrefs.enterApp(act) }
+    }
     // Top detail page (Item or PersonRef) plus back stack, so Back retraces Movie → Person → Movie
     var top by remember { mutableStateOf<Any?>(null) }
     val trail = remember { mutableStateListOf<Any>() }

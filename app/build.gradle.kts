@@ -112,6 +112,9 @@ android {
     lint {
         disable += "UnsafeOptInUsageError"
     }
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+    }
 }
 
 dependencies {
@@ -134,4 +137,9 @@ dependencies {
     implementation("androidx.work:work-runtime-ktx:2.10.0")
 
     testImplementation("junit:junit:4.13.2")
+    // MR TV 2: Compose UI tests on the JVM (touch clicks / long-clicks in Live TV at Fold screen sizes), see LiveTabTouchTest
+    testImplementation(platform("androidx.compose:compose-bom:2026.09.00"))
+    testImplementation("org.robolectric:robolectric:4.17")
+    testImplementation("androidx.compose.ui:ui-test-junit4")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
 }

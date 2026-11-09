@@ -482,7 +482,7 @@ private fun GeneralPage(ctx: Context) {
     // Phone/tablet: landscape (the UI is built for the TV)
     if (MobilePrefs.isMobile(ctx)) {
         val act = generateSequence<Context>(ctx) { (it as? android.content.ContextWrapper)?.baseContext }.filterIsInstance<android.app.Activity>().firstOrNull()
-        ToggleRow("Auf dem Handy im Querformat", "Die App ist für den Fernseher gebaut und wirkt quer am besten. Aus: dreht mit dem Gerät. Im Player: Tippen zeigt die Steuerung, Doppeltippen links/rechts spult, in der Mitte Pause.", MobilePrefs.landscape) {
+        ToggleRow("Auf dem Handy immer im Querformat", "Aus (Standard): die App dreht mit dem Gerät (Hoch- und Querformat, die Bildschirmsperre des Systems gilt). An: immer quer. Im Player: Tippen zeigt die Steuerung, Doppeltippen links/rechts spult, in der Mitte Pause.", MobilePrefs.landscape) {
             if (act != null) MobilePrefs.set(act, it)
         }
     }

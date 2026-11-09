@@ -43,3 +43,13 @@ fun Modifier.menuKeys(onMenu: () -> Unit, onLong: () -> Unit): Modifier {
         }
     }
 }
+
+/**
+ * MR TV 2: wraps a long-press action so it only runs for a finger. combinedClickable also reports a long OK on the
+ * remote; that one is already handled by [favKeys] / [menuKeys] (on release), and must not run a second time.
+ */
+@androidx.compose.runtime.Composable
+fun touchOnly(f: () -> Unit): () -> Unit {
+    val im = androidx.compose.ui.platform.LocalInputModeManager.current
+    return { if (im.inputMode == androidx.compose.ui.input.InputMode.Touch) f() }
+}

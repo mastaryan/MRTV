@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class, ExperimentalLayoutApi::class)
 @Composable
 fun AddPlaylistScreen(onDone: () -> Unit) {
     val ctx = LocalContext.current
@@ -142,6 +142,9 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
         }
     }
 
+    // MR TV 2: after a successful sign-in stay on the branded loading step until the TV guide is in (or timeout / Skip)
+    var epgGate by remember { mutableStateOf(false) }
+    if (epgGate) { EpgGateScreen { MobilePrefs.markFirstLoginDone(ctx); onDone() }; return }
     if (PlaylistStore.loading) { PlaylistLoadingOverlay(); return }
 
     // Start focus on the M3U/Xtream choice (not on an input field: that would open the on-screen keyboard immediately)
@@ -166,7 +169,7 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
         if (PlaylistStore.loading) return
         val lockedUrl = PlaylistStore.xtreamUrl(Rebrand.SERVER_URL, user, pass)
         if (lockedUrl == null) PlaylistStore.error = "Bitte Benutzername und Passwort eingeben."
-        else scope.launch { if (PlaylistStore.load(ctx, lockedUrl, true)) onDone() }
+        else scope.launch { if (PlaylistStore.load(ctx, lockedUrl, true)) epgGate = true }
     }
 
     // Phone (narrow or portrait): single column, without the phone card, smaller margins
@@ -187,16 +190,18 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
         horizontalArrangement = Arrangement.spacedBy(if (compact) 0.dp else 28.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Left: the form
-        Column(
-            // Padding in the scroll area: the focused button is enlarged and must not be cut off
-            Modifier.weight(1.1f).fillMaxHeight().verticalScroll(rememberScrollState()).padding(if (compact) 6.dp else 10.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+        val form: @Composable () -> Unit = {
+            if (locked) {
+                // MR TV 2 login: logo and name centered above the fields; smaller (never hidden) while the keyboard is open
+                val ime = WindowInsets.isImeVisible
+                Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    BrandMark(Modifier.size(if (ime) 44.dp else 84.dp))
+                    Text(Rebrand.APP_NAME, raw = true, color = Color.White, fontSize = if (ime) 22.sp else 30.sp, fontWeight = FontWeight.ExtraBold)
+                }
+            } else Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 BrandMark(Modifier.size(36.dp))
                 Text(Rebrand.APP_NAME, raw = true, color = Color.White, fontSize = 28.sp, fontWeight = FontWeight.ExtraBold)
-                if (!locked) Text("Playlist hinzufügen", color = Color.White, fontSize = 22.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 14.dp))
+                Text("Playlist hinzufügen", color = Color.White, fontSize = 22.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 14.dp))
             }
             // Many new users ask which link to enter: say clearly that the app brings no content of its own
             if (!locked) Column(
@@ -253,7 +258,7 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
                     onNext = {},
                     onGo = { loginKb?.hide(); editField = 0; signInLocked() }
                 )
-                Row(Modifier.padding(horizontal = 8.dp, vertical = 5.dp)) {
+                Row(Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 5.dp)) {
                     LoginButton(if (showPass) "Passwort verbergen" else "Passwort anzeigen") { showPass = !showPass }
                 }
             } else {
@@ -269,10 +274,10 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
             PlaylistStore.error?.let { Text(it, color = DS.Danger, fontSize = 14.sp, lineHeight = 18.sp) }
             // MR TV 2 login: Sign in, then (below it) Cancel / Continue without playlist
             if (locked) {
-                Row(Modifier.padding(horizontal = 8.dp, vertical = 5.dp)) {
+                Row(Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 5.dp)) {
                     LoginButton(if (PlaylistStore.loading) "Lade…" else "Anmelden", primary = true) { signInLocked() }
                 }
-                Row(Modifier.padding(horizontal = 8.dp, vertical = 5.dp)) {
+                Row(Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 5.dp)) {
                     if (canCancel) LoginButton("Abbrechen") { PlaylistStore.clearPending(ctx); onDone() }
                     else LoginButton("Weiter ohne Playlist") { PlaylistStore.clearPending(ctx); PlaylistStore.error = null; onDone() }
                 }
@@ -297,6 +302,22 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
                 }
             }
         }
+        if (locked) BoxWithConstraints(Modifier.weight(1.1f).fillMaxHeight().imePadding()) {
+            // Centered block with a maximum width (does not stretch on the Fold's inner screen); scrolls if the keyboard needs the room
+            val minH = maxHeight
+            Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
+                Column(
+                    Modifier.fillMaxWidth().heightIn(min = minH).padding(if (compact) 6.dp else 10.dp),
+                    verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Column(Modifier.widthIn(max = 460.dp).fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) { form() }
+                }
+            }
+        } else Column(
+            // Padding in the scroll area: the focused button is enlarged and must not be cut off
+            Modifier.weight(1.1f).fillMaxHeight().verticalScroll(rememberScrollState()).padding(if (compact) 6.dp else 10.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) { form() }
         // Right: instructions for input on the phone
         if (!compact) PhoneCard(Modifier.weight(1f), if (serving && ip != null) "http://" + ip + ":" + receiver.port else null, receiver.code, locked)
     }
@@ -499,18 +520,21 @@ private val LOGIN_RADIUS = 6.dp
 /** MR TV 2 login button: the normal MR TV 2 button, plus 1.3's 3 dp red outline while focused (D-pad or keyboard). */
 @Composable
 private fun LoginButton(text: String, primary: Boolean = false, onClick: () -> Unit) {
+    // MR TV 2: full width of the login block and at least 48 real dp tall (phone and TV, whatever the app's UI scaling)
+    val minH = maxOf(realDp(48f), 48.dp)
     var f by remember { mutableStateOf(false) }
     val s by androidx.compose.animation.core.animateFloatAsState(if (f) focusScale(1.07f) else 1f, label = "loginBtn")
     val shape = RoundedCornerShape(50)
     Box(
         Modifier
+            .fillMaxWidth().heightIn(min = minH)
             .graphicsLayer { scaleX = s; scaleY = s }
             .clip(shape)
             .background(if (f) DS.FocusFill else if (primary) lerp(DS.Overlay3, Look.accent1, 0.32f) else DS.Overlay3)
             .border(if (f) LOGIN_FOCUS_WIDTH else 0.dp, if (f) LOGIN_RED else Color.Transparent, shape)
             .onFocusChanged { f = it.isFocused }
             .clickable(onClick = onClick)
-            .padding(horizontal = 20.dp, vertical = 9.dp),
+            .padding(horizontal = 24.dp, vertical = 12.dp),
         contentAlignment = Alignment.Center
-    ) { Text(text, color = if (f) DS.FocusInk else Color.White, fontSize = 16.sp, fontWeight = FontWeight.SemiBold) }
+    ) { Text(text, color = if (f) DS.FocusInk else Color.White, fontSize = 17.sp, fontWeight = FontWeight.SemiBold) }
 }

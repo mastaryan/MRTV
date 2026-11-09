@@ -75,6 +75,20 @@ fun epgSane(start: Long, end: Long): Boolean {
 object Xmltv {
     var status by mutableStateOf("Noch nicht geladen")
     var channelCount by mutableStateOf(0)
+    /** MR TV 2: guide download running (for the loading step after sign-in). */
+    var running by mutableStateOf(false)
+        private set
+    /** Bytes read / announced size (0 = unknown) and shows read so far, for a visible progress (polled, not state: written per read). */
+    @Volatile var bytes = 0L
+        private set
+    @Volatile var total = 0L
+        private set
+    @Volatile var programmes = 0
+        private set
+    @Volatile private var gen = 0
+    /** Last error of the last run (null = none). */
+    var lastError by mutableStateOf<String?>(null)
+        private set
     private val progs = ConcurrentHashMap<String, List<EpgEntry>>()
     private val client = Net.withTimeouts(20, 180)
     // MR TV 2: an error in the background (also out of memory with a huge guide) must never crash the app
@@ -98,11 +112,20 @@ object Xmltv {
     /** [delayMs]: at app start the guide waits a little so the home screen and the playlist get the CPU first. */
     fun start(c: Context, urls: List<String>, items: List<Item>, delayMs: Long = 0L) {
         val all = (urls + listOf(customUrl(c))).filter { it.startsWith("http") }.distinct()
-        if (all.isEmpty()) { status = "Keine EPG-Adresse gefunden"; return }
+        if (all.isEmpty()) { status = "Keine EPG-Adresse gefunden"; running = false; return }
         val wanted = items.filter { it.kind == Kind.LIVE }.mapNotNull { it.tvgId?.lowercase() }.toSet()
-        if (wanted.isEmpty()) { status = "Playlist enthält keine Sender-IDs (tvg-id)"; return }
+        if (wanted.isEmpty()) { status = "Playlist enthält keine Sender-IDs (tvg-id)"; running = false; return }
         job?.cancel()
+        bytes = 0L; total = 0L; programmes = 0; lastError = null
+        running = true
+        val g = ++gen
         job = scope.launch {
+            try { load(all, wanted, items, delayMs) } finally { if (gen == g) running = false }
+        }
+    }
+
+    private suspend fun load(all: List<String>, wanted: Set<String>, items: List<Item>, delayMs: Long) {
+        run {
             if (delayMs > 0) kotlinx.coroutines.delay(delayMs)
             status = "Wird geladen …"
             val map = HashMap<String, MutableList<EpgEntry>>()
@@ -118,12 +141,17 @@ object Xmltv {
             }
             for (u in all) {
                 try { parse(u, wanted, map, past) } catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (e: Exception) { err = if (e is PlaylistError) e.message else e.javaClass.simpleName }
-                catch (e: OutOfMemoryError) { truncated = true; map.values.forEach { if (it.size > 20) it.subList(20, it.size).clear() }; break }
+                catch (e: OutOfMemoryError) { truncated = true; err = "OutOfMemoryError"; map.values.forEach { if (it.size > 20) it.subList(20, it.size).clear() }; break }
             }
-            progs.clear()
-            for ((k, v) in map) progs[k] = v.sortedBy { it.start }
+            // MR TV 2: only swap in new data after a run that read something; a failed / empty refresh keeps the previous guide
+            if (map.isNotEmpty()) {
+                progs.clear()
+                for ((k, v) in map) progs[k] = v.sortedBy { it.start }
+            }
             channelCount = progs.size
-            status = if (progs.isEmpty()) "Keine Programmdaten erhalten (${err ?: "leer"})"
+            lastError = if (map.isEmpty()) (err ?: "leer") else null
+            status = if (map.isEmpty() && progs.isNotEmpty()) "Aktualisierung fehlgeschlagen (${err ?: "leer"}), bisheriges Programm bleibt"
+            else if (progs.isEmpty()) "Keine Programmdaten erhalten (${err ?: "leer"})"
             else if (truncated) "Geladen: ${progs.size} Sender mit Programm (gekürzt, Speicher knapp)"
             else "Geladen: ${progs.size} Sender mit Programm"
         }
@@ -141,7 +169,13 @@ object Xmltv {
     private fun parse(url: String, wanted: Set<String>, out: HashMap<String, MutableList<EpgEntry>>, past: Map<String, Int> = emptyMap()) {
         client.newCall(Request.Builder().url(url).build()).execute().use { r ->
             if (!r.isSuccessful) throw PlaylistError("HTTP ${r.code}")
-            var ins: InputStream = BufferedInputStream((r.body ?: throw PlaylistError("leer")).byteStream())
+            val body = r.body ?: throw PlaylistError("leer")
+            total = body.contentLength().coerceAtLeast(0L)
+            val counted = object : java.io.FilterInputStream(body.byteStream()) {
+                override fun read(): Int = super.read().also { if (it >= 0) bytes++ }
+                override fun read(b: ByteArray, off: Int, len: Int): Int = super.read(b, off, len).also { if (it > 0) bytes += it }
+            }
+            var ins: InputStream = BufferedInputStream(counted)
             ins.mark(2)
             val b1 = ins.read()
             val b2 = ins.read()
@@ -176,7 +210,8 @@ object Xmltv {
                         if (l.size < MAX_PER_CHANNEL + pd * 48) l.add(EpgEntry(pool.of(title), shortDesc(desc), s, e))
                     }
                     // Memory is getting tight: stop and keep what has been read so far (better gaps in the program than a crash)
-                    if (++seen % 5000 == 0 && Mem.heapTight(0.70)) { truncated = true; return }
+                    if (++seen % 500 == 0) programmes = seen
+                    if (seen % 5000 == 0 && Mem.heapTight(0.70)) { truncated = true; return }
                 }
                 ev = p.next()
             }

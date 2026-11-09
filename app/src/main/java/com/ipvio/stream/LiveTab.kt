@@ -4,6 +4,10 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.testTag
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -90,14 +94,15 @@ fun LiveTab(liveAll: List<Item>, groupsAll: Map<String, List<Item>>, favsAll: Li
     val genres = remember(live) { LiveGenre.split(live) }
     val favs = remember(favsAll, srcK) { if (srcK < 0) favsAll else favsAll.filter { it.src == srcK } }
     CatFavs.init(ctx)
+    CityFavs.init(ctx)
     ChannelLists.init(ctx)
     remember { LiveQuality.init(ctx) }
     // Last chosen category / list (round 14): the same one again after Back from the player and after a restart
     var sel by remember {
         val saved = LiveMemory.sel(ctx)?.takeIf { k ->
-            (k == FAV_CAT && favs.isNotEmpty()) || k == "ALL" || k == "HOME" || k in groups || (LiveGenre.isGenreKey(k) && genres.containsKey(k)) || ChannelLists.byKey(k) != null || k == "REC"
+            (k == FAV_CAT && (favs.isNotEmpty() || CityFavs.list.isNotEmpty())) || k == UsaLocals.KEY || UsaLocals.isCity(k) || k == "ALL" || k == "HOME" || k in groups || (LiveGenre.isGenreKey(k) && genres.containsKey(k)) || ChannelLists.byKey(k) != null || k == "REC"
         }
-        mutableStateOf(saved ?: if (favs.isNotEmpty()) FAV_CAT else "ALL")
+        mutableStateOf(saved ?: if (favs.isNotEmpty() || CityFavs.list.isNotEmpty()) FAV_CAT else "ALL")
     }
     HiddenCats.init(ctx)
     // Channel name search ("SEARCH" entry): text is kept while the tab is open
@@ -114,7 +119,7 @@ fun LiveTab(liveAll: List<Item>, groupsAll: Map<String, List<Item>>, favsAll: Li
     // Order: favorites, own channel lists, "New channel list", all channels, categories
     // Aufnahmen (Runde 20): eigene Kategorie, sobald es welche gibt
     val recs = remember(Recorder.active.size, sel == "REC") { Recorder.list(ctx).map { Recorder.itemOf(it) } }
-    val names = (if (PlaylistStore.lists.size > 1) listOf("PL") else emptyList()) + listOf("HOME", "GUIDE", "SEARCH", "MULTI", FAV_CAT) + (if (recs.isNotEmpty()) listOf("REC") else emptyList()) + myLists.map { ChannelListLogic.key(it) } + listOf("NEW", "ALL") + genres.keys + favCats + groups.keys.filter { it !in favCats && it !in HiddenCats.list } + (if (HiddenCats.list.any { it in groups }) listOf("HIDDEN") else emptyList())
+    val names = (if (PlaylistStore.lists.size > 1) listOf("PL") else emptyList()) + listOf("HOME", "GUIDE", "SEARCH", "MULTI", FAV_CAT, UsaLocals.KEY) + CityFavs.list.map { UsaLocals.cityKey(it) } + (if (recs.isNotEmpty()) listOf("REC") else emptyList()) + myLists.map { ChannelListLogic.key(it) } + listOf("NEW", "ALL") + genres.keys + favCats + groups.keys.filter { it !in favCats && it !in HiddenCats.list } + (if (HiddenCats.list.any { it in groups }) listOf("HIDDEN") else emptyList())
     val curList = ChannelLists.byKey(sel)
     // Own list currently being filled (OK on a channel adds it); declared early because bundling depends on it
     var addTo by remember { mutableStateOf<Int?>(null) }
@@ -128,8 +133,23 @@ fun LiveTab(liveAll: List<Item>, groupsAll: Map<String, List<Item>>, favsAll: Li
         value = if (addTo != null && query.isBlank()) live
             else kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) { ChannelSearch.filter(live, query) }
     }
+    // MR TV 2 USA Locals (ported from MR TV 1.3): a city's local stations, matched in the background
+    val cityRank = UsaLocals.rankOf(sel)
+    var cityLoading by remember { mutableStateOf(false) }
+    val cityList by produceState(emptyList<Item>(), cityRank, live) {
+        value = emptyList()
+        val m = cityRank?.let { LocalMarkets.byKey(it) } ?: return@produceState
+        cityLoading = true
+        value = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) { UsaLocals.channels(m, live, { it.id }, { it.title }) }
+        cityLoading = false
+    }
+    // Favorites with saved cities: favorite channels grouped under their city, the rest below
+    val favGroups = remember(favs, CityFavs.list) { if (CityFavs.list.isEmpty()) null else UsaLocals.groupFavorites(CityFavs.list, favs) { it.title } }
+    var localsState by remember { mutableStateOf(UsaLocals.stateOf(cityRank ?: -1)) }
     val rawList = when {
-        sel == FAV_CAT -> favs
+        sel == FAV_CAT -> favGroups?.flatMap { it.second } ?: favs
+        sel == UsaLocals.KEY -> emptyList()
+        cityRank != null -> cityList
         sel == "ALL" -> live
         sel == "SEARCH" -> searchRes
         sel == "HOME" -> emptyList()
@@ -137,6 +157,12 @@ fun LiveTab(liveAll: List<Item>, groupsAll: Map<String, List<Item>>, favsAll: Li
         sel == "REC" -> recs
         curList != null -> ChannelListLogic.resolve(curList, byIdLazy.value)
         else -> groups[sel].orEmpty()
+    }
+    // Favorites grouped by saved city: list index -> heading ("Locals – City" / "Weitere Favoriten")
+    val favHeads: Map<Int, String> = if (sel != FAV_CAT || favGroups == null) emptyMap() else {
+        val m = HashMap<Int, String>(); var at = 0
+        for ((r, l) in favGroups) { m[at] = if (r != null) UsaLocals.cityLabel(r) else Lang.tr("Weitere Favoriten"); at += l.size }
+        m
     }
     // Quality variants of one channel as a single row (not in favorites, own lists, recordings or while filling a list)
     val bundleOn = General.bundleLive && sel != FAV_CAT && sel != "REC" && curList == null && addTo == null
@@ -188,10 +214,20 @@ fun LiveTab(liveAll: List<Item>, groupsAll: Map<String, List<Item>>, favsAll: Li
     LaunchedEffect(Unit) {
         snapshotFlow { focusTarget }.collectLatest { t -> if (focusedState.value != null) kotlinx.coroutines.delay(300); focusedState.value = t }
     }
-    Box(Modifier.fillMaxSize()) {
+    // Channel list to the top when another category is chosen (not on the first frame: Back from the player restores the position)
+    var selSeen by remember { mutableStateOf(sel) }
+    LaunchedEffect(sel) { if (sel != selSeen) { selSeen = sel; runCatching { chanState.scrollToItem(0) } } }
+    // MR TV 2: narrow screens (phone in portrait, Fold cover screen): categories and channels as two pages instead of side by side
+    var showContent by remember { mutableStateOf(false) }
+    BoxWithConstraints(Modifier.fillMaxSize()) {
+        val narrow = maxWidth < 700.dp
+        // Phones (also the Fold's screens in landscape): no "what is on" panel on the right, the channel names need the width
+        val noPanel = narrow || (MobilePrefs.mobile && maxWidth < 1300.dp && sel != "SEARCH")
+        androidx.activity.compose.BackHandler(enabled = narrow && showContent) { showContent = false }
+        fun opened() { if (narrow) showContent = true }
         FocusedBackdrop(focusedState, Modifier.fillMaxSize())
         Row(Modifier.fillMaxSize().padding(top = 20.dp)) {
-            LazyColumn(Modifier.width(270.dp).fillMaxHeight().padding(start = 24.dp, end = 8.dp), state = catState, verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            if (!narrow || !showContent) LazyColumn((if (narrow) Modifier.fillMaxWidth() else Modifier.width(270.dp)).fillMaxHeight().padding(start = 24.dp, end = 8.dp).testTag("live-cats"), state = catState, verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 itemsIndexed(names) { _, n ->
                     val ml = ChannelLists.byKey(n)
                     if (n == "GUIDE") {
@@ -214,7 +250,7 @@ fun LiveTab(liveAll: List<Item>, groupsAll: Map<String, List<Item>>, favsAll: Li
                             onFocus = { sel = "SEARCH" },
                             onRight = { runCatching { kbFirst.requestFocus() } },
                             onFav = {}, icon = AIcon.Edit, raw = true
-                        ) { runCatching { kbFirst.requestFocus() } }
+                        ) { opened(); runCatching { kbFirst.requestFocus() } }
                         return@itemsIndexed
                     }
                     if (n == "PL") {
@@ -275,6 +311,34 @@ fun LiveTab(liveAll: List<Item>, groupsAll: Map<String, List<Item>>, favsAll: Li
                         CatRow("Neue Senderliste", -1, false, Modifier, onFocus = {}, onRight = { runCatching { firstChan.requestFocus() } }, onFav = {}, icon = AIcon.Plus) { newList(null) }
                         return@itemsIndexed
                     }
+                    if (n == UsaLocals.KEY) {
+                        val localsSel = sel == n || (cityRank != null && !CityFavs.isSaved(cityRank))
+                        CatRow(
+                            "US-Lokalsender", -1, localsSel,
+                            if (localsSel) Modifier.focusRequester(ContentFocus.req) else Modifier,
+                            onFocus = { if (UsaLocals.rankOf(sel) == null || CityFavs.isSaved(UsaLocals.rankOf(sel)!!)) sel = n },
+                            onRight = { runCatching { firstChan.requestFocus() } }, onFav = {}, icon = AIcon.Globe
+                        ) { sel = n; opened(); runCatching { firstChan.requestFocus() } }
+                        return@itemsIndexed
+                    }
+                    val cityR = UsaLocals.rankOf(n)
+                    if (cityR != null) {
+                        var cityMenu by remember { mutableStateOf(false) }
+                        Box {
+                            CatRow(
+                                UsaLocals.cityLabel(cityR), -1, n == sel,
+                                if (n == sel) Modifier.focusRequester(ContentFocus.req) else Modifier,
+                                onFocus = { sel = n }, onRight = { runCatching { firstChan.requestFocus() } },
+                                onFav = { cityMenu = true }, icon = AIcon.Star, raw = true
+                            ) { opened(); runCatching { firstChan.requestFocus() } }
+                            if (cityMenu) OptionPopup(listOf("Stadt aus Favoriten entfernen"), -1, { cityMenu = false }, listOf(AIcon.Close)) {
+                                cityMenu = false
+                                CityFavs.toggle(ctx, cityR)
+                                Toast.makeText(ctx, Lang.tr("Stadt aus Favoriten entfernt") + ": " + UsaLocals.cityLabel(cityR), Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                        return@itemsIndexed
+                    }
                     val label = when {
                         n == FAV_CAT -> "Favoriten"
                         n == "HOME" -> "Start"
@@ -311,7 +375,7 @@ fun LiveTab(liveAll: List<Item>, groupsAll: Map<String, List<Item>>, favsAll: Li
                             onFocus = { sel = n }, onRight = { runCatching { firstChan.requestFocus() } },
                             onFav = { if (ml != null) listMenu = true else if (plainCat) catMenu = true else if (n != FAV_CAT && n != "ALL" && n != "REC" && !LiveGenre.isGenreKey(n)) CatFavs.toggle(ctx, n) },
                             icon = icon, raw = ml != null
-                        ) { runCatching { firstChan.requestFocus() } }
+                        ) { opened(); runCatching { firstChan.requestFocus() } }
                         // Menu of a provider category: favorite on/off, hide
                         if (catMenu && plainCat) OptionPopup(listOf(if (n in CatFavs.list) "Aus Favoriten entfernen" else "Zu Favoriten hinzufügen", "Kategorie ausblenden"), -1, { catMenu = false }) { i ->
                             catMenu = false
@@ -327,6 +391,7 @@ fun LiveTab(liveAll: List<Item>, groupsAll: Map<String, List<Item>>, favsAll: Li
                     }
                 }
             }
+            if (!narrow || showContent) NarrowPage(narrow, onBack = { showContent = false }) {
             if (sel == "HOME") Box(Modifier.weight(2f).fillMaxHeight().padding(end = 24.dp)) {
                 LiveHome(live, genres, favs, firstChan, onOpen = { ch, l -> ZapContext.list = l; ZapContext.key = "ALL"; onOpen(ch) })
             } else {
@@ -358,20 +423,40 @@ fun LiveTab(liveAll: List<Item>, groupsAll: Map<String, List<Item>>, favsAll: Li
                         color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
                     PillButton("Fertig", light = true) { finishAdd() }
                 }
+                // A city (USA Locals): back to its state, name, save the whole city to Favorites
+                if (cityRank != null) {
+                    val saved = CityFavs.isSaved(cityRank)
+                    Row(
+                        Modifier.fillMaxWidth().padding(bottom = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        PillButton("Zurück", Modifier.heightIn(min = touchMin()), icon = AIcon.Left) { localsState = UsaLocals.stateOf(cityRank); sel = UsaLocals.KEY }
+                        Text(raw = true, text = LocalMarkets.byKey(cityRank)?.name ?: "", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold,
+                            maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
+                        PillButton(if (saved) "Stadt gespeichert" else "Stadt speichern", Modifier.heightIn(min = touchMin()), light = !saved, icon = if (saved) AIcon.Star else AIcon.StarOutline) {
+                            val now = CityFavs.toggle(ctx, cityRank)
+                            Toast.makeText(ctx, Lang.tr(if (now) "Stadt zu Favoriten hinzugefügt" else "Stadt aus Favoriten entfernt") + ": " + (LocalMarkets.byKey(cityRank)?.name ?: ""), Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
                 if (sel == "SEARCH") Field(query, { query = it.take(40) }, "Sendername eingeben", Modifier.padding(bottom = 12.dp), inner = Modifier.focusRequester(searchReq))
-                if (list.isEmpty()) EmptyState(
+                val favCities = if (sel == FAV_CAT) CityFavs.list else emptyList()
+                if (sel == UsaLocals.KEY) LocalsBrowser(localsState, { localsState = it }, firstChan) { r -> sel = UsaLocals.cityKey(r) }
+                else if (list.isEmpty() && favCities.isEmpty()) EmptyState(
                     if (sel == FAV_CAT) AIcon.Heart else AIcon.Live,
-                    if (sel == FAV_CAT) "Noch keine Favoriten" else if (sel == "SEARCH") (if (query.isBlank()) "Sender suchen" else "Keine Treffer") else if (curList != null) "Diese Liste ist noch leer" else "Keine Sender",
+                    if (sel == FAV_CAT) "Noch keine Favoriten" else if (sel == "SEARCH") (if (query.isBlank()) "Sender suchen" else "Keine Treffer") else if (curList != null) "Diese Liste ist noch leer"
+                        else if (cityRank != null) (if (cityLoading) "Lokalsender werden gesucht …" else "Keine Lokalsender gefunden") else "Keine Sender",
                     when {
+                        cityRank != null -> "Für diese Stadt wurden bei deinem Anbieter keine Lokalsender (ABC, NBC, CBS, FOX …) gefunden."
                         sel == "SEARCH" -> "Tippe rechts mit der Tastatur. Gesucht wird im Sendernamen und in der Kategorie."
-                        sel == FAV_CAT -> "Auf einem Sender OK gedrückt halten und „Zu Favoriten“ wählen."
+                        sel == FAV_CAT -> "Auf einem Sender OK gedrückt halten (am Handy: lange tippen oder den Stern) und „Zu Favoriten“ wählen. Ganze Städte speicherst du unter „US-Lokalsender“."
                         curList != null -> "In „Alle Sender“ oder einer Kategorie auf einem Sender OK gedrückt halten und „Zu …“ wählen."
                         else -> "In dieser Kategorie gibt es keine Sender. Links eine andere Kategorie wählen."
                     }
                 ) else LazyColumn(
                     state = chanState,
                     // Held Down/Up key: at most ~9 steps per second, so a weak box is not flooded with scroll animations and rebinds
-                    modifier = Modifier.onPreviewKeyEvent { e ->
+                    modifier = Modifier.testTag("live-channels").onPreviewKeyEvent { e ->
                         if (e.type == KeyEventType.KeyDown && (e.key == Key.DirectionDown || e.key == Key.DirectionUp) && e.nativeKeyEvent.repeatCount > 0) {
                             val now = android.os.SystemClock.uptimeMillis()
                             LiveHold.lastRepeat = now
@@ -380,10 +465,30 @@ fun LiveTab(liveAll: List<Item>, groupsAll: Map<String, List<Item>>, favsAll: Li
                     },
                     verticalArrangement = Arrangement.spacedBy(6.dp), contentPadding = PaddingValues(bottom = 40.dp)
                 ) {
+                    // Favorites: saved cities first (open = all its local channels), then favorite channels grouped by city
+                    if (favCities.isNotEmpty()) {
+                        item(key = "cities-h", contentType = "h") { SectionHead("Gespeicherte Städte") }
+                        itemsIndexed(favCities, key = { _, r -> "city:$r" }, contentType = { _, _ -> "city" }) { ci, r ->
+                            var cm by remember { mutableStateOf(false) }
+                            Box {
+                                CatRow(
+                                    UsaLocals.cityLabel(r), -1, false,
+                                    (if (ci == 0) Modifier.focusRequester(firstChan) else Modifier).clip(RoundedCornerShape(DS.RadiusS)).background(Color(0x0FFFFFFF)),
+                                    onFocus = {}, onRight = {}, onFav = { cm = true }, icon = AIcon.Star, raw = true
+                                ) { sel = UsaLocals.cityKey(r) }
+                                if (cm) OptionPopup(listOf("Öffnen", "Stadt aus Favoriten entfernen"), -1, { cm = false }, listOf(AIcon.Right, AIcon.Close)) { i ->
+                                    cm = false
+                                    if (i == 0) sel = UsaLocals.cityKey(r) else CityFavs.toggle(ctx, r)
+                                }
+                            }
+                        }
+                    }
                     // In own lists the focus moves along with the channel when moving it (key = channel)
                     itemsIndexed(list, key = if (curList != null) { ix, ch -> ch.id + "#" + ix } else null, contentType = { _, _ -> "ch" }) { i, ch ->
+                      Column {
+                        favHeads[i]?.let { SectionHead(it, raw = true) }
                         ChannelLine(
-                            ch, (if (i == 0) Modifier.focusRequester(firstChan) else Modifier)
+                            ch, (if (i == 0 && favCities.isEmpty()) Modifier.focusRequester(firstChan) else Modifier)
                                 .then(if (ch.id == restoreId) Modifier.focusRequester(restoreReq) else Modifier), curList,
                             onNewList = { newList(ch.id) },
                             onFocus = { focusTarget = ch },
@@ -397,11 +502,12 @@ fun LiveTab(liveAll: List<Item>, groupsAll: Map<String, List<Item>>, favsAll: Li
                             } else if (sel == "REC") onPlayNow(ch)   // Aufnahme: wie ein Film abspielen (spulbar)
                             else { ZapContext.list = list; ZapContext.key = sel; LiveMemory.setSel(ctx, sel); onOpen(ch) }
                         }
+                      }
                     }
                 }
             }
-            // Right: what is on the selected channel
-            Box(Modifier.weight(1.1f).fillMaxHeight().padding(start = dpx(30), end = dpx(60), top = dpx(150))) {
+            // Right: what is on the selected channel (not on narrow screens: the channels need the width)
+            if (!noPanel) Box(Modifier.weight(1.1f).fillMaxHeight().padding(start = dpx(30), end = dpx(60), top = dpx(150))) {
                 if (sel == "SEARCH") Column(Modifier.fillMaxSize()) {
                     Box(Modifier.weight(1f).fillMaxWidth()) { FocusedNowPanel(focusedState, list.firstOrNull()) }
                     Spacer(Modifier.height(10.dp))
@@ -417,6 +523,7 @@ fun LiveTab(liveAll: List<Item>, groupsAll: Map<String, List<Item>>, favsAll: Li
                 } else FocusedNowPanel(focusedState, list.firstOrNull())
             }
                     }
+            }
 }
         ask?.let { a -> NameDialog(a.title, a.initial, onDismiss = { ask = null }) { a.onSave(it); ask = null } }
     }
@@ -445,6 +552,7 @@ private fun NameDialog(title: String, initial: String, onDismiss: () -> Unit, on
     }
 }
 
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
 private fun CatRow(
     label: String, count: Int, selected: Boolean, modifier: Modifier,
@@ -453,14 +561,16 @@ private fun CatRow(
     var f by remember { mutableStateOf(false) }
     val shape = RoundedCornerShape(DS.RadiusS)
     Row(
-        modifier.fillMaxWidth().clip(shape)
+        modifier.fillMaxWidth().heightIn(min = touchMin()).clip(shape)
             .background(if (f) Color(0x33FFFFFF) else if (selected) Accent1.copy(alpha = 0.16f) else Color.Transparent)
             .onFocusChanged { f = it.isFocused; if (it.isFocused) onFocus() }
             .onPreviewKeyEvent { e ->
                 if (e.type == KeyEventType.KeyDown && e.key == Key.DirectionRight && e.nativeKeyEvent.repeatCount == 0) { onRight(); true } else false
             }
             .favKeys { onFav() }
-            .clickable(onClick = onClick)
+            // MR TV 2: a tap selects the row too (touch does not move focus, so onFocus alone never fired on a phone);
+            // long-press = the same as Menu / long OK. D-pad: OK on the focused row behaves as before.
+            .combinedClickable(onClick = { onFocus(); onClick() }, onLongClick = touchOnly(onFav))
             .padding(horizontal = 14.dp, vertical = 12.dp),
         horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically
     ) {
@@ -473,6 +583,7 @@ private fun CatRow(
     }
 }
 
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
 private fun ChannelLine(item: Item, modifier: Modifier, inList: ChList?, onNewList: () -> Unit, onFocus: () -> Unit = {}, variants: List<Item> = emptyList(), onVariant: (Item) -> Unit = {}, onClick: () -> Unit) {
     var f by remember { mutableStateOf(false) }
@@ -499,7 +610,8 @@ private fun ChannelLine(item: Item, modifier: Modifier, inList: ChList?, onNewLi
             .border(1.dp, if (f) Color(0x40FFFFFF) else Color.Transparent, shape)
             .onFocusChanged { f = it.isFocused; if (it.isFocused) onFocus() }
             .menuKeys(onMenu = { menu = true }, onLong = { menu = true })
-            .clickable(onClick = onClick)
+            // MR TV 2: long-press opens the channel menu on touch (same as Menu / long OK)
+            .combinedClickable(onClick = onClick, onLongClick = touchOnly { menu = true })
             .padding(12.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(14.dp)
@@ -531,7 +643,19 @@ private fun ChannelLine(item: Item, modifier: Modifier, inList: ChList?, onNewLi
         }
         if (Catchup.version >= 0 && Catchup.has(item)) AppIcon(AIcon.Catchup, Accent2, size = 20.dp)
         if (DeadLinks.isDead(item.url)) AppIcon(AIcon.Warning, DS.Gold, size = 20.dp)
-        if (Library.isFav(item.id)) AppIcon(AIcon.Star, DS.Gold, size = 20.dp)
+        if (MobilePrefs.mobile) {
+            // Touch: a visible star (48 dp target) adds / removes the channel from Favorites. Not focusable: D-pad unchanged.
+            val ctx = LocalContext.current
+            val fav = Library.isFav(item.id)
+            Box(
+                Modifier.size(maxOf(touchMin(), 44.dp)).clip(RoundedCornerShape(50))
+                    .pointerInput(item.id) { detectTapGestures(onTap = {
+                        Library.toggleFav(ctx, item.id)
+                        Toast.makeText(ctx, Lang.tr(if (Library.isFav(item.id)) "Zu Favoriten hinzugefügt" else "Aus Favoriten entfernt") + ": " + item.title, Toast.LENGTH_SHORT).show()
+                    }) },
+                contentAlignment = Alignment.Center
+            ) { AppIcon(if (fav) AIcon.Star else AIcon.StarOutline, if (fav) DS.Gold else Muted, size = 24.dp) }
+        } else if (Library.isFav(item.id)) AppIcon(AIcon.Star, DS.Gold, size = 20.dp)
     }
     }
 }
@@ -618,5 +742,74 @@ private fun LiveHome(live: List<Item>, genres: Map<String, List<Item>>, favs: Li
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun SectionHead(text: String, raw: Boolean = false) {
+    Text(text, raw = raw, color = Accent2, fontSize = 15.sp, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis,
+        modifier = Modifier.padding(start = 6.dp, top = 10.dp, bottom = 4.dp))
+}
+
+/** MR TV 2 narrow screens: one page (categories or content) with a back row above the content. */
+@Composable
+private fun RowScope.NarrowPage(narrow: Boolean, onBack: () -> Unit, content: @Composable RowScope.() -> Unit) {
+    if (!narrow) { content(); return }
+    Column(Modifier.weight(1f).fillMaxHeight()) {
+        PillButton("Kategorien", Modifier.padding(start = 12.dp, bottom = 10.dp).heightIn(min = touchMin()), icon = AIcon.Left) { onBack() }
+        Row(Modifier.weight(1f).fillMaxWidth().padding(start = 12.dp)) { content() }
+    }
+}
+
+/**
+ * USA Locals browser (ported from MR TV 1.3 UsaLocalsPanel): states A–Z → the state's Nielsen top-5 markets → a city's
+ * channels. Tap / OK opens; long-press, Menu, long OK or the star saves / removes a whole city in Favorites.
+ */
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
+@Composable
+private fun LocalsBrowser(state: String?, onState: (String?) -> Unit, firstReq: FocusRequester, onCity: (Int) -> Unit) {
+    val ctx = LocalContext.current
+    val st = UsaLocals.state(state)
+    val ls = remember(state) { LazyListState() }
+    fun toggle(r: Int) {
+        val now = CityFavs.toggle(ctx, r)
+        Toast.makeText(ctx, Lang.tr(if (now) "Stadt zu Favoriten hinzugefügt" else "Stadt aus Favoriten entfernt") + ": " + (LocalMarkets.byKey(r)?.name ?: ""), Toast.LENGTH_SHORT).show()
+    }
+    if (st != null) androidx.activity.compose.BackHandler { onState(null) }
+    LazyColumn(Modifier.fillMaxSize().testTag("live-locals"), state = ls, verticalArrangement = Arrangement.spacedBy(4.dp), contentPadding = PaddingValues(bottom = 40.dp)) {
+        if (st == null) {
+            item(key = "h") { SectionHead("Bundesstaat wählen") }
+            itemsIndexed(UsaLocals.states, key = { _, s -> s.code }) { i, s ->
+                BrowseRow(s.name, null, if (i == 0) Modifier.focusRequester(firstReq) else Modifier, onStar = null) { onState(s.code) }
+            }
+        } else {
+            item(key = "back") { BrowseRow("‹ " + st.name, null, Modifier.focusRequester(firstReq), onStar = null) { onState(null) } }
+            itemsIndexed(UsaLocals.markets(st.code), key = { _, m -> m.rank }) { _, m ->
+                BrowseRow(st.label(m), CityFavs.isSaved(m.rank), Modifier, onStar = { toggle(m.rank) }) { onCity(m.rank) }
+            }
+        }
+    }
+}
+
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
+@Composable
+private fun BrowseRow(label: String, saved: Boolean?, modifier: Modifier, onStar: (() -> Unit)?, onClick: () -> Unit) {
+    var f by remember { mutableStateOf(false) }
+    val shape = RoundedCornerShape(DS.RadiusS)
+    Row(
+        modifier.fillMaxWidth().heightIn(min = maxOf(touchMin(), 48.dp)).clip(shape)
+            .background(if (f) Color(0x33FFFFFF) else Color(0x0AFFFFFF))
+            .onFocusChanged { f = it.isFocused }
+            .then(if (onStar != null) Modifier.favKeys { onStar() } else Modifier)
+            .combinedClickable(onClick = onClick, onLongClick = onStar?.let { touchOnly(it) })
+            .padding(start = 14.dp, end = 4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(raw = true, text = label, color = Color.White, fontSize = 16.sp, maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f).padding(vertical = 10.dp))
+        if (saved != null && onStar != null) Box(
+            // Touch: the star saves / removes the whole city (not focusable: D-pad uses Menu / long OK)
+            Modifier.size(maxOf(touchMin(), 44.dp)).clip(RoundedCornerShape(50)).pointerInput(label) { detectTapGestures(onTap = { onStar() }) },
+            contentAlignment = Alignment.Center
+        ) { AppIcon(if (saved) AIcon.Star else AIcon.StarOutline, if (saved) DS.Gold else Muted, size = 24.dp) }
     }
 }
