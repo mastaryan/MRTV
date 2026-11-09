@@ -77,7 +77,10 @@ object Xmltv {
     var channelCount by mutableStateOf(0)
     private val progs = ConcurrentHashMap<String, List<EpgEntry>>()
     private val client = Net.withTimeouts(20, 180)
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    // MR TV 2: an error in the background (also out of memory with a huge guide) must never crash the app
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO + kotlinx.coroutines.CoroutineExceptionHandler { _, e ->
+        status = "Keine Programmdaten erhalten (" + e.javaClass.simpleName + ")"
+    })
     private var job: Job? = null
 
     private fun prefs(c: Context) = c.getSharedPreferences("ipvio_epg", Context.MODE_PRIVATE)
@@ -114,7 +117,8 @@ object Xmltv {
                 past[k] = maxOf(past[k] ?: 0, d.coerceAtMost(7))
             }
             for (u in all) {
-                try { parse(u, wanted, map, past) } catch (e: Exception) { err = if (e is PlaylistError) e.message else e.javaClass.simpleName }
+                try { parse(u, wanted, map, past) } catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (e: Exception) { err = if (e is PlaylistError) e.message else e.javaClass.simpleName }
+                catch (e: OutOfMemoryError) { truncated = true; map.values.forEach { if (it.size > 20) it.subList(20, it.size).clear() }; break }
             }
             progs.clear()
             for ((k, v) in map) progs[k] = v.sortedBy { it.start }
@@ -257,41 +261,3 @@ object Epg {
 }
 
 data class Seg(val label: String, val start: Long, val end: Long)
-
-object IntroDb {
-    private val client = Net.base
-
-    suspend fun get(tmdbId: Int, season: Int, episode: Int, durMs: Long): List<Seg> {
-        val tv = if (season > 0 && episode > 0) "&season=$season&episode=$episode" else ""
-        val url = "https://api.theintrodb.org/v3/media?tmdb_id=$tmdbId$tv&duration_ms=$durMs"
-        val body = withContext(Dispatchers.IO) {
-            try {
-                client.newCall(Request.Builder().url(url).build()).execute().use { r ->
-                    if (r.isSuccessful) r.body?.string() else null
-                }
-            } catch (e: Exception) {
-                null
-            }
-        } ?: return emptyList()
-        val out = ArrayList<Seg>()
-        try {
-            val o = JSONObject(body)
-            // Only plausible sections (see SegLogic): missing end times for intro/recap or an "intro" in the middle of the episode
-            // would otherwise lead to buttons that do not fit
-            fun read(key: String, kind: Int, label: String) {
-                val a = o.optJSONArray(key) ?: return
-                for (x in 0 until a.length()) {
-                    val s = a.optJSONObject(x) ?: continue
-                    val st = if (!s.has("start_ms") || s.isNull("start_ms")) null else s.optLong("start_ms")
-                    val en = if (!s.has("end_ms") || s.isNull("end_ms")) null else s.optLong("end_ms")
-                    SegLogic.clean(kind, st, en, durMs)?.let { (a0, b0) -> out.add(Seg(label, a0, b0)) }
-                }
-            }
-            read("intro", SegLogic.INTRO, "Intro überspringen")
-            read("recap", SegLogic.RECAP, "Rückblick überspringen")
-            read("credits", SegLogic.CREDITS, "Abspann überspringen")
-        } catch (e: Exception) {
-        }
-        return out
-    }
-}

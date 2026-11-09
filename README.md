@@ -1,3 +1,10 @@
+> **This is MR TV 2** – a rebranded build of IPVIO Stream for MR TV ([watchmrtv.com](https://watchmrtv.com)).
+> Based on [IPVIO Stream](https://github.com/Emrodev/IPVIO-Stream) by Emrodev (GPL-3.0). What was changed: see [NOTICE.md](NOTICE.md).
+> How to pull in new IPVIO versions: [docs/UPSTREAM-SYNC.md](docs/UPSTREAM-SYNC.md). The rest of this README is the upstream IPVIO README.
+> MR TV 2 differences: the TMDB / OMDb / TheIntroDB features and the "API keys" section below do not exist in MR TV 2
+> (removed in 2.0.1). To build with the MR TV server built in, copy `server.properties.example` to `server.properties`
+> (git-ignored) and enter the address; without it the app shows the normal IPVIO login.
+
 # IPVIO Stream
 
 DOWNLOADER CODE: 4200542

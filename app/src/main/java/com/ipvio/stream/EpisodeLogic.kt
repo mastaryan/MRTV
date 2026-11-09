@@ -15,15 +15,15 @@ object EpisodeLogic {
     const val MAX_GROUP = 100
 
     /** A season according to TMDB: number, count of episodes, name (or null). Season 0 = specials, not used. */
-    data class TmdbSeason(val num: Int, val count: Int, val name: String?)
+    data class RefSeason(val num: Int, val count: Int, val name: String?)
 
     /**
      * Section of a playlist season: episodes [from]..[to] (index in the season's episode list, inclusive).
-     * Info comes from TMDB season [tmdbSeason] (-1 = none, e.g. newer than TMDB), TMDB episode number = number − [offset].
+     * Info comes from TMDB season [refSeason] (-1 = none, e.g. newer than TMDB), TMDB episode number = number − [offset].
      */
     data class Group(
         val from: Int, val to: Int, val firstNum: Int, val lastNum: Int,
-        val tmdbSeason: Int, val offset: Int, val name: String?
+        val refSeason: Int, val offset: Int, val name: String?
     ) {
         val size: Int get() = to - from + 1
         operator fun contains(index: Int) = index in from..to
@@ -34,13 +34,13 @@ object EpisodeLogic {
     /** TMDB name only if it says more than "Season 3". */
     fun niceName(n: String?): String? = n?.trim()?.takeIf { it.isNotEmpty() && !GENERIC.matches(it) }
 
-    private fun real(tmdb: List<TmdbSeason>) = tmdb.filter { it.num >= 1 && it.count > 0 }.sortedBy { it.num }
+    private fun real(ref: List<RefSeason>) = ref.filter { it.num >= 1 && it.count > 0 }.sortedBy { it.num }
 
     /** First (continuous) episode number of each TMDB season: season 1 → 1, season 2 → 1 + episodes of season 1 … */
-    fun starts(tmdb: List<TmdbSeason>): Map<Int, Int> {
+    fun starts(ref: List<RefSeason>): Map<Int, Int> {
         val out = LinkedHashMap<Int, Int>()
         var n = 1
-        for (s in real(tmdb)) { out[s.num] = n; n += s.count }
+        for (s in real(ref)) { out[s.num] = n; n += s.count }
         return out
     }
 
@@ -48,8 +48,8 @@ object EpisodeLogic {
      * Does the provider count continuously (everything in one season, numbers far beyond TMDB's season 1)?
      * Only then are the episodes distributed over the TMDB seasons.
      */
-    fun absolute(eps: List<Episode>, providerSeasons: Int, tmdb: List<TmdbSeason>): Boolean {
-        val r = real(tmdb)
+    fun absolute(eps: List<Episode>, providerSeasons: Int, ref: List<RefSeason>): Boolean {
+        val r = real(ref)
         if (providerSeasons != 1 || r.size < 2 || eps.isEmpty()) return false
         val first = r.first().count
         return eps.maxOf { it.num } > first + 2
@@ -59,14 +59,14 @@ object EpisodeLogic {
      * Sections of a season. [eps] = episodes of this season, sorted by number.
      * Short seasons: one section (the list looks as before).
      */
-    fun groups(eps: List<Episode>, season: Int, providerSeasons: Int, tmdb: List<TmdbSeason>): List<Group> {
+    fun groups(eps: List<Episode>, season: Int, providerSeasons: Int, ref: List<RefSeason>): List<Group> {
         if (eps.isEmpty()) return emptyList()
-        val st = starts(tmdb)
-        if (absolute(eps, providerSeasons, tmdb)) {
-            val r = real(tmdb)
+        val st = starts(ref)
+        if (absolute(eps, providerSeasons, ref)) {
+            val r = real(ref)
             val out = ArrayList<Group>()
             // TMDB season per episode (null = newer than TMDB knows), equal ones in a row become one section
-            fun seasonOf(n: Int): TmdbSeason? = r.firstOrNull { s -> val a = st.getValue(s.num); n >= a && n < a + s.count }
+            fun seasonOf(n: Int): RefSeason? = r.firstOrNull { s -> val a = st.getValue(s.num); n >= a && n < a + s.count }
             var i = 0
             while (i < eps.size) {
                 val s = seasonOf(eps[i].num)
@@ -80,16 +80,16 @@ object EpisodeLogic {
         }
         // Provider with own seasons but continuous numbering (season 2 starts with episode 62)
         val offset = st[season]?.let { a ->
-            val cnt = real(tmdb).first { it.num == season }.count
+            val cnt = real(ref).first { it.num == season }.count
             if (a > 1 && eps.first().num == a && eps.last().num <= a + cnt + 1) a - 1 else 0
         } ?: 0
         if (eps.size <= LONG) return listOf(Group(0, eps.lastIndex, eps.first().num, eps.last().num, season, offset, null))
         return split(eps, 0, eps.lastIndex, season, offset, null, BLOCK)
     }
 
-    private fun split(eps: List<Episode>, from: Int, to: Int, tmdbSeason: Int, offset: Int, name: String?, size: Int = MAX_GROUP): List<Group> {
+    private fun split(eps: List<Episode>, from: Int, to: Int, refSeason: Int, offset: Int, name: String?, size: Int = MAX_GROUP): List<Group> {
         val n = to - from + 1
-        if (n <= size) return listOf(Group(from, to, eps[from].num, eps[to].num, tmdbSeason, offset, name))
+        if (n <= size) return listOf(Group(from, to, eps[from].num, eps[to].num, refSeason, offset, name))
         val out = ArrayList<Group>()
         // Distribute evenly instead of 50 + remainder: shorter ways to the wanted episode, no tiny last section
         val count = (n + BLOCK - 1) / BLOCK
@@ -97,7 +97,7 @@ object EpisodeLogic {
         var a = from
         while (a <= to) {
             val b = minOf(a + per - 1, to)
-            out.add(Group(a, b, eps[a].num, eps[b].num, tmdbSeason, offset, name))
+            out.add(Group(a, b, eps[a].num, eps[b].num, refSeason, offset, name))
             a = b + 1
         }
         return out
@@ -131,8 +131,8 @@ object EpisodeLogic {
     fun label(g: Group): String = (if (g.firstNum == g.lastNum) "${g.firstNum}" else "${g.firstNum}–${g.lastNum}") +
         (g.name?.let { " · $it" } ?: "")
 
-    /** Episode number under which TMDB lists the episode in [Group.tmdbSeason]. */
-    fun tmdbNum(g: Group, num: Int): Int = num - g.offset
+    /** Episode number under which TMDB lists the episode in [Group.refSeason]. */
+    fun refNum(g: Group, num: Int): Int = num - g.offset
 }
 
 /**

@@ -15,7 +15,6 @@ class UpdateWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx
     override suspend fun doWork(): Result {
         val c = applicationContext
         General.init(c)
-        Config.init(c)
         val now = System.currentTimeMillis()
         if (!SettingsLogic.refreshDue(General.plan(), General.lastRefresh, now, General.zone())) return Result.success()
         val url = PlaylistStore.savedUrl(c) ?: return Result.success()

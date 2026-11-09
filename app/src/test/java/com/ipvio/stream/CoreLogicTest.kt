@@ -90,8 +90,11 @@ http://h/x
     }
 
     @Test fun farben_firmenfarbenSindStandard() {
-        assertEquals(Look.BRAND_GREEN, Look.ACCENTS[0].fill)
-        assertEquals(0x0B0F19, Look.BGS[0].bg)
+        // MR TV 2: watchmrtv.com silver on charcoal is the default design
+        assertEquals(Look.MRTV_SILVER, Look.ACCENTS[0].fill)
+        assertEquals(0x0D0E10, Look.BGS[0].bg)
+        assertEquals(ThemeMath.INK, ThemeMath.onAccent(Look.MRTV_SILVER))   // silver gets dark text
+        assertTrue(ThemeMath.contrast(Look.MRTV_SILVER_HI, Look.MRTV_BG) >= 7.0)   // highlight as text on charcoal
         // Neon-Grün bekommt dunkle Schrift, dunkle Flächen weiterhin weiße
         assertEquals(ThemeMath.INK, ThemeMath.onAccent(Look.BRAND_GREEN))
         assertEquals(0xFFFFFF, ThemeMath.onAccent(0x7C5CFF))

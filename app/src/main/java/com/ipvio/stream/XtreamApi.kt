@@ -20,10 +20,36 @@ class XtreamApi(private val client: OkHttpClient, private val ua: String) {
     /** Called regularly and throws on abort. */
     var check: () -> Unit = {}
 
+    /**
+     * MR TV 2: [write] loads channels, movies and series one after the other instead of at the same time
+     * (gentler on the MR TV panel's connection limits).
+     */
+    var parallel: Boolean = true
+
     private fun req(url: String) = Request.Builder().url(url).header("User-Agent", ua).build()
 
+    /** Requests still running (MR TV 2): [cancelAll] stops them when loading fails or is cancelled. */
+    private val calls = java.util.Collections.newSetFromMap(java.util.concurrent.ConcurrentHashMap<okhttp3.Call, Boolean>())
+    @Volatile private var stopped = false
+
+    private fun call(url: String): okhttp3.Call {
+        val c = client.newCall(req(url))
+        calls.add(c)
+        if (stopped) c.cancel()
+        return c
+    }
+
+    private inline fun <T> exec(c: okhttp3.Call, body: (okhttp3.Response) -> T): T =
+        try { c.execute().use(body) } finally { calls.remove(c) }
+
+    /** Cancels every running request of this loader (e.g. after an error or when the user cancels loading). */
+    fun cancelAll() {
+        stopped = true
+        for (c in calls.toList()) runCatching { c.cancel() }
+    }
+
     private fun text(url: String): String {
-        client.newCall(req(url)).execute().use { r ->
+        exec(call(url)) { r ->
             if (!r.isSuccessful) throw PlaylistError(PlaylistLogic.httpError(r.code))
             return r.body?.string() ?: ""
         }
@@ -79,7 +105,7 @@ class XtreamApi(private val client: OkHttpClient, private val ua: String) {
 
     /** Goes through a (large) list entry by entry. If the provider does not answer with a list, nothing happens. */
     private fun stream(url: String, each: (Map<String, String>) -> Unit) {
-        client.newCall(req(url)).execute().use { r ->
+        exec(call(url)) { r ->
             if (!r.isSuccessful) throw PlaylistError(PlaylistLogic.httpError(r.code))
             val body = r.body ?: return
             JsonReader(body.charStream()).use { jr ->
@@ -104,9 +130,9 @@ class XtreamApi(private val client: OkHttpClient, private val ua: String) {
         for (attempt in 0 until 2) {
             try {
                 var ok = true
-                client.newCall(req(XtreamLogic.api(a, "get_series_info", "&series_id=$seriesId"))).execute().use { r ->
-                    if (!r.isSuccessful) { ok = false; return@use }
-                    val body = r.body ?: run { ok = false; return@use }
+                exec(call(XtreamLogic.api(a, "get_series_info", "&series_id=$seriesId"))) { r ->
+                    if (!r.isSuccessful) { ok = false; return@exec }
+                    val body = r.body ?: run { ok = false; return@exec }
                     JsonReader(body.charStream()).use { jr ->
                         jr.isLenient = true
                         if (jr.peek() != JsonToken.BEGIN_OBJECT) { ok = false; return@use }
@@ -206,6 +232,36 @@ class XtreamApi(private val client: OkHttpClient, private val ua: String) {
      * the parallel requests, the missing part is simply fetched again one after the other.
      */
     fun write(a: XtreamLogic.Acct, out: Writer): Int {
+        try {
+            return if (parallel) writeParallel(a, out) else writeSequential(a, out)
+        } catch (e: Throwable) {
+            cancelAll()
+            throw e
+        }
+    }
+
+    /** MR TV 2 (built-in server): channels, then movies, then series – one request at a time, in the old order. */
+    private fun writeSequential(a: XtreamLogic.Acct, out: Writer): Int {
+        onPhase("Zugang wird geprüft …")
+        verify(a)
+        var n = 0
+        out.write(XtreamLogic.header(a)); out.write("\n")
+        onPhase("Sender werden geladen …")
+        val liveCats = categories(a, "get_live_categories")
+        stream(XtreamLogic.api(a, "get_live_streams")) { f ->
+            XtreamLogic.liveEntry(a, f, liveCats)?.let { out.write(it); out.write("\n"); n++ }
+        }
+        check()
+        onPhase("Filme werden geladen …")
+        n += writeMovies(a, out)
+        check()
+        onPhase("Serien werden geladen …")
+        n += writeSeries(a, out)
+        out.flush()
+        return n
+    }
+
+    private fun writeParallel(a: XtreamLogic.Acct, out: Writer): Int {
         onPhase("Zugang wird geprüft …")
         verify(a)
         var n = 0

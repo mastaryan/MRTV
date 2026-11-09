@@ -24,7 +24,7 @@ object ProviderInfo {
     }
 
     private fun toMeta(i: ProviderLogic.Info, tv: Boolean, itemYear: Int?): Meta = Meta(
-        tmdbId = 0, isTv = tv, poster = i.cover, backdrop = i.backdrop, overview = i.plot, rating = i.rating,
+        metaId = 0, isTv = tv, poster = i.cover, backdrop = i.backdrop, overview = i.plot, rating = i.rating,
         year = i.year ?: itemYear?.toString(), genres = i.genres, runtime = i.runtime, trailerKey = i.trailer,
         extended = true, uiLang = Lang.code(), checked = true
     )

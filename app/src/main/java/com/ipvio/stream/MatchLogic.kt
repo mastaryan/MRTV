@@ -63,6 +63,6 @@ object MatchLogic {
      * Does a stored hit still fit? No if the playlist has more seasons than the series at TMDB
      * (typical for a wrong hit), or if neither name nor original name matches the title and there is a better one.
      */
-    fun seasonsFit(playlistMaxSeason: Int, tmdbSeasons: Int): Boolean =
-        playlistMaxSeason <= 0 || tmdbSeasons <= 0 || playlistMaxSeason <= tmdbSeasons
+    fun seasonsFit(playlistMaxSeason: Int, refSeasons: Int): Boolean =
+        playlistMaxSeason <= 0 || refSeasons <= 0 || playlistMaxSeason <= refSeasons
 }

@@ -95,7 +95,7 @@ import kotlinx.coroutines.flow.collectLatest
 
 data class PlayReq(
     val title: String, val url: String, val itemId: String, val live: Boolean, val startMs: Long,
-    val tmdbId: Int = 0, val season: Int = 0, val episode: Int = 0,
+    val metaId: Int = 0, val season: Int = 0, val episode: Int = 0,
     /** Further sources of the same movie (other quality) – to fall back on errors/stutter and in the quality menu. */
     val alts: List<Variant> = emptyList(),
     /** Short notice at start (e.g. "4K does not suit this device – playing FHD"). */
@@ -151,6 +151,7 @@ fun PlayerScreen(req: PlayReq, zapList: List<Item>, liveAll: List<Item>, seriesI
     // and gives up after 10 s connect time or 15 s read time instead of waiting forever.
     val player = remember {
         val http = DefaultHttpDataSource.Factory()
+            .setUserAgent(Rebrand.USER_AGENT)
             .setAllowCrossProtocolRedirects(true)
             .setConnectTimeoutMs(10_000)
             .setReadTimeoutMs(15_000)
@@ -568,7 +569,7 @@ fun PlayerScreen(req: PlayReq, zapList: List<Item>, liveAll: List<Item>, seriesI
         val v = pickVariant(ep, saved.first, saved.second, saved.third, PlaybackPrefs.cap(ctx))
         History.add(ctx, si.id)
         scrubTarget = -1L
-        cur = PlayReq(si.title + " S" + ep.season + "E" + ep.num, v.url, si.id, false, 0L, cur.tmdbId, ep.season, ep.num)
+        cur = PlayReq(si.title + " S" + ep.season + "E" + ep.num, v.url, si.id, false, 0L, cur.metaId, ep.season, ep.num)
         if (!openStream(player, v.url, 0L)) { msg = PlayerLogic.MSG_FORMAT; buffering = false; return }
         ping()
     }
@@ -891,7 +892,6 @@ fun PlayerScreen(req: PlayReq, zapList: List<Item>, liveAll: List<Item>, seriesI
         }
     }
     LaunchedEffect(cur.url, hasDur) {
-        if (!cur.live && cur.tmdbId > 0 && hasDur && AppSettings.skipIntro) segs = IntroDb.get(cur.tmdbId, cur.season, cur.episode, dur)
     }
     // Optional: skip the intro automatically
     LaunchedEffect(activeSeg) {
@@ -922,7 +922,6 @@ fun PlayerScreen(req: PlayReq, zapList: List<Item>, liveAll: List<Item>, seriesI
         if (cur.live || (cur.season <= 0 && cur.episode <= 0)) return@LaunchedEffect
         epBanner = false
         var name: String? = null
-        if (cur.tmdbId > 0) name = runCatching { MetaRepo.season(cur.tmdbId, cur.season, null).firstOrNull { it.num == cur.episode }?.name }.getOrNull()
         if (name.isNullOrBlank()) {
             val t = epList.firstOrNull { it.season == cur.season && it.num == cur.episode }?.title?.trim()
             name = t?.takeIf { it.isNotBlank() && !Regex("[Ss]\\d{1,3}\\s*[Ee]\\d{1,4}").containsMatchIn(it) && !it.equals(seriesItem?.title, true) }

@@ -18,7 +18,7 @@ data class XtreamLive(val host: String, val user: String, val pass: String, val 
 /**
  * Catchup without Android (testable). Supports:
  * - Xtream servers (tv_archive from the API or catchup="xc"): /timeshift/user/pass/minutes/starttime/id.ts
- * - M3U-Angaben wie in Kodi/TiviMate: catchup="default|append|shift|flussonic|xc", catchup-days, catchup-source,
+ * - M3U-Angaben wie in Kodi: catchup="default|append|shift|flussonic|xc", catchup-days, catchup-source,
  *   plus the older spellings timeshift="3" and tvg-rec="3".
  * Platzhalter in catchup-source: {utc} {start} {utcend} {end} {lutc} {now} {timestamp} {duration} {offset},
  * with divisor ({duration:60}) or format ({utc:Y-m-d H:M:S}), {Y} {m} {d} {H} {M} {S} and the ${start} spelling.

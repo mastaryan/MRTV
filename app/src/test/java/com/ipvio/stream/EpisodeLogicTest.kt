@@ -13,11 +13,11 @@ class EpisodeLogicTest {
 
     // One Piece laut TMDB (gekürzt): 61, 16, 14, 39 Folgen …
     private val op = listOf(
-        EpisodeLogic.TmdbSeason(0, 20, "Specials"),
-        EpisodeLogic.TmdbSeason(1, 61, "East Blue"),
-        EpisodeLogic.TmdbSeason(2, 16, "Season 2"),
-        EpisodeLogic.TmdbSeason(3, 14, "Chopper Kingdom"),
-        EpisodeLogic.TmdbSeason(4, 39, "Alabasta")
+        EpisodeLogic.RefSeason(0, 20, "Specials"),
+        EpisodeLogic.RefSeason(1, 61, "East Blue"),
+        EpisodeLogic.RefSeason(2, 16, "Season 2"),
+        EpisodeLogic.RefSeason(3, 14, "Chopper Kingdom"),
+        EpisodeLogic.RefSeason(4, 39, "Alabasta")
     )
 
     @Test fun kurzeStaffel_einAbschnitt_wieBisher() {
@@ -44,21 +44,21 @@ class EpisodeLogicTest {
         assertEquals(listOf("1–61 · East Blue", "62–77", "78–91 · Chopper Kingdom", "92–130 · Alabasta", "131–140"), g.map { EpisodeLogic.label(it) })
         // Folge 62 = TMDB Staffel 2, Folge 1
         val s2 = g[1]
-        assertEquals(2, s2.tmdbSeason)
-        assertEquals(1, EpisodeLogic.tmdbNum(s2, 62))
-        assertEquals(39, EpisodeLogic.tmdbNum(g[3], 130))
+        assertEquals(2, s2.refSeason)
+        assertEquals(1, EpisodeLogic.refNum(s2, 62))
+        assertEquals(39, EpisodeLogic.refNum(g[3], 130))
         // neuer als TMDB: keine Infos-Staffel
-        assertEquals(-1, g[4].tmdbSeason)
+        assertEquals(-1, g[4].refSeason)
     }
 
     @Test fun riesigeTmdbStaffel_wirdZusaetzlichGeteilt() {
-        val big = listOf(EpisodeLogic.TmdbSeason(1, 10, null), EpisodeLogic.TmdbSeason(2, 250, "Wano"))
+        val big = listOf(EpisodeLogic.RefSeason(1, 10, null), EpisodeLogic.RefSeason(2, 250, "Wano"))
         val g = EpisodeLogic.groups(eps(1, 1..260), 1, 1, big)
         assertEquals("1–10", EpisodeLogic.label(g[0]))
         val w = g.drop(1)
         assertTrue(w.all { it.to - it.from + 1 <= EpisodeLogic.BLOCK })
         assertEquals(11, w.first().firstNum); assertEquals(260, w.last().lastNum)
-        assertTrue(g.drop(1).all { it.tmdbSeason == 2 && it.offset == 10 })
+        assertTrue(g.drop(1).all { it.refSeason == 2 && it.offset == 10 })
     }
 
     @Test fun eigeneStaffelnMitFortlaufenderNummer() {
@@ -66,7 +66,7 @@ class EpisodeLogicTest {
         val g = EpisodeLogic.groups(eps(2, 62..77), 2, 3, op)
         assertEquals(1, g.size)
         assertEquals(61, g[0].offset)
-        assertEquals(1, EpisodeLogic.tmdbNum(g[0], 62))
+        assertEquals(1, EpisodeLogic.refNum(g[0], 62))
         // normale Zählung bleibt unverändert
         assertEquals(0, EpisodeLogic.groups(eps(2, 1..16), 2, 3, op)[0].offset)
         // mehrere Staffeln beim Anbieter: nie quer verteilen

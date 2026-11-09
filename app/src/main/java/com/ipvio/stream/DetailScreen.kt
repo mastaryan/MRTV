@@ -146,9 +146,9 @@ private fun DetailScreenFull(
         MetaRepo.extended(ctx, item)?.let { meta = it }
         metaDone = true
     }
-    val credits by produceState<Credits?>(null, meta?.tmdbId) {
+    val credits by produceState<Credits?>(null, meta?.metaId) {
         val m = meta
-        value = if (m != null && m.tmdbId > 0) CreditsRepo.credits(ctx, m) else null
+        value = if (m != null && m.metaId > 0) CreditsRepo.credits(ctx, m) else null
     }
     // Match against the whole playlist in the background (an index is built the first time)
     val similar by produceState(emptyList<Item>(), credits, all) {
@@ -192,18 +192,11 @@ private fun DetailScreenFull(
     val playUrl = if (item.kind == Kind.SERIES) eps.firstOrNull()?.let { pick(it).url }
         else movieVars.firstOrNull { it.label == prefLabel }?.url ?: item.url
 
-    val tmdbId = meta?.tmdbId
-    val imdbId = meta?.imdbId
+    val metaId = meta?.metaId
     val isTv = meta?.isTv == true
-    // Lange Staffeln (One Piece & Co.): TMDB-Staffeln holen, um sie als Abschnitte zu nutzen
-    val needTmdbSeasons = remember(item) {
-        item.kind == Kind.SERIES && item.episodes.groupBy { it.season }.values.any { it.size > EpisodeLogic.LONG || it.first().num > 1 }
-    }
-    val tmdbSeasons by produceState(emptyList<EpisodeLogic.TmdbSeason>(), tmdbId, isTv) {
-        val id = tmdbId
-        if (needTmdbSeasons && isTv && id != null && id > 0) value = MetaRepo.tvSeasons(ctx, id)
-    }
-    val groups = remember(eps, season, tmdbSeasons) { EpisodeLogic.groups(eps, season, seasons.size, tmdbSeasons) }
+    // MR TV 2: episodes are grouped from the provider's own seasons only (no outside season data)
+    val refSeasons = remember { emptyList<EpisodeLogic.RefSeason>() }
+    val groups = remember(eps, season, refSeasons) { EpisodeLogic.groups(eps, season, seasons.size, refSeasons) }
     // On season change to the left: land in the last section; "Go to episode" in another season: jump there
     val enterAtEnd = remember { booleanArrayOf(false) }
     val pendingNum = remember { intArrayOf(-1) }
@@ -224,28 +217,8 @@ private fun DetailScreenFull(
     val gi = EpisodeLogic.groupOf(groups, anchor)
     val group = groups.getOrNull(gi)
     val shown = remember(eps, group) { if (group == null) emptyList() else eps.subList(group.from, group.to + 1) }
-    // Info from the matching TMDB season (with continuous numbering not season 1 of the playlist)
-    val metaSeason = group?.tmdbSeason ?: season
-    // New with a different TMDB match (the detail page can correct a wrongly stored match on opening)
-    var epCache by remember(item.id, tmdbId) { mutableStateOf<Map<Int, List<EpMeta>>>(emptyMap()) }
-    var epLoading by remember(item.id, tmdbId) { mutableStateOf(false) }
-    LaunchedEffect(tmdbId, imdbId, metaSeason) {
-        if (item.kind == Kind.SERIES && isTv && tmdbId != null && tmdbId > 0 && metaSeason >= 0 && epCache[metaSeason] == null) {
-            epLoading = true
-            // IMDb ratings per episode only with the same count (IMDb splits long anime differently)
-            val sameCount = group == null || (group.offset == 0 && metaSeason == season)
-            val res = MetaRepo.season(tmdbId, metaSeason, if (sameCount) imdbId else null)
-            epCache = epCache + (metaSeason to res)
-            epLoading = false
-        }
-    }
-    val epMetas = epCache[metaSeason] ?: emptyList()
-    fun metaOf(ep: Episode): EpMeta? {
-        val g = group ?: return null
-        if (g.tmdbSeason < 0) return null
-        val n = EpisodeLogic.tmdbNum(g, ep.num)
-        return epMetas.firstOrNull { it.num == n } ?: if (g.offset > 0) epMetas.firstOrNull { it.num == ep.num } else null
-    }
+    // MR TV 2: no per-episode info from outside services; episode titles come from the provider
+    @Suppress("UNUSED_PARAMETER") fun metaOf(ep: Episode): EpMeta? = null
 
     val playFocus = remember { FocusRequester() }
     // Back from a person or a similar title: go back there, not to "Resume"
@@ -465,7 +438,7 @@ private fun DetailScreenFull(
                             }
                         } else Text(
                             raw = meta?.overview != null,
-                            text = meta?.overview ?: if (MetaRepo.usable(item)) "Keine Beschreibung gefunden." else "Tipp: Unter Einstellungen > API-Schlüssel einen eigenen TMDB-Schlüssel eintragen, dann erscheinen hier Beschreibung, Cover und Bewertungen.",
+                            text = meta?.overview ?: "Keine Beschreibung gefunden.",
                             color = Tok.TextMid, fontSize = spx(17), lineHeight = spx(25),
                             // Short and medium descriptions (up to about 800 characters) are shown completely, without "Read more".
                             // In the cinema preview (without buttons) it is at most 6 lines.
@@ -646,7 +619,7 @@ private fun DetailScreenFull(
                             horizontalArrangement = Arrangement.spacedBy(dpx(16)), verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                if (epLoading) "lade Infos …" else "Rechts = nächste Staffel  ·  Links = Staffeln",
+                                "Rechts = nächste Staffel  ·  Links = Staffeln",
                                 color = Muted, fontSize = spx(14)
                             )
                             if (item.episodes.size > EpisodeLogic.LONG) DetailPill("Zu Folge springen", icon = AIcon.Down) { jumpOpen = !jumpOpen }
@@ -716,14 +689,10 @@ private fun DetailScreenFull(
             credits?.let { c ->
                 if (c.cast.isNotEmpty()) item(key = "cast") { CastRow(c.cast, castState, if (memKey?.startsWith("c:") == true) memKey.drop(2).toIntOrNull() else null, restoreReq) { p -> DetailFocus.last[item.id] = "c:" + p.id; onPerson(PersonRef(p.id, p.name, p.photo, item.id)) } }
             }
-            if (credits == null && (meta?.tmdbId ?: 0) > 0 && CreditsRepo.lastError != null) item(key = "cerr") {
+            if (credits == null && (meta?.metaId ?: 0) > 0 && CreditsRepo.lastError != null) item(key = "cerr") {
                 Text("Besetzung nicht verfügbar: ${CreditsRepo.lastError}", color = Muted, fontSize = 13.sp, modifier = Modifier.padding(top = 24.dp))
             }
             if (similar.isNotEmpty()) item(key = "similar") { SimilarRow("Ähnliche Titel in deiner Playlist", similar, simState, if (memKey?.startsWith("s:") == true) memKey.drop(2) else null, restoreReq) { i -> DetailFocus.last[item.id] = "s:" + i.id; onOpenItem(i) } }
-            if (MetaRepo.enabled()) item {
-                Text("Dieses Produkt verwendet die TMDB-API, wird aber nicht von TMDB unterstützt oder zertifiziert.",
-                    color = Muted, fontSize = 13.sp, modifier = Modifier.padding(top = 32.dp))
-            }
         }
     }
 }
@@ -768,8 +737,7 @@ private fun EpisodeRow(ep: Episode, em: EpMeta?, v: Variant, prog: ResumeLogic.E
                 Text(raw = true, text = "${ep.num}. ${em?.name ?: ep.title}", color = if (f) Tok.TextHi else Tok.TextMid, fontSize = spx(if (f) 26 else 24), fontWeight = FontWeight.Bold,
                     maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f, fill = false))
                 v.quality?.let { QualityBadge(it) }
-                em?.imdb?.let { Badge("IMDb $it", Color(0xFFF5C518), Color.Black) }
-                if (em?.imdb == null) em?.rating?.let { RatingBadge(it, Color(0x26FFFFFF)) }
+                em?.rating?.let { RatingBadge(it, Color(0x26FFFFFF)) }
                 em?.runtime?.let { Badge("$it Min") }
             }
             em?.air?.let { Text(raw = true, text = it, color = Muted, fontSize = spx(16)) }

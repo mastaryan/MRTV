@@ -12,7 +12,7 @@ object CastLogic {
 }
 
 /** Reference to a title at TMDB (recommendation or filmography). [alt] is the original title. */
-data class Ref(val tmdbId: Int, val isTv: Boolean, val title: String, val alt: String?, val year: String?, val poster: String?)
+data class Ref(val metaId: Int, val isTv: Boolean, val title: String, val alt: String?, val year: String?, val poster: String?)
 
 /** Maps TMDB titles to entries of the own playlist (title normalized, year ±1, movie/series separate). */
 object LibMatch {

@@ -63,15 +63,12 @@ Film¦Film
 {#0} Staffel(n)¦{#0} seizoen(en)
 {#0} Min¦{#0} min
 bei {#0} Min¦bij {#0} min
-TMDB antwortet mit Fehler {#0}¦TMDB antwoordt met fout {#0}
-Keine Verbindung zu TMDB ({0})¦Geen verbinding met TMDB ({0})
 Besetzung nicht lesbar ({0})¦Cast niet leesbaar ({0})
 Besetzung nicht verfügbar: {0}¦Cast niet beschikbaar: {0}
 Keine App zum Öffnen des Trailers gefunden¦Geen app gevonden om de trailer te openen
 Externer Player¦Externe speler
 Kein externer Player installiert (z. B. VLC)¦Geen externe speler geïnstalleerd (bijv. VLC)
 Keine Beschreibung gefunden.¦Geen beschrijving gevonden.
-Tipp: TMDB-Schlüssel in secrets.properties eintragen, dann erscheinen hier Beschreibung, Cover und Bewertungen.¦Tip: voer de TMDB-sleutel in bij secrets.properties, dan verschijnen hier beschrijving, cover en beoordelingen.
 Fortsetzen {0}¦Hervatten {0}
 Von vorn¦Van het begin
 Abspielen¦Afspelen
@@ -89,7 +86,6 @@ Episoden¦Afleveringen
 lade Infos …¦info laden …
 Links/Rechts = Staffel wechseln¦Links/rechts = seizoen wisselen
 Ähnliche Titel in deiner Playlist¦Vergelijkbare titels in je playlist
-Dieses Produkt verwendet die TMDB-API, wird aber nicht von TMDB unterstützt oder zertifiziert.¦Dit product gebruikt de TMDB-API, maar wordt niet door TMDB ondersteund of gecertificeerd.
 Raster anpassen¦Raster aanpassen
 Spalten¦Kolommen
 Zeilen¦Rijen

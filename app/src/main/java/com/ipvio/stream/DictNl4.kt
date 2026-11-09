@@ -186,7 +186,6 @@ Bildschirm füllen¦Scherm vullen
 Cover¦Cover
 Favorit¦Favoriet
 Favoriten & Listen¦Favorieten & lijsten
-Intro-Zeiten stammen aus der Community-Datenbank TheIntroDB und gibt es nicht für jede Serie. Die Stream-Info erscheint nur bei Filmen und Serien.¦Introtijden komen uit de communitydatabase TheIntroDB en zijn er niet voor elke serie. De streaminfo verschijnt alleen bij films en series.
 Kartengröße¦Kaartgrootte
 Markiere eine Einstellung, um sie hier zu sehen.¦Markeer een instelling om die hier te zien.
 Noch keine Favoriten. Auf einem Sender OK gedrückt halten, bei Filmen und Serien auf der Detailseite „Zu Favoriten“ wählen.¦Nog geen favorieten. Houd OK ingedrukt op een zender; kies bij films en series op de detailpagina „Naar favorieten”.

@@ -57,7 +57,6 @@ Leere Antwort¦Leeg antwoord
 Lade … {#0} %¦Laden … {#0} %
 Erlaube der App einmal „Apps installieren“ und tippe dann erneut.¦Sta de app eenmalig „Apps installeren” toe en tik dan opnieuw.
 Trage die Adresse einer kleinen Datei update.json ein, die du selbst bereitstellst: {"versionCode": 2, "versionName": "1.1", "apk": "ipvio.apk"}. Die neue APK muss mit demselben Schlüssel signiert sein wie die installierte, sonst lehnt Android sie ab.¦Voer het adres in van een klein bestand update.json dat je zelf beschikbaar stelt: {"versionCode": 2, "versionName": "1.1", "apk": "ipvio.apk"}. De nieuwe APK moet met dezelfde sleutel zijn ondertekend als de geïnstalleerde, anders weigert Android hem.
-Startet die nächste Folge, sobald der Abspann beginnt. Geht nur, wenn für die Serie Abspann-Zeiten bekannt sind (TheIntroDB); sonst bleibt es beim Hinweis in den letzten 30 Sekunden.¦Start de volgende aflevering zodra de aftiteling begint. Werkt alleen als voor de serie aftitelingtijden bekend zijn (TheIntroDB); anders blijft het bij de melding in de laatste 30 seconden.
 Zeigt die aktuelle Uhrzeit beim Abspielen in einer Ecke (nicht, solange die Steuerleiste offen ist).¦Toont tijdens het afspelen de actuele tijd in een hoek (niet zolang de bedieningsbalk open is).
 Oben rechts¦Rechtsboven
 Oben links¦Linksboven
@@ -95,24 +94,12 @@ Server nicht gefunden (DNS)¦Server niet gevonden (DNS)
 Sichere Verbindung fehlgeschlagen. Datum und Uhrzeit des Geräts prüfen¦Beveiligde verbinding mislukt. Controleer datum en tijd van het apparaat
 Zeitüberschreitung, Server antwortet nicht¦Time-out, server reageert niet
 API-Schlüssel¦API-sleutel
-TMDB, IMDb und Rotten Tomatoes¦TMDB, IMDb en Rotten Tomatoes
-Die App enthält keine eigenen Schlüssel. Mit deinen eigenen, kostenlosen Schlüsseln zeigt sie Poster, Beschreibungen, Besetzung, Trailer, automatische Genres sowie IMDb- und Rotten-Tomatoes-Wertungen. Ohne Schlüssel übernimmt sie Beschreibung, Cover und Bewertung von deinem Anbieter (bei Xtream-Zugängen).¦De app bevat geen eigen sleutels. Met je eigen, gratis sleutels toont ze posters, beschrijvingen, cast, trailers, automatische genres en IMDb- en Rotten Tomatoes-scores. Zonder sleutel neemt ze beschrijving, cover en beoordeling over van je aanbieder (bij Xtream-toegang).
-TMDB (Film-Infos)¦TMDB (filminfo)
-TMDB API-Schlüssel (v3)¦TMDB API-sleutel (v3)
-Kostenlos unter themoviedb.org: Konto anlegen, anmelden, dann Einstellungen > API > API-Schlüssel anfordern und den 32-stelligen „API Key“ eintragen. Dieses Produkt verwendet die TMDB-API, wird aber nicht von TMDB unterstützt oder zertifiziert.¦Gratis op themoviedb.org: maak een account aan, log in, kies dan Instellingen > API > API-sleutel aanvragen en voer de 32-cijferige „API Key” in. Dit product gebruikt de TMDB-API, maar wordt niet door TMDB ondersteund of gecertificeerd.
-OMDb (IMDb- und Rotten-Tomatoes-Wertung)¦OMDb (IMDb- en Rotten Tomatoes-score)
-OMDb API-Schlüssel¦OMDb API-sleutel
-Kostenlos unter omdbapi.com > API Key (FREE). Danach den Aktivierungslink in der E-Mail anklicken, sonst funktioniert der Schlüssel nicht. Geht auch ohne TMDB-Schlüssel.¦Gratis op omdbapi.com > API Key (FREE). Klik daarna op de activeringslink in de e-mail, anders werkt de sleutel niet. Werkt ook zonder TMDB-sleutel.
 Speichern und prüfen¦Opslaan en controleren
 Schlüssel entfernen¦Sleutel verwijderen
 Schlüssel gültig¦Sleutel geldig
 Schlüssel ungültig¦Sleutel ongeldig
 Keine Verbindung¦Geen verbinding
-Die Schlüssel bleiben nur auf diesem Gerät. Nach dem Eintragen die App einmal neu starten, damit alle Bereiche die Infos laden. Intro- und Abspann-Zeiten kommen von TheIntroDB und brauchen keinen Schlüssel.¦De sleutels blijven alleen op dit apparaat. Start de app na het invoeren eenmaal opnieuw, zodat alle onderdelen de info laden. Intro- en aftitelingtijden komen van TheIntroDB en hebben geen sleutel nodig.
-Dieses Produkt verwendet die TMDB-API, wird aber nicht von TMDB unterstützt oder zertifiziert. Wertungen: OMDb. Intro-Zeiten: TheIntroDB.¦Dit product gebruikt de TMDB-API, maar wordt niet door TMDB ondersteund of gecertificeerd. Scores: OMDb. Introtijden: TheIntroDB.
 IPVIO Stream ist freie Software unter der GNU General Public License v3 (GPL-3.0). Verwendete Bibliotheken: AndroidX/Jetpack Compose, Media3 (Apache 2.0), OkHttp, Coil (Apache 2.0), Jellyfin FFmpeg-Decoder (GPL-3.0), Schriften Outfit und Inter (SIL Open Font License).¦IPVIO Stream is vrije software onder de GNU General Public License v3 (GPL-3.0). Gebruikte bibliotheken: AndroidX/Jetpack Compose, Media3 (Apache 2.0), OkHttp, Coil (Apache 2.0), Jellyfin FFmpeg-decoder (GPL-3.0), lettertypen Outfit en Inter (SIL Open Font License).
-Automatische Genres brauchen einen TMDB-Schlüssel (Einstellungen > API-Schlüssel).¦Automatische genres hebben een TMDB-sleutel nodig (Instellingen > API-sleutels).
-Tipp: Unter Einstellungen > API-Schlüssel einen eigenen TMDB-Schlüssel eintragen, dann erscheinen hier Beschreibung, Cover und Bewertungen.¦Tip: voer onder Instellingen > API-sleutels een eigen TMDB-sleutel in, dan verschijnen hier beschrijving, cover en beoordelingen.
 Zugang wird geprüft …¦Toegang wordt gecontroleerd …
 Sender werden geladen …¦Zenders worden geladen …
 Filme werden geladen …¦Films worden geladen …
@@ -233,13 +220,9 @@ Auf dem Handy im Querformat¦Op de telefoon in landschapsstand
 Die App ist für den Fernseher gebaut und wirkt quer am besten. Aus: dreht mit dem Gerät. Im Player: Tippen zeigt die Steuerung, Doppeltippen links/rechts spult, in der Mitte Pause.¦De app is gebouwd voor de tv en werkt het best in landschapsstand. Uit: draait mee met het apparaat. In de speler: tikken toont de bediening, dubbeltikken links/rechts spoelt, in het midden pauze.
 Oder mit der Handy-Kamera scannen¦Of scan met de camera van je telefoon
 QR-Code scannen¦QR-code scannen
-Spende¦Donatie
-Hallo, ich bin der nigerianische Prinz und brauche dringend deine Hilfe! Spaß beiseite: Die App kostet dich nichts, mich aber ein paar Nächte Schlaf und sehr viel Kaffee. Wenn du mir ein paar Euro schicken möchtest, tanzt mein Kontostand vor Freude. Kein Zwang: Die App bleibt kostenlos, werbefrei und GPL-lizenziert.¦Hallo, ik ben de Nigeriaanse prins en ik heb dringend je hulp nodig! Maar zonder gekheid: de app kost jou niets, maar mij wel een paar slapeloze nachten en HEEL veel koffie. Wil je me een paar euro sturen, dan danst mijn bankrekening van vreugde. Geen verplichting: de app blijft gratis, reclamevrij en onder GPL-licentie.
 Mit der Handy-Kamera scannen¦Scannen met de camera van je telefoon
 Folgen werden geladen …¦Afleveringen worden geladen …
 Die Folgen konnten nicht geladen werden. Verbindung oder Zugang prüfen.¦De afleveringen konden niet worden geladen. Controleer de verbinding of toegang.
-Dieser QR-Code ist der PayPal-Link für meine Spende. Mit der Handy-Kamera scannen, dann öffnet sich PayPal.¦Deze QR-code is de PayPal-link voor mijn donatie. Scan hem met de camera van je telefoon, dan opent PayPal.
-Unterstütze IPVIO Stream¦Steun IPVIO Stream
 Raster & Ansicht¦Raster & weergave
 American Football¦American football
 Basketball¦Basketbal

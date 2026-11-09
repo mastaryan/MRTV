@@ -1,0 +1,5 @@
+# MR TV 2: built-in Xtream server. Copy this file to "server.properties" (it is ignored by Git) and enter the server
+# address, e.g. http://your-server.tld or http://your-server.tld:8080. With it the login screen only asks for username and
+# password. Alternatives: ./gradlew assembleRelease -PMRTV2_SERVER_URL=... or the MRTV2_SERVER_URL environment variable.
+# Leave empty (or delete server.properties) for the normal IPVIO login with server, M3U and Stalker portal.
+MRTV2_SERVER_URL=

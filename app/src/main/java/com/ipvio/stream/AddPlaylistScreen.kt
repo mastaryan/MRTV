@@ -10,12 +10,16 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.clickable
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.foundation.horizontalScroll
@@ -42,26 +46,30 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
     // Last entered playlist that has not finished loading (crash, power loss, abort): prefill
     val pend = remember { PlaylistStore.pending(ctx) }
     val pendX = remember { pend?.let { LoadLogic.xtreamParts(it.url) } }
-    var xtream by remember { mutableStateOf(pendX != null) }
+    // MR TV 2: built-in server (see Rebrand.SERVER_URL): only username and password, no server field, no M3U/Stalker
+    val locked = Rebrand.SERVER_LOCKED
+    var xtream by remember { mutableStateOf(locked || pendX != null) }
     // Runde 20: Stalker-Portal (Portal-Adresse + MAC-Adresse)
     val pendS = remember { pend?.url?.let { StalkerLogic.parse(it) } }
     var stalker by remember { mutableStateOf(pendS != null) }
     var portal by remember { mutableStateOf(pendS?.portal ?: "") }
     var mac by remember { mutableStateOf(pendS?.mac ?: "00:1A:79:") }
-    // Optional: some providers also want serial number and device IDs (as in TiviMate / STB Emu)
+    // Optional: some providers also want serial number and device IDs
     var sn by remember { mutableStateOf(pendS?.sn ?: "") }
     var devId by remember { mutableStateOf(pendS?.id1 ?: "") }
     var devId2 by remember { mutableStateOf(pendS?.id2 ?: "") }
     var url by remember { mutableStateOf(if (pend != null && pendX == null && pendS == null) pend.url else "") }
-    var host by remember { mutableStateOf(pendX?.first ?: "") }
-    var user by remember { mutableStateOf(pendX?.second ?: "") }
-    var pass by remember { mutableStateOf(pendX?.third ?: "") }
+    val pendOk = pendX != null && (!locked || Rebrand.isBuiltInServer(pendX.first))
+    var host by remember { mutableStateOf(if (locked) Rebrand.SERVER_URL else pendX?.first ?: "") }
+    var user by remember { mutableStateOf(if (pendOk) pendX?.second ?: "" else "") }
+    var pass by remember { mutableStateOf(if (pendOk) pendX?.third ?: "" else "") }
     var showPass by remember { mutableStateOf(false) }
     // Send from the phone: local mini server as long as this screen is open
     val ip = remember { PhoneImport.localIp() }
     val receiver = remember {
         PhoneImport { inp ->
             Handler(Looper.getMainLooper()).post {
+                if (locked && !inp.isXtream) { PlaylistStore.error = "Bitte Benutzername und Passwort eingeben."; return@post }
                 val u = if (inp.isXtream) PlaylistStore.xtreamUrl(inp.host, inp.user, inp.pass) else inp.url
                 stalker = false
                 if (inp.isXtream) { xtream = true; host = inp.host; user = inp.user; pass = inp.pass } else { xtream = false; url = inp.url }
@@ -73,8 +81,11 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
     var serving by remember { mutableStateOf(false) }
     DisposableEffect(Unit) {
         // Runde 20: Playlist-Datei vom Handy hochladen, Absturzbericht am Handy lesen
-        receiver.uploadDir = ImportFiles.tmpDir(ctx)
-        receiver.saveUpload = { name, f -> ImportFiles.save(ctx, name, f) }
+        if (locked) receiver.loginServer = Rebrand.SERVER_URL
+        else {
+            receiver.uploadDir = ImportFiles.tmpDir(ctx)
+            receiver.saveUpload = { name, f -> ImportFiles.save(ctx, name, f) }
+        }
         receiver.crash = { ImportFiles.crashText(ctx) }
         // Full transfer from another device (settings, history, playlists with logins): also possible from the phone page
         receiver.restore = { t ->
@@ -118,11 +129,14 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
     }
     BackHandler(enabled = canCancel) { PlaylistStore.clearPending(ctx); onDone() }
 
-    // Interrupted in the middle of loading last time: continue automatically without entering anything again
+    // Interrupted in the middle of loading last time: the entries are prefilled (MR TV 2: no automatic restart)
     LaunchedEffect(Unit) {
         val p = pend ?: return@LaunchedEffect
+        if (locked && !pendOk) return@LaunchedEffect
         when {
-            p.autoResume && !PlaylistStore.loading -> { if (PlaylistStore.load(ctx, p.url, true, resumed = true)) onDone() }
+            // MR TV 2: an interrupted load (crash, app killed) is never restarted by itself – the fields stay filled in and
+            // the user taps Sign in again, so a load that crashes the app cannot loop at every start
+            p.interrupted && locked -> {}
             p.interrupted -> PlaylistStore.error = "Das Laden wurde mehrmals unterbrochen. Deine Angaben sind gespeichert – drücke „Hinzufügen“, um es erneut zu versuchen."
             p.msg != null -> PlaylistStore.error = p.msg
         }
@@ -132,7 +146,28 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
 
     // Start focus on the M3U/Xtream choice (not on an input field: that would open the on-screen keyboard immediately)
     val startFocus = remember { FocusRequester() }
-    LaunchedEffect(Unit) { delay(120); runCatching { startFocus.requestFocus() } }
+    // MR TV 2 login (built-in server): Username first. Phone: cursor in Username with the keyboard open;
+    // TV: Username highlighted (OK opens the keyboard).
+    val mobile = remember { MobilePrefs.isMobile(ctx) }
+    val userBox = remember { FocusRequester() }
+    val userText = remember { FocusRequester() }
+    val passBox = remember { FocusRequester() }
+    val passText = remember { FocusRequester() }
+    /** TV: which login field is being edited (0 none, 1 username, 2 password). On the phone both are always editable. */
+    var editField by remember { mutableIntStateOf(0) }
+    val loginKb = androidx.compose.ui.platform.LocalSoftwareKeyboardController.current
+    LaunchedEffect(Unit) {
+        delay(120)
+        if (!locked) runCatching { startFocus.requestFocus() }
+        else if (mobile) { runCatching { userText.requestFocus() }; loginKb?.show() }
+        else runCatching { userBox.requestFocus() }
+    }
+    fun signInLocked() {
+        if (PlaylistStore.loading) return
+        val lockedUrl = PlaylistStore.xtreamUrl(Rebrand.SERVER_URL, user, pass)
+        if (lockedUrl == null) PlaylistStore.error = "Bitte Benutzername und Passwort eingeben."
+        else scope.launch { if (PlaylistStore.load(ctx, lockedUrl, true)) onDone() }
+    }
 
     // Phone (narrow or portrait): single column, without the phone card, smaller margins
     val cfg = androidx.compose.ui.platform.LocalConfiguration.current
@@ -160,11 +195,11 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
         ) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 BrandMark(Modifier.size(36.dp))
-                Text("IPVIO", color = Color.White, fontSize = 28.sp, fontWeight = FontWeight.ExtraBold)
-                Text("Playlist hinzufügen", color = Color.White, fontSize = 22.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 14.dp))
+                Text(Rebrand.APP_NAME, raw = true, color = Color.White, fontSize = 28.sp, fontWeight = FontWeight.ExtraBold)
+                if (!locked) Text("Playlist hinzufügen", color = Color.White, fontSize = 22.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 14.dp))
             }
             // Many new users ask which link to enter: say clearly that the app brings no content of its own
-            Column(
+            if (!locked) Column(
                 Modifier.fillMaxWidth().clip(RoundedCornerShape(DS.RadiusM)).background(Color(0x14FFFFFF)).border(1.dp, Surf2, RoundedCornerShape(DS.RadiusM)).padding(10.dp),
                 verticalArrangement = Arrangement.spacedBy(2.dp)
             ) {
@@ -173,7 +208,7 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
                     color = Muted, fontSize = 12.sp, lineHeight = 16.sp)
             }
             // The padding sits inside the scrolling row: an enlarged (focused) button must not be cut off at its edge
-            Row(Modifier.horizontalScroll(rememberScrollState()).padding(horizontal = 8.dp, vertical = 5.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            if (!locked) Row(Modifier.horizontalScroll(rememberScrollState()).padding(horizontal = 8.dp, vertical = 5.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 FocusButton("M3U-Link", Modifier.focusRequester(startFocus), primary = !xtream && !stalker, compact = true) { xtream = false; stalker = false }
                 FocusButton("Xtream-Login", primary = xtream && !stalker, compact = true) { xtream = true; stalker = false }
                 FocusButton("Stalker-Portal", primary = stalker, compact = true) { stalker = true; xtream = false }
@@ -188,7 +223,7 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
                     Field(devId, { devId = it }, "Device ID (optional)", Modifier.weight(1f))
                     Field(devId2, { devId2 = it }, "Device ID 2 (optional)", Modifier.weight(1f))
                 }
-                Text("Seriennummer und Device IDs nur eintragen, wenn dein Anbieter sie verlangt (wie bei TiviMate oder STB Emu). Leer = die App erzeugt eigene Werte.", color = Muted, fontSize = 12.sp, lineHeight = 16.sp)
+                Text("Seriennummer und Device IDs nur eintragen, wenn dein Anbieter sie verlangt. Leer = die App erzeugt eigene Werte.", color = Muted, fontSize = 12.sp, lineHeight = 16.sp)
             } else if (!xtream) {
                 Field(url, { url = it }, "http://…/playlist.m3u")
                 Row(Modifier.horizontalScroll(rememberScrollState()).padding(horizontal = 8.dp, vertical = 5.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -202,6 +237,25 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
                         catch (e: Exception) { PlaylistStore.error = "Auf diesem Gerät gibt es keine Dateiauswahl. Lade die Datei über die Handy-Seite rechts hoch." }
                     }
                 }
+            } else if (locked) {
+                // MR TV 2: Username above Password, full width; keyboard Next -> Password, Go -> Sign in
+                LoginField(
+                    user, { user = it }, "Benutzername", password = false, mobile = mobile,
+                    editing = editField == 1, onEditing = { on -> if (on) editField = 1 else if (editField == 1) editField = 0 },
+                    boxReq = userBox, textReq = userText, last = false,
+                    onNext = { if (mobile) runCatching { passText.requestFocus() } else editField = 2 },
+                    onGo = {}
+                )
+                LoginField(
+                    pass, { pass = it }, "Passwort", password = !showPass, mobile = mobile,
+                    editing = editField == 2, onEditing = { on -> if (on) editField = 2 else if (editField == 2) editField = 0 },
+                    boxReq = passBox, textReq = passText, last = true,
+                    onNext = {},
+                    onGo = { loginKb?.hide(); editField = 0; signInLocked() }
+                )
+                Row(Modifier.padding(horizontal = 8.dp, vertical = 5.dp)) {
+                    LoginButton(if (showPass) "Passwort verbergen" else "Passwort anzeigen") { showPass = !showPass }
+                }
             } else {
                 Field(host, { host = it }, "Server (z. B. http://server.tld:8080)")
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -213,7 +267,17 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
                 }
             }
             PlaylistStore.error?.let { Text(it, color = DS.Danger, fontSize = 14.sp, lineHeight = 18.sp) }
-            Row(Modifier.horizontalScroll(rememberScrollState()).padding(horizontal = 8.dp, vertical = 5.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            // MR TV 2 login: Sign in, then (below it) Cancel / Continue without playlist
+            if (locked) {
+                Row(Modifier.padding(horizontal = 8.dp, vertical = 5.dp)) {
+                    LoginButton(if (PlaylistStore.loading) "Lade…" else "Anmelden", primary = true) { signInLocked() }
+                }
+                Row(Modifier.padding(horizontal = 8.dp, vertical = 5.dp)) {
+                    if (canCancel) LoginButton("Abbrechen") { PlaylistStore.clearPending(ctx); onDone() }
+                    else LoginButton("Weiter ohne Playlist") { PlaylistStore.clearPending(ctx); PlaylistStore.error = null; onDone() }
+                }
+            }
+            if (!locked) Row(Modifier.horizontalScroll(rememberScrollState()).padding(horizontal = 8.dp, vertical = 5.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 FocusButton(if (PlaylistStore.loading) "Lade…" else "Hinzufügen", primary = true, compact = true) {
                     if (PlaylistStore.loading) return@FocusButton
                     val finalUrl = if (stalker) StalkerLogic.source(portal, mac, sn, devId, devId2)?.encode() else if (xtream) PlaylistStore.xtreamUrl(host, user, pass) else url
@@ -225,8 +289,8 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
                 else FocusButton("Weiter ohne Playlist", compact = true) { PlaylistStore.clearPending(ctx); PlaylistStore.error = null; onDone() }
             }
             // Second device? Take everything over in one step
-            Text("Schon ein anderes Gerät mit IPVIO Stream? Spiele die Sicherung ein: Playlists, Zugangsdaten, Verlauf, Favoriten und Einstellungen sind danach sofort da.", color = Muted, fontSize = 12.sp, lineHeight = 16.sp)
-            Row(Modifier.padding(horizontal = 8.dp, vertical = 5.dp)) {
+            if (!locked) Text("Schon ein anderes Gerät mit IPVIO Stream? Spiele die Sicherung ein: Playlists, Zugangsdaten, Verlauf, Favoriten und Einstellungen sind danach sofort da.", color = Muted, fontSize = 12.sp, lineHeight = 16.sp)
+            if (!locked) Row(Modifier.padding(horizontal = 8.dp, vertical = 5.dp)) {
                 FocusButton("Sicherung von anderem Gerät einspielen", compact = true) {
                     try { pickBackup.launch(arrayOf("*/*")) }
                     catch (e: Exception) { PlaylistStore.error = "Auf diesem Gerät gibt es keine Dateiauswahl. Spiele die Sicherung über die Handy-Seite rechts ein." }
@@ -234,7 +298,7 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
             }
         }
         // Right: instructions for input on the phone
-        if (!compact) PhoneCard(Modifier.weight(1f), if (serving && ip != null) "http://" + ip + ":" + receiver.port else null, receiver.code)
+        if (!compact) PhoneCard(Modifier.weight(1f), if (serving && ip != null) "http://" + ip + ":" + receiver.port else null, receiver.code, locked)
     }
     }
 }
@@ -258,7 +322,7 @@ val InstantSpec = object : androidx.compose.foundation.gestures.BringIntoViewSpe
 
 /** Card with instructions: enter the playlist conveniently on the phone instead of with the remote. */
 @Composable
-private fun PhoneCard(modifier: Modifier, address: String?, code: String) {
+private fun PhoneCard(modifier: Modifier, address: String?, code: String, locked: Boolean = false) {
     val shape = RoundedCornerShape(DS.RadiusXl)
     var bigQr by remember { mutableStateOf(false) }
     // The card scrolls (the focused QR code brings the rest into view), so nothing is cut off on small screens
@@ -304,7 +368,7 @@ private fun PhoneCard(modifier: Modifier, address: String?, code: String) {
                 Text("Code", color = Muted, fontSize = 18.sp)
                 Text(code, color = Color.White, fontSize = 30.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 4.sp)
             }
-            Step(4, "Zugangsdaten eintragen oder eine M3U-Datei hochladen und senden. Die Playlist wird danach automatisch geladen.")
+            Step(4, if (locked) "Benutzername und Passwort eintragen und senden. Die Playlist wird danach automatisch geladen." else "Zugangsdaten eintragen oder eine M3U-Datei hochladen und senden. Die Playlist wird danach automatisch geladen.")
         }
     }
     if (bigQr && address != null) Dialog(onDismissRequest = { bigQr = false }, properties = DialogProperties(usePlatformDefaultWidth = false)) {
@@ -337,4 +401,116 @@ private fun Step(n: Int, text: String) {
         }
         Text(text, color = Color.White, fontSize = 17.sp, lineHeight = 24.sp, modifier = Modifier.padding(top = 2.dp))
     }
+}
+
+/**
+ * MR TV 2 login field (built-in server): label above a full-width box.
+ * Phone: a normal text field, a tap goes straight in. TV: the box is highlighted first, OK starts editing and opens the
+ * keyboard; Up/Down leave the field. Keyboard action: Next (Username → Password) or Go (Password → Sign in).
+ */
+@Composable
+private fun LoginField(
+    value: String, onChange: (String) -> Unit, label: String, password: Boolean, mobile: Boolean,
+    editing: Boolean, onEditing: (Boolean) -> Unit, boxReq: FocusRequester, textReq: FocusRequester,
+    last: Boolean, onNext: () -> Unit, onGo: () -> Unit
+) {
+    var f by remember { mutableStateOf(false) }
+    var hadFocus by remember { mutableStateOf(false) }
+    var returnToBox by remember { mutableStateOf(false) }
+    val active = mobile || editing
+    val fm = androidx.compose.ui.platform.LocalFocusManager.current
+    val kb = androidx.compose.ui.platform.LocalSoftwareKeyboardController.current
+    LaunchedEffect(editing) {
+        if (mobile) return@LaunchedEffect
+        if (editing) { runCatching { textReq.requestFocus() }; kb?.show() }
+        else if (returnToBox) { returnToBox = false; runCatching { boxReq.requestFocus() } }
+    }
+    // Focus look copied from MR TV 1.3's login (TvTextField): 3 dp red outline, 6 dp corners, lighter fill, red bold label
+    val shape = RoundedCornerShape(LOGIN_RADIUS)
+    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Text(label, color = if (f) LOGIN_RED_LABEL else LOGIN_SILVER, fontSize = 15.sp,
+            fontWeight = if (f) FontWeight.Bold else FontWeight.SemiBold, modifier = Modifier.padding(start = 6.dp))
+        Box(
+            Modifier.fillMaxWidth().height(62.dp)
+                .clip(shape).background(if (f) LOGIN_FOCUS_FILL else Surf)
+                .border(if (f) LOGIN_FOCUS_WIDTH else 1.dp, if (f) LOGIN_RED else LOGIN_DIM, shape)
+                .padding(horizontal = 20.dp),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            // Placeholder under the text (drawn first, so taps reach the text field)
+            if (value.isEmpty()) Text(label, color = LOGIN_DIM, fontSize = 20.sp)
+            // Phone: a tap anywhere in the box (not only on the text line) goes into the field
+            if (mobile) Box(
+                Modifier.fillMaxSize().clickable(
+                    interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() }, indication = null
+                ) { runCatching { textReq.requestFocus() }; kb?.show() }
+            )
+            // TV: focus target while not editing; OK starts editing
+            if (!mobile) Box(
+                Modifier.fillMaxSize()
+                    .focusRequester(boxReq)
+                    .onFocusChanged { f = it.isFocused || it.hasFocus }
+                    .clickable { onEditing(true) }
+            )
+            androidx.compose.foundation.text.BasicTextField(
+                value = value, onValueChange = onChange, singleLine = true, enabled = active,
+                textStyle = androidx.compose.ui.text.TextStyle(color = Color.White, fontSize = 20.sp),
+                cursorBrush = androidx.compose.ui.graphics.SolidColor(Color.White),
+                visualTransformation = if (password) androidx.compose.ui.text.input.PasswordVisualTransformation()
+                    else androidx.compose.ui.text.input.VisualTransformation.None,
+                keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
+                    keyboardType = if (password) androidx.compose.ui.text.input.KeyboardType.Password else androidx.compose.ui.text.input.KeyboardType.Text,
+                    autoCorrectEnabled = false,
+                    imeAction = if (last) androidx.compose.ui.text.input.ImeAction.Go else androidx.compose.ui.text.input.ImeAction.Next
+                ),
+                keyboardActions = androidx.compose.foundation.text.KeyboardActions(
+                    onNext = { onNext() },
+                    onGo = { if (!mobile) returnToBox = true; onGo() },
+                    onDone = { if (!mobile) returnToBox = true; onGo() }
+                ),
+                modifier = Modifier.fillMaxWidth()
+                    .focusRequester(textReq)
+                    .onFocusChanged {
+                        if (it.isFocused) { hadFocus = true; f = true }
+                        else if (hadFocus) { hadFocus = false; if (mobile) f = false else if (editing) onEditing(false) }
+                    }
+                    .then(if (mobile) Modifier else Modifier.onPreviewKeyEvent { e ->
+                        val up = e.key == androidx.compose.ui.input.key.Key.DirectionUp
+                        if (e.type == androidx.compose.ui.input.key.KeyEventType.KeyDown && (up || e.key == androidx.compose.ui.input.key.Key.DirectionDown)) {
+                            kb?.hide()
+                            fm.moveFocus(if (up) androidx.compose.ui.focus.FocusDirection.Up else androidx.compose.ui.focus.FocusDirection.Down)
+                            true
+                        } else false
+                    })
+            )
+        }
+    }
+}
+
+// MR TV 1.3 login focus look (app/tv MainActivity.kt TvTextField, Ui.kt object C)
+private val LOGIN_RED = Color(0xFFFF3030)        // focused outline
+private val LOGIN_RED_LABEL = Color(0xFFFF4040)  // focused label
+private val LOGIN_DIM = Color(0xFF7D8188)        // unfocused outline / placeholder (C.Dim)
+private val LOGIN_SILVER = Color(0xFFC9CCD1)     // unfocused label (C.Silver)
+private val LOGIN_FOCUS_FILL = Color(0xFF3A3D42) // focused field background (C.Focus)
+private val LOGIN_FOCUS_WIDTH = 3.dp
+private val LOGIN_RADIUS = 6.dp
+
+/** MR TV 2 login button: the normal MR TV 2 button, plus 1.3's 3 dp red outline while focused (D-pad or keyboard). */
+@Composable
+private fun LoginButton(text: String, primary: Boolean = false, onClick: () -> Unit) {
+    var f by remember { mutableStateOf(false) }
+    val s by androidx.compose.animation.core.animateFloatAsState(if (f) focusScale(1.07f) else 1f, label = "loginBtn")
+    val shape = RoundedCornerShape(50)
+    Box(
+        Modifier
+            .graphicsLayer { scaleX = s; scaleY = s }
+            .clip(shape)
+            .background(if (f) DS.FocusFill else if (primary) lerp(DS.Overlay3, Look.accent1, 0.32f) else DS.Overlay3)
+            .border(if (f) LOGIN_FOCUS_WIDTH else 0.dp, if (f) LOGIN_RED else Color.Transparent, shape)
+            .onFocusChanged { f = it.isFocused }
+            .clickable(onClick = onClick)
+            .padding(horizontal = 20.dp, vertical = 9.dp),
+        contentAlignment = Alignment.Center
+    ) { Text(text, color = if (f) DS.FocusInk else Color.White, fontSize = 16.sp, fontWeight = FontWeight.SemiBold) }
 }

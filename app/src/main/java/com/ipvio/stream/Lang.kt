@@ -22,7 +22,7 @@ object Lang {
     private fun ensureLoaded() {
         if (loaded) return
         loaded = true
-        I18nCore.load(DictA, DictB, DictC, DictD, DictE, DictF, DictG, DictH, DictI, DictJ, DictK)
+        I18nCore.load(DictA, DictB, DictC, DictD, DictE, DictF, DictG, DictH, DictI, DictJ, DictK, DictMrtv)
         I18nCore.loadColumn(I18nCore.CODES.indexOf("nl"), DictNl1, DictNl2, DictNl3, DictNl4, DictNl5)
     }
 
@@ -43,15 +43,10 @@ object Lang {
         else -> Locale.forLanguageTag(code())
     }
 
-    /** Language code for TMDB requests, e.g. "de-DE". */
-    fun tmdb(): String = when (code()) {
-        "en" -> "en-US"; "tr" -> "tr-TR"; "bs" -> "bs-BA"; "hr" -> "hr-HR"; "sr" -> "sr-RS"
-        "es" -> "es-ES"; "fr" -> "fr-FR"; "it" -> "it-IT"; "nl" -> "nl-NL"; else -> "de-DE"
-    }
 
     fun tr(s: String): String {
         val i = index
-        return if (i == 0) s else I18nCore.translate(s, i)
+        return Rebrand.apply(if (i == 0) s else I18nCore.translate(s, i))
     }
 }
 

@@ -8,7 +8,7 @@ import java.net.URLEncoder
  * Without Android, testable.
  *
  * Some providers switch get.php off, limit it or answer with their own error codes (e.g. 884) while the
- * API works (this is how TiviMate works too). The app builds a list from the API's answers
+ * API works. The app builds a list from the API's answers
  * in the same format as get.php (type=m3u_plus, output=ts). So parsing, language filter, cache and
  * Titel-IDs gleich.
  */

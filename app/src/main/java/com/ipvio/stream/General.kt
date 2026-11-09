@@ -209,7 +209,6 @@ object General {
     fun cleanupLegacy(c: Context) {
         val p = prefs(c)
         if (p.getInt("cleanup_v", 0) >= 1) return
-        listOf("imdb_ratings.bin", "imdb_ratings.bin.tmp").forEach { runCatching { File(c.filesDir, it).delete() } }
         p.edit().putInt("cleanup_v", 1).apply()
     }
 

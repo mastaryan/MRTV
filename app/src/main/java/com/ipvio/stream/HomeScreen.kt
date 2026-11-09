@@ -119,7 +119,8 @@ private fun buildHome(all: List<Item>, ipvioWanted: Boolean, trend: Set<String>)
     val ipvio = ipvioWanted && genresOk
     val movieP = providerGroups(movies)
     val seriesP = providerGroups(series)
-    val trendItems = if (trend.isEmpty()) emptyList() else (movies.asSequence() + series.asSequence()).filter { Trending.norm(it.title) in trend }.toList()
+    // MR TV 2: no outside trending list (that service was removed), so this row stays empty
+    val trendItems = emptyList<Item>()
     return HomeData(
         live, movies, series, providerGroups(live), movieP, seriesP,
         if (ipvio) ipvioGroups(movies) else movieP, if (ipvio) ipvioGroups(series) else seriesP,
@@ -166,7 +167,7 @@ private fun topRated(list: List<Item>): List<Item> =
     list.mapNotNull { i ->
         val m = MetaRepo.cached(i)
         val sc = m?.score()
-        if (m != null && (m.votes >= 300 || m.tmdbId <= 0) && sc != null) i to sc else null
+        if (m != null && (m.votes >= 300 || m.metaId <= 0) && sc != null) i to sc else null
     }.sortedByDescending { it.second }.map { it.first }
 
 @OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
@@ -188,7 +189,6 @@ fun HomeScreen(
     var ver by remember { mutableIntStateOf(HomeVer.value.takeIf { it >= 0 } ?: Classifier.version) }
     LaunchedEffect(Unit) { while (true) { delay(45_000); if (ver != Classifier.version) { ver = Classifier.version; HomeVer.value = ver } } }
     var trend by remember { mutableStateOf(HomeVer.trend) }
-    LaunchedEffect(all.isNotEmpty()) { if (all.isNotEmpty()) { trend = Trending.titles(); HomeVer.trend = trend } }
     val wantIpvio = AppSettings.ipvioFilter
     val cached = HomeCache.get(all, order, wantIpvio, ver, trend)
     // When inputs change, the previous state stays visible until the new result (produceState keeps the value)
@@ -239,7 +239,7 @@ fun HomeScreen(
     val because by produceState<Pair<Item, List<Item>>?>(null, becauseSrc?.id, byId.size) {
         val src = becauseSrc ?: return@produceState
         val m = MetaRepo.extended(ctx, src) ?: return@produceState
-        if (m.tmdbId <= 0) return@produceState
+        if (m.metaId <= 0) return@produceState
         val c = CreditsRepo.credits(ctx, m) ?: return@produceState
         val seen = History.ids.toSet()
         val l = withContext(Dispatchers.Default) {

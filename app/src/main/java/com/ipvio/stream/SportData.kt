@@ -412,7 +412,7 @@ object SportData {
         val hit = synchronized(cache) { cache[key] }
         if (hit != null && now - hit.first < maxAgeMs) return hit.second
         return try {
-            val req = Request.Builder().url(urlFor(l, ymd)).header("User-Agent", "IPVIO-Stream").build()
+            val req = Request.Builder().url(urlFor(l, ymd)).header("User-Agent", "MRTV2").build()
             Net.withTimeouts(8, 12).newCall(req).execute().use { r ->
                 if (!r.isSuccessful) { lastOk = false; return hit?.second ?: emptyList() }
                 val g = parse(r.body?.string().orEmpty(), l)

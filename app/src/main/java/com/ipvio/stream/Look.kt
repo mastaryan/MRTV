@@ -23,12 +23,19 @@ object Look {
     const val BRAND_GREEN = 0x4ADE80
     const val BRAND_GREEN_HI = 0x86EFAC
     const val BRAND_NAVY = 0x0B0F19
+    /** MR TV 2 colors from watchmrtv.com: --purple #c9ced6 (buttons/borders), --blue #e2e6ec (links), --bg #0d0e10, --panel #17191c, --panel2 #202328. */
+    const val MRTV_SILVER = 0xC9CED6
+    const val MRTV_SILVER_HI = 0xE2E6EC
+    const val MRTV_BG = 0x0D0E10
+    const val MRTV_PANEL = 0x17191C
+    const val MRTV_PANEL2 = 0x202328
     /** Default: IPVIO green on navy (round 13e: the design colors were removed again). */
     const val DEFAULT_ACCENT = 0
     const val DEFAULT_BG = 0
 
     val ACCENTS = listOf(
-        AccentPreset("IPVIO", BRAND_GREEN, BRAND_GREEN_HI),
+        // MR TV 2: first preset (= default) is the MR TV silver from watchmrtv.com
+        AccentPreset("MR TV Silber", MRTV_SILVER, MRTV_SILVER_HI),
         AccentPreset("Violett & Türkis", 0x7C5CFF, 0x00D4C8),
         AccentPreset("Ozean", 0x2F6FE0, 0x5CD6FF),
         AccentPreset("Smaragd", 0x0A7F58, 0x4ADE80),
@@ -50,7 +57,8 @@ object Look {
     val CUSTOM get() = ACCENTS.size
 
     val BGS = listOf(
-        BgPreset("IPVIO Navy", BRAND_NAVY, 0x151B2A, 0x1F2739),
+        // MR TV 2: first background (= default) is the watchmrtv.com charcoal
+        BgPreset("MR TV Anthrazit", MRTV_BG, MRTV_PANEL, MRTV_PANEL2),
         BgPreset("Mitternacht", 0x07080C, 0x12141C, 0x1B1E2A),
         BgPreset("OLED-Schwarz", 0x000000, 0x0B0C10, 0x15171E),
         BgPreset("Graphit", 0x121316, 0x1C1E24, 0x272A32),
@@ -84,7 +92,7 @@ object Look {
 
     var accentIdx by mutableIntStateOf(DEFAULT_ACCENT)
     /** Custom color 1 (surfaces, buttons, bars). */
-    var custom by mutableIntStateOf(BRAND_GREEN)
+    var custom by mutableIntStateOf(MRTV_SILVER)
     /** Custom color 2 (highlight, text and frame on the background); -1 = automatic from color 1. */
     var custom2 by mutableIntStateOf(-1)
     var bgIdx by mutableIntStateOf(DEFAULT_BG)
@@ -128,7 +136,7 @@ object Look {
         return LookPalette(c(b.bg), c(b.surf), c(b.surf2), c(fill), c(high), c(ThemeMath.onAccent(fill)))
     }
 
-    fun reset() { accentIdx = DEFAULT_ACCENT; custom = BRAND_GREEN; custom2 = -1; bgIdx = DEFAULT_BG; motion = 2; uiScale = DEFAULT_SCALE }
+    fun reset() { accentIdx = DEFAULT_ACCENT; custom = MRTV_SILVER; custom2 = -1; bgIdx = DEFAULT_BG; motion = 2; uiScale = DEFAULT_SCALE }
 }
 
 /** Focus enlargement, depending on the chosen animation level. */

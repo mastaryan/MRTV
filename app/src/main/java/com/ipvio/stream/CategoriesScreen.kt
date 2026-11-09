@@ -80,7 +80,7 @@ fun CategoriesScreen(
 ) {
     val ctx = LocalContext.current
     CatPrefs.init(ctx)
-    var mode by remember { mutableIntStateOf(if (AppSettings.ipvioFilter && req.ipvio.isNotEmpty()) 0 else 1) }
+    var mode by remember { mutableIntStateOf(1) }
     var az by remember { mutableStateOf(false) }
     val sideFocus = remember { FocusRequester() }
     val pillFocus = remember { FocusRequester() }
@@ -115,15 +115,9 @@ fun CategoriesScreen(
             Spacer(Modifier.height(10.dp))
             Box(Modifier.onFocusChanged { inPills = it.hasFocus }) {
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
-                    // Provider categories first; the choice is saved (same setting as "Automatic genres")
-                    val modes = listOf("Anbieter-Kategorien", "Auto-Genres")
-                    val sel = if (mode == 0) 1 else 0
-                    DropdownPill("Filter", modes[sel], modes, sel, modifier = Modifier.focusRequester(pillFocus), icon = FIcon.Genre) {
-                        mode = if (it == 1) 0 else 1
-                        AppSettings.set(ctx, mode == 0)
-                    }
+                    // MR TV 2: the provider's categories are always used (automatic genres were removed)
                     val sorts = listOf("Standard", "A–Z")
-                    DropdownPill("Sortierung", sorts[if (az) 1 else 0], sorts, if (az) 1 else 0, icon = FIcon.Sort) { az = it == 1 }
+                    DropdownPill("Sortierung", sorts[if (az) 1 else 0], sorts, if (az) 1 else 0, modifier = Modifier.focusRequester(pillFocus), icon = FIcon.Sort) { az = it == 1 }
                     val views = listOf("Liste", "Kacheln")
                     DropdownPill("Ansicht", views[if (CatPrefs.listView) 0 else 1], views, if (CatPrefs.listView) 0 else 1, icon = FIcon.View) { CatPrefs.set(ctx, it == 0) }
                     if (CatPrefs.listView) {
@@ -361,8 +355,7 @@ private fun AutoGenresOff() {
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         Text("Automatische Genres sind für diese Auswahl ausgeschaltet", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-        if (!MetaRepo.enabled()) Text("Automatische Genres brauchen einen TMDB-Schlüssel (Einstellungen > API-Schlüssel).", color = Muted, fontSize = 15.sp, lineHeight = 21.sp)
-        else Text(
+        Text(
             "Deine Bibliothek hat " + nf.format(n) + " Filme und Serien – die Grenze für automatische Genres liegt bei " + nf.format(Classifier.MAX_TITLES) +
                 ". Blende in Einstellungen > Playlists > „Sprachen der Inhalte“ die Sprachen aus, die du nicht brauchst. Danach werden die Genres im Hintergrund erkannt.",
             color = Muted, fontSize = 15.sp, lineHeight = 21.sp
