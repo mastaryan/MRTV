@@ -1,3 +1,7 @@
+> **This is MR TV 2** – a rebranded build of IPVIO Stream for MR TV ([watchmrtv.com](https://watchmrtv.com)).
+> Based on [IPVIO Stream](https://github.com/Emrodev/IPVIO-Stream) by Emrodev (GPL-3.0). What was changed: see [NOTICE.md](NOTICE.md).
+> How to pull in new IPVIO versions: [docs/UPSTREAM-SYNC.md](docs/UPSTREAM-SYNC.md). The rest of this README is the upstream IPVIO README.
+
 # IPVIO Stream
 
 DOWNLOADER CODE: 4200542

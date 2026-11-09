@@ -1310,6 +1310,7 @@ private fun AboutPage(ctx: Context) {
     Hint("IPVIO Stream ist ein Player und liefert selbst keine Inhalte. Nutze nur Quellen, für die du eine Berechtigung hast.")
     if (Rebrand.METADATA_SERVICES) Hint("Dieses Produkt verwendet die TMDB-API, wird aber nicht von TMDB unterstützt oder zertifiziert. Wertungen: OMDb. Intro-Zeiten: TheIntroDB.")
     Hint("IPVIO Stream ist freie Software unter der GNU General Public License v3 (GPL-3.0). Verwendete Bibliotheken: AndroidX/Jetpack Compose, Media3 (Apache 2.0), OkHttp, Coil (Apache 2.0), Jellyfin FFmpeg-Decoder (GPL-3.0), Schriften Outfit und Inter (SIL Open Font License).")
+    MrtvCredits()
     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
         PillButton("Systemeinstellungen der App") {
             runCatching {
