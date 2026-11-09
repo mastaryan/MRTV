@@ -10,6 +10,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.clickable
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.foundation.rememberScrollState
@@ -140,7 +143,28 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
 
     // Start focus on the M3U/Xtream choice (not on an input field: that would open the on-screen keyboard immediately)
     val startFocus = remember { FocusRequester() }
-    LaunchedEffect(Unit) { delay(120); runCatching { startFocus.requestFocus() } }
+    // MR TV 2 login (built-in server): Username first. Phone: cursor in Username with the keyboard open;
+    // TV: Username highlighted (OK opens the keyboard).
+    val mobile = remember { MobilePrefs.isMobile(ctx) }
+    val userBox = remember { FocusRequester() }
+    val userText = remember { FocusRequester() }
+    val passBox = remember { FocusRequester() }
+    val passText = remember { FocusRequester() }
+    /** TV: which login field is being edited (0 none, 1 username, 2 password). On the phone both are always editable. */
+    var editField by remember { mutableIntStateOf(0) }
+    val loginKb = androidx.compose.ui.platform.LocalSoftwareKeyboardController.current
+    LaunchedEffect(Unit) {
+        delay(120)
+        if (!locked) runCatching { startFocus.requestFocus() }
+        else if (mobile) { runCatching { userText.requestFocus() }; loginKb?.show() }
+        else runCatching { userBox.requestFocus() }
+    }
+    fun signInLocked() {
+        if (PlaylistStore.loading) return
+        val lockedUrl = PlaylistStore.xtreamUrl(Rebrand.SERVER_URL, user, pass)
+        if (lockedUrl == null) PlaylistStore.error = "Bitte Benutzername und Passwort eingeben."
+        else scope.launch { if (PlaylistStore.load(ctx, lockedUrl, true)) onDone() }
+    }
 
     // Phone (narrow or portrait): single column, without the phone card, smaller margins
     val cfg = androidx.compose.ui.platform.LocalConfiguration.current
@@ -210,8 +234,27 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
                         catch (e: Exception) { PlaylistStore.error = "Auf diesem Gerät gibt es keine Dateiauswahl. Lade die Datei über die Handy-Seite rechts hoch." }
                     }
                 }
+            } else if (locked) {
+                // MR TV 2: Username above Password, full width; keyboard Next -> Password, Go -> Sign in
+                LoginField(
+                    user, { user = it }, "Benutzername", password = false, mobile = mobile,
+                    editing = editField == 1, onEditing = { on -> if (on) editField = 1 else if (editField == 1) editField = 0 },
+                    boxReq = userBox, textReq = userText, last = false,
+                    onNext = { if (mobile) runCatching { passText.requestFocus() } else editField = 2 },
+                    onGo = {}
+                )
+                LoginField(
+                    pass, { pass = it }, "Passwort", password = !showPass, mobile = mobile,
+                    editing = editField == 2, onEditing = { on -> if (on) editField = 2 else if (editField == 2) editField = 0 },
+                    boxReq = passBox, textReq = passText, last = true,
+                    onNext = {},
+                    onGo = { loginKb?.hide(); editField = 0; signInLocked() }
+                )
+                Row(Modifier.padding(horizontal = 8.dp, vertical = 5.dp)) {
+                    FocusButton(if (showPass) "Passwort verbergen" else "Passwort anzeigen", compact = true) { showPass = !showPass }
+                }
             } else {
-                if (!locked) Field(host, { host = it }, "Server (z. B. http://server.tld:8080)")
+                Field(host, { host = it }, "Server (z. B. http://server.tld:8080)")
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Field(user, { user = it }, "Benutzername", Modifier.weight(1f))
                     Field(pass, { pass = it }, "Passwort", Modifier.weight(1f), password = !showPass)
@@ -221,15 +264,19 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
                 }
             }
             PlaylistStore.error?.let { Text(it, color = DS.Danger, fontSize = 14.sp, lineHeight = 18.sp) }
-            Row(Modifier.horizontalScroll(rememberScrollState()).padding(horizontal = 8.dp, vertical = 5.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                FocusButton(if (PlaylistStore.loading) "Lade…" else if (locked) "Anmelden" else "Hinzufügen", modifier = if (locked) Modifier.focusRequester(startFocus) else Modifier, primary = true, compact = true) {
+            // MR TV 2 login: Sign in, then (below it) Cancel / Continue without playlist
+            if (locked) {
+                Row(Modifier.padding(horizontal = 8.dp, vertical = 5.dp)) {
+                    FocusButton(if (PlaylistStore.loading) "Lade…" else "Anmelden", primary = true, compact = true) { signInLocked() }
+                }
+                Row(Modifier.padding(horizontal = 8.dp, vertical = 5.dp)) {
+                    if (canCancel) FocusButton("Abbrechen", compact = true) { PlaylistStore.clearPending(ctx); onDone() }
+                    else FocusButton("Weiter ohne Playlist", compact = true) { PlaylistStore.clearPending(ctx); PlaylistStore.error = null; onDone() }
+                }
+            }
+            if (!locked) Row(Modifier.horizontalScroll(rememberScrollState()).padding(horizontal = 8.dp, vertical = 5.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                FocusButton(if (PlaylistStore.loading) "Lade…" else "Hinzufügen", primary = true, compact = true) {
                     if (PlaylistStore.loading) return@FocusButton
-                    if (locked) {
-                        val lockedUrl = PlaylistStore.xtreamUrl(Rebrand.SERVER_URL, user, pass)
-                        if (lockedUrl == null) PlaylistStore.error = "Bitte Benutzername und Passwort eingeben."
-                        else scope.launch { if (PlaylistStore.load(ctx, lockedUrl, true)) onDone() }
-                        return@FocusButton
-                    }
                     val finalUrl = if (stalker) StalkerLogic.source(portal, mac, sn, devId, devId2)?.encode() else if (xtream) PlaylistStore.xtreamUrl(host, user, pass) else url
                     if (finalUrl == null) PlaylistStore.error = if (stalker) "Angaben unvollständig: Portal-Adresse und MAC-Adresse (z. B. 00:1A:79:12:34:56) nötig." else "Angaben unvollständig: Server, Benutzername und Passwort nötig."
                     else scope.launch { if (PlaylistStore.load(ctx, finalUrl, true)) onDone() }
@@ -350,5 +397,87 @@ private fun Step(n: Int, text: String) {
             Text(n.toString(), color = OnAccent, fontSize = 16.sp, fontWeight = FontWeight.Bold)
         }
         Text(text, color = Color.White, fontSize = 17.sp, lineHeight = 24.sp, modifier = Modifier.padding(top = 2.dp))
+    }
+}
+
+/**
+ * MR TV 2 login field (built-in server): label above a full-width box.
+ * Phone: a normal text field, a tap goes straight in. TV: the box is highlighted first, OK starts editing and opens the
+ * keyboard; Up/Down leave the field. Keyboard action: Next (Username → Password) or Go (Password → Sign in).
+ */
+@Composable
+private fun LoginField(
+    value: String, onChange: (String) -> Unit, label: String, password: Boolean, mobile: Boolean,
+    editing: Boolean, onEditing: (Boolean) -> Unit, boxReq: FocusRequester, textReq: FocusRequester,
+    last: Boolean, onNext: () -> Unit, onGo: () -> Unit
+) {
+    var f by remember { mutableStateOf(false) }
+    var hadFocus by remember { mutableStateOf(false) }
+    var returnToBox by remember { mutableStateOf(false) }
+    val active = mobile || editing
+    val fm = androidx.compose.ui.platform.LocalFocusManager.current
+    val kb = androidx.compose.ui.platform.LocalSoftwareKeyboardController.current
+    LaunchedEffect(editing) {
+        if (mobile) return@LaunchedEffect
+        if (editing) { runCatching { textReq.requestFocus() }; kb?.show() }
+        else if (returnToBox) { returnToBox = false; runCatching { boxReq.requestFocus() } }
+    }
+    val shape = RoundedCornerShape(16.dp)
+    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Text(label, color = Muted, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(start = 6.dp))
+        Box(
+            Modifier.fillMaxWidth().height(62.dp)
+                .clip(shape).background(Surf)
+                .border(DS.Border, if (f) Accent2 else Surf2, shape)
+                .padding(horizontal = 20.dp),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            // Placeholder under the text (drawn first, so taps reach the text field)
+            if (value.isEmpty()) Text(label, color = Muted, fontSize = 20.sp)
+            // Phone: a tap anywhere in the box (not only on the text line) goes into the field
+            if (mobile) Box(
+                Modifier.fillMaxSize().clickable(
+                    interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() }, indication = null
+                ) { runCatching { textReq.requestFocus() }; kb?.show() }
+            )
+            // TV: focus target while not editing; OK starts editing
+            if (!mobile) Box(
+                Modifier.fillMaxSize()
+                    .focusRequester(boxReq)
+                    .onFocusChanged { f = it.isFocused || it.hasFocus }
+                    .clickable { onEditing(true) }
+            )
+            androidx.compose.foundation.text.BasicTextField(
+                value = value, onValueChange = onChange, singleLine = true, enabled = active,
+                textStyle = androidx.compose.ui.text.TextStyle(color = Color.White, fontSize = 20.sp),
+                cursorBrush = androidx.compose.ui.graphics.SolidColor(Accent2),
+                visualTransformation = if (password) androidx.compose.ui.text.input.PasswordVisualTransformation()
+                    else androidx.compose.ui.text.input.VisualTransformation.None,
+                keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
+                    keyboardType = if (password) androidx.compose.ui.text.input.KeyboardType.Password else androidx.compose.ui.text.input.KeyboardType.Text,
+                    autoCorrectEnabled = false,
+                    imeAction = if (last) androidx.compose.ui.text.input.ImeAction.Go else androidx.compose.ui.text.input.ImeAction.Next
+                ),
+                keyboardActions = androidx.compose.foundation.text.KeyboardActions(
+                    onNext = { onNext() },
+                    onGo = { if (!mobile) returnToBox = true; onGo() },
+                    onDone = { if (!mobile) returnToBox = true; onGo() }
+                ),
+                modifier = Modifier.fillMaxWidth()
+                    .focusRequester(textReq)
+                    .onFocusChanged {
+                        if (it.isFocused) { hadFocus = true; f = true }
+                        else if (hadFocus) { hadFocus = false; if (mobile) f = false else if (editing) onEditing(false) }
+                    }
+                    .then(if (mobile) Modifier else Modifier.onPreviewKeyEvent { e ->
+                        val up = e.key == androidx.compose.ui.input.key.Key.DirectionUp
+                        if (e.type == androidx.compose.ui.input.key.KeyEventType.KeyDown && (up || e.key == androidx.compose.ui.input.key.Key.DirectionDown)) {
+                            kb?.hide()
+                            fm.moveFocus(if (up) androidx.compose.ui.focus.FocusDirection.Up else androidx.compose.ui.focus.FocusDirection.Down)
+                            true
+                        } else false
+                    })
+            )
+        }
     }
 }
