@@ -74,7 +74,7 @@ val Muted = Color(0xFFA0A6B8)
  * Focus: buttons white with dark text, cards white frame with shadow.
  */
 object Tok {
-    val TextHi = Color(0xFFF4F6FB)
+    val TextHi = Color(0xFFF3F5F8) // MR TV 2: watchmrtv.com --txt
     val TextMid = Color(0xFFD3D7E2)
     val TextLow = Color(0xFFA0A6B8)
     /** Ruhende Karte/Zeile, markierte Zeile */
@@ -143,7 +143,7 @@ object DS {
 
     // Focus for buttons
     val FocusFill = Color.White
-    val FocusInk = Color(0xFF0B0F19)
+    val FocusInk = Color(0xFF121418) // MR TV 2: watchmrtv.com button text
 }
 
 /** Surface of a row with focus (derived from the theme, fits every background). */

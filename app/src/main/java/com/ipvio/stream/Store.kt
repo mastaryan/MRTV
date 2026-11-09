@@ -168,7 +168,7 @@ object AppSettings {
             e.putInt("look_accent", newAcc).putInt("look_bg", if (bg >= 5) Look.DEFAULT_BG else bg).remove("look_custom_was").commit()
         }
         Look.accentIdx = p.getInt("look_accent", Look.DEFAULT_ACCENT).coerceIn(0, Look.ACCENTS.size)
-        Look.custom = p.getInt("look_custom", Look.BRAND_GREEN) and 0xFFFFFF
+        Look.custom = p.getInt("look_custom", Look.MRTV_SILVER) and 0xFFFFFF
         Look.custom2 = p.getInt("look_custom2", -1).let { if (it < 0) -1 else it and 0xFFFFFF }
         Look.bgIdx = p.getInt("look_bg", Look.DEFAULT_BG).coerceIn(0, Look.BGS.lastIndex)
         Look.motion = p.getInt("look_motion", 2).coerceIn(0, 2)
