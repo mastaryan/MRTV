@@ -19,6 +19,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.foundation.horizontalScroll
@@ -251,7 +252,7 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
                     onGo = { loginKb?.hide(); editField = 0; signInLocked() }
                 )
                 Row(Modifier.padding(horizontal = 8.dp, vertical = 5.dp)) {
-                    FocusButton(if (showPass) "Passwort verbergen" else "Passwort anzeigen", compact = true) { showPass = !showPass }
+                    LoginButton(if (showPass) "Passwort verbergen" else "Passwort anzeigen") { showPass = !showPass }
                 }
             } else {
                 Field(host, { host = it }, "Server (z. B. http://server.tld:8080)")
@@ -267,11 +268,11 @@ fun AddPlaylistScreen(onDone: () -> Unit) {
             // MR TV 2 login: Sign in, then (below it) Cancel / Continue without playlist
             if (locked) {
                 Row(Modifier.padding(horizontal = 8.dp, vertical = 5.dp)) {
-                    FocusButton(if (PlaylistStore.loading) "Lade…" else "Anmelden", primary = true, compact = true) { signInLocked() }
+                    LoginButton(if (PlaylistStore.loading) "Lade…" else "Anmelden", primary = true) { signInLocked() }
                 }
                 Row(Modifier.padding(horizontal = 8.dp, vertical = 5.dp)) {
-                    if (canCancel) FocusButton("Abbrechen", compact = true) { PlaylistStore.clearPending(ctx); onDone() }
-                    else FocusButton("Weiter ohne Playlist", compact = true) { PlaylistStore.clearPending(ctx); PlaylistStore.error = null; onDone() }
+                    if (canCancel) LoginButton("Abbrechen") { PlaylistStore.clearPending(ctx); onDone() }
+                    else LoginButton("Weiter ohne Playlist") { PlaylistStore.clearPending(ctx); PlaylistStore.error = null; onDone() }
                 }
             }
             if (!locked) Row(Modifier.horizontalScroll(rememberScrollState()).padding(horizontal = 8.dp, vertical = 5.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -422,18 +423,20 @@ private fun LoginField(
         if (editing) { runCatching { textReq.requestFocus() }; kb?.show() }
         else if (returnToBox) { returnToBox = false; runCatching { boxReq.requestFocus() } }
     }
-    val shape = RoundedCornerShape(16.dp)
+    // Focus look copied from MR TV 1.3's login (TvTextField): 3 dp red outline, 6 dp corners, lighter fill, red bold label
+    val shape = RoundedCornerShape(LOGIN_RADIUS)
     Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        Text(label, color = Muted, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(start = 6.dp))
+        Text(label, color = if (f) LOGIN_RED_LABEL else LOGIN_SILVER, fontSize = 15.sp,
+            fontWeight = if (f) FontWeight.Bold else FontWeight.SemiBold, modifier = Modifier.padding(start = 6.dp))
         Box(
             Modifier.fillMaxWidth().height(62.dp)
-                .clip(shape).background(Surf)
-                .border(DS.Border, if (f) Accent2 else Surf2, shape)
+                .clip(shape).background(if (f) LOGIN_FOCUS_FILL else Surf)
+                .border(if (f) LOGIN_FOCUS_WIDTH else 1.dp, if (f) LOGIN_RED else LOGIN_DIM, shape)
                 .padding(horizontal = 20.dp),
             contentAlignment = Alignment.CenterStart
         ) {
             // Placeholder under the text (drawn first, so taps reach the text field)
-            if (value.isEmpty()) Text(label, color = Muted, fontSize = 20.sp)
+            if (value.isEmpty()) Text(label, color = LOGIN_DIM, fontSize = 20.sp)
             // Phone: a tap anywhere in the box (not only on the text line) goes into the field
             if (mobile) Box(
                 Modifier.fillMaxSize().clickable(
@@ -450,7 +453,7 @@ private fun LoginField(
             androidx.compose.foundation.text.BasicTextField(
                 value = value, onValueChange = onChange, singleLine = true, enabled = active,
                 textStyle = androidx.compose.ui.text.TextStyle(color = Color.White, fontSize = 20.sp),
-                cursorBrush = androidx.compose.ui.graphics.SolidColor(Accent2),
+                cursorBrush = androidx.compose.ui.graphics.SolidColor(Color.White),
                 visualTransformation = if (password) androidx.compose.ui.text.input.PasswordVisualTransformation()
                     else androidx.compose.ui.text.input.VisualTransformation.None,
                 keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
@@ -480,4 +483,32 @@ private fun LoginField(
             )
         }
     }
+}
+
+// MR TV 1.3 login focus look (app/tv MainActivity.kt TvTextField, Ui.kt object C)
+private val LOGIN_RED = Color(0xFFFF3030)        // focused outline
+private val LOGIN_RED_LABEL = Color(0xFFFF4040)  // focused label
+private val LOGIN_DIM = Color(0xFF7D8188)        // unfocused outline / placeholder (C.Dim)
+private val LOGIN_SILVER = Color(0xFFC9CCD1)     // unfocused label (C.Silver)
+private val LOGIN_FOCUS_FILL = Color(0xFF3A3D42) // focused field background (C.Focus)
+private val LOGIN_FOCUS_WIDTH = 3.dp
+private val LOGIN_RADIUS = 6.dp
+
+/** MR TV 2 login button: the normal MR TV 2 button, plus 1.3's 3 dp red outline while focused (D-pad or keyboard). */
+@Composable
+private fun LoginButton(text: String, primary: Boolean = false, onClick: () -> Unit) {
+    var f by remember { mutableStateOf(false) }
+    val s by androidx.compose.animation.core.animateFloatAsState(if (f) focusScale(1.07f) else 1f, label = "loginBtn")
+    val shape = RoundedCornerShape(50)
+    Box(
+        Modifier
+            .graphicsLayer { scaleX = s; scaleY = s }
+            .clip(shape)
+            .background(if (f) DS.FocusFill else if (primary) lerp(DS.Overlay3, Look.accent1, 0.32f) else DS.Overlay3)
+            .border(if (f) LOGIN_FOCUS_WIDTH else 0.dp, if (f) LOGIN_RED else Color.Transparent, shape)
+            .onFocusChanged { f = it.isFocused }
+            .clickable(onClick = onClick)
+            .padding(horizontal = 20.dp, vertical = 9.dp),
+        contentAlignment = Alignment.Center
+    ) { Text(text, color = if (f) DS.FocusInk else Color.White, fontSize = 16.sp, fontWeight = FontWeight.SemiBold) }
 }
