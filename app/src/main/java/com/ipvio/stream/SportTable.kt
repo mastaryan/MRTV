@@ -88,7 +88,7 @@ object SportTable {
         val hit = synchronized(cache) { cache[l.path] }
         if (hit != null && now - hit.first < 300_000) return@withContext hit.second
         try {
-            val req = Request.Builder().url("https://site.api.espn.com/apis/v2/sports/${l.path}/standings").header("User-Agent", "IPVIO-Stream").build()
+            val req = Request.Builder().url("https://site.api.espn.com/apis/v2/sports/${l.path}/standings").header("User-Agent", "MRTV2").build()
             Net.withTimeouts(8, 10).newCall(req).execute().use { r ->
                 if (!r.isSuccessful) return@withContext hit?.second ?: emptyList()
                 val rows = parse(r.body?.string().orEmpty())

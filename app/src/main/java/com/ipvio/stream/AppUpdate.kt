@@ -30,8 +30,8 @@ data class UpdateInfo(val code: Long, val name: String, val apkUrl: String, val 
  * key (see docs/RELEASE.md). Otherwise Android rejects the installation.
  */
 object AppUpdate {
-    /** Built-in update address: the latest release of the project on GitHub. */
-    const val DEFAULT_URL = "https://api.github.com/repos/Emrodev/IPVIO-Stream/releases/latest"
+    /** Built-in update address (MR TV 2: JSON file on watchmrtv.com, set in app/build.gradle.kts). */
+    val DEFAULT_URL: String = BuildConfig.UPDATE_URL
 
     /** Found update (for the bell), null = none known. */
     var available by mutableStateOf<UpdateInfo?>(null)
@@ -60,7 +60,7 @@ object AppUpdate {
         runCatching {
             val u = url(c)
             if (u.isBlank()) error("Keine Update-Adresse eingetragen")
-            val req = Request.Builder().url(u).header("User-Agent", "IPVIO Stream")
+            val req = Request.Builder().url(u).header("User-Agent", Rebrand.APP_NAME)
                 .header("Accept", "application/vnd.github+json").build()
             Net.base.newCall(req).execute().use { r ->
                 if (r.code == 404) error("Noch keine Veröffentlichung gefunden")
@@ -149,7 +149,7 @@ object AppUpdate {
             val dir = File(c.cacheDir, "updates").apply { mkdirs(); listFiles()?.forEach { it.delete() } }
             val out = File(dir, "ipvio-update.apk")
             val client = Net.withTimeouts(15, 60)
-            client.newCall(Request.Builder().url(info.apkUrl).header("User-Agent", "IPVIO Stream").build()).execute().use { r ->
+            client.newCall(Request.Builder().url(info.apkUrl).header("User-Agent", Rebrand.APP_NAME).build()).execute().use { r ->
                 if (!r.isSuccessful) error("Fehler ${r.code}")
                 val body = r.body ?: error("Leere Antwort")
                 val total = body.contentLength()

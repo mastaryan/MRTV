@@ -52,7 +52,8 @@ object RemoteLogic {
         return if (h > 0) String.format("%d:%02d:%02d", h, m, r) else String.format("%d:%02d", m, r)
     }
 
-    private fun tr(li: Int, de: String, en: String): String = when (li) {
+    private fun tr(li: Int, de: String, en: String): String = Rebrand.apply(trRaw(li, de, en))
+    private fun trRaw(li: Int, de: String, en: String): String = when (li) {
         0 -> de
         1 -> en
         else -> I18nCore.translate(de, li).takeIf { it != de } ?: en
@@ -69,7 +70,7 @@ object RemoteLogic {
         val lang = I18nCore.CODES.getOrElse(li) { "en" }
         return """<!doctype html><html lang="$lang"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0b1220">
-<title>IPVIO Stream</title>
+<title>MR TV 2</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#0b1220;color:#fff;font:16px/1.35 system-ui,sans-serif;padding-bottom:150px}

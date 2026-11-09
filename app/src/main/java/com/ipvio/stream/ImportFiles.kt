@@ -44,6 +44,6 @@ object ImportFiles {
     fun crashText(c: Context): String? {
         val l = CrashLog.last(c) ?: return null
         return l.first + "\n\n" + java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.ROOT).format(java.util.Date(l.second)) +
-            "\nIPVIO Stream " + AppUpdate.currentName(c) + " · Android " + android.os.Build.VERSION.RELEASE + " · " + android.os.Build.MANUFACTURER + " " + android.os.Build.MODEL
+            "\n" + Rebrand.APP_NAME + " " + AppUpdate.currentName(c) + " · Android " + android.os.Build.VERSION.RELEASE + " · " + android.os.Build.MANUFACTURER + " " + android.os.Build.MODEL
     }
 }

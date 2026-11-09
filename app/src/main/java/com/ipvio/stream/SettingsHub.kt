@@ -1351,6 +1351,6 @@ private fun UpdateSection(ctx: Context) {
     if (status.isNotBlank()) Text(status, color = Muted, fontSize = 16.sp)
     Hint("Updates kommen von der Projektseite auf GitHub. Deine Playlists, Favoriten, der Verlauf und die Einstellungen bleiben bei einem Update erhalten. Android fragt vor der Installation einmal nach.")
     var url by remember { mutableStateOf(AppUpdate.url(ctx).takeIf { it != AppUpdate.DEFAULT_URL }.orEmpty()) }
-    Field(url, { url = it; AppUpdate.setUrl(ctx, it) }, "Eigene Update-Adresse (leer = GitHub)")
+    Field(url, { url = it; AppUpdate.setUrl(ctx, it) }, "Eigene Update-Adresse (leer = watchmrtv.com)")
 }
 

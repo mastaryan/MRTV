@@ -32,14 +32,18 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.ipvio.stream"
+        // MR TV 2: own app ID so it installs next to the old MR TV (com.watchmrtv.tv) and next to IPVIO.
+        // The Kotlin namespace stays com.ipvio.stream on purpose, so upstream IPVIO updates merge cleanly.
+        applicationId = "com.watchmrtv.tv2"
         minSdk = 24
         targetSdk = 37
         // Raise both for every release; the GitHub release tag must match versionName (e.g. tag "v1.1").
-        versionCode = 4
-        versionName = "1.3"
+        versionCode = 1
+        versionName = "1.0.0"
         // Name unter dem Symbol; der Debug-Build überschreibt ihn (siehe buildTypes)
-        manifestPlaceholders["appLabel"] = "IPVIO Stream"
+        manifestPlaceholders["appLabel"] = "MR TV 2"
+        // In-app updater: small JSON file on watchmrtv.com ({"versionCode":2,"versionName":"1.0.1","apk":"MRTV2-1.0.1.apk","notes":"..."}).
+        buildConfigField("String", "UPDATE_URL", "\"https://watchmrtv.com/mrtv2-version.json\"")
 
         buildConfigField("String", "TMDB_KEY", "\"${secret("TMDB_KEY")}\"")
         buildConfigField("String", "OMDB_KEY", "\"${secret("OMDB_KEY")}\"")
@@ -61,7 +65,7 @@ android {
         // nicht überschrieben wird. Beide Apps lassen sich parallel installieren (eigene Daten, eigener Name).
         debug {
             applicationIdSuffix = ".test"
-            manifestPlaceholders["appLabel"] = "IPVIO Stream"
+            manifestPlaceholders["appLabel"] = "MR TV 2 Test"
         }
         release {
             if (hasKeystore) signingConfig = signingConfigs.getByName("release")

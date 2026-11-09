@@ -54,7 +54,7 @@ import org.json.JSONObject
 /** Small JSON helpers shared by the ESPN readers in this file. */
 private object J {
     fun get(url: String): JSONObject? = try {
-        val req = Request.Builder().url(url).header("User-Agent", "IPVIO-Stream").build()
+        val req = Request.Builder().url(url).header("User-Agent", "MRTV2").build()
         Net.withTimeouts(8, 12).newCall(req).execute().use { r -> if (r.isSuccessful) JSONObject(r.body?.string().orEmpty()) else null }
     } catch (_: Exception) { null }
 
@@ -133,7 +133,7 @@ object SportStandings {
         val hit = synchronized(cache) { cache[l.path] }
         if (hit != null && now - hit.first < 300_000) return@withContext hit.second
         val o = try {
-            val req = Request.Builder().url("https://site.api.espn.com/apis/v2/sports/${l.path}/standings").header("User-Agent", "IPVIO-Stream").build()
+            val req = Request.Builder().url("https://site.api.espn.com/apis/v2/sports/${l.path}/standings").header("User-Agent", "MRTV2").build()
             Net.withTimeouts(8, 12).newCall(req).execute().use { r -> if (r.isSuccessful) r.body?.string().orEmpty() else null }
         } catch (_: Exception) { null } ?: return@withContext hit?.second ?: emptyList()
         val g = try { parse(o, l) } catch (_: Exception) { emptyList() }
