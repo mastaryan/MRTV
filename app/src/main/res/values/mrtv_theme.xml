@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MR TV 2: window/splash colors from watchmrtv.com (bg #0d0e10, panel #17191c, accent #c9ced6) -->
+<resources>
+    <color name="mrtv_bg">#0D0E10</color>
+    <color name="mrtv_panel">#17191C</color>
+    <color name="mrtv_accent">#C9CED6</color>
+    <style name="Theme.MRTV2" parent="@android:style/Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/mrtv_bg</item>
+        <item name="android:colorBackground">@color/mrtv_bg</item>
+        <item name="android:colorAccent">@color/mrtv_accent</item>
+        <item name="android:colorPrimary">@color/mrtv_bg</item>
+        <item name="android:colorPrimaryDark">@color/mrtv_bg</item>
+        <item name="android:statusBarColor">@color/mrtv_bg</item>
+        <item name="android:navigationBarColor">@color/mrtv_bg</item>
+    </style>
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MR TV 2 splash (Android 12+): MR TV logo on the site background color -->
+<resources>
+    <style name="Theme.MRTV2" parent="@android:style/Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/mrtv_bg</item>
+        <item name="android:colorBackground">@color/mrtv_bg</item>
+        <item name="android:colorAccent">@color/mrtv_accent</item>
+        <item name="android:colorPrimary">@color/mrtv_bg</item>
+        <item name="android:statusBarColor">@color/mrtv_bg</item>
+        <item name="android:navigationBarColor">@color/mrtv_bg</item>
+        <item name="android:windowSplashScreenBackground">@color/mrtv_bg</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <item name="android:windowSplashScreenIconBackgroundColor">@color/mrtv_bg</item>
+    </style>
+</resources>
