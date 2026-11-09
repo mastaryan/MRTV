@@ -80,7 +80,7 @@ fun CategoriesScreen(
 ) {
     val ctx = LocalContext.current
     CatPrefs.init(ctx)
-    var mode by remember { mutableIntStateOf(if (AppSettings.ipvioFilter && req.ipvio.isNotEmpty()) 0 else 1) }
+    var mode by remember { mutableIntStateOf(if (Rebrand.METADATA_SERVICES && AppSettings.ipvioFilter && req.ipvio.isNotEmpty()) 0 else 1) }
     var az by remember { mutableStateOf(false) }
     val sideFocus = remember { FocusRequester() }
     val pillFocus = remember { FocusRequester() }
@@ -118,7 +118,8 @@ fun CategoriesScreen(
                     // Provider categories first; the choice is saved (same setting as "Automatic genres")
                     val modes = listOf("Anbieter-Kategorien", "Auto-Genres")
                     val sel = if (mode == 0) 1 else 0
-                    DropdownPill("Filter", modes[sel], modes, sel, modifier = Modifier.focusRequester(pillFocus), icon = FIcon.Genre) {
+                    // MR TV 2: auto genres need TMDB, the provider's categories are always used
+                    if (Rebrand.METADATA_SERVICES) DropdownPill("Filter", modes[sel], modes, sel, modifier = Modifier.focusRequester(pillFocus), icon = FIcon.Genre) {
                         mode = if (it == 1) 0 else 1
                         AppSettings.set(ctx, mode == 0)
                     }

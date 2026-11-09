@@ -36,6 +36,7 @@ object Config {
     fun init(c: Context) {
         if (inited) return
         inited = true
+        if (!Rebrand.METADATA_SERVICES) return   // MR TV 2: keys stay empty, services off
         val p = prefs(c)
         val t = clean(p.getString("tmdb", "").orEmpty())
         val o = clean(p.getString("omdb", "").orEmpty())
@@ -45,6 +46,7 @@ object Config {
 
     /** Stores the entered keys; empty = remove key (then secrets.properties applies again if present). */
     fun save(c: Context, tmdb: String, omdb: String) {
+        if (!Rebrand.METADATA_SERVICES) return   // MR TV 2: services off
         val t = clean(tmdb); val o = clean(omdb)
         prefs(c).edit().putString("tmdb", t).putString("omdb", o).apply()
         TMDB_KEY = t.ifEmpty { clean(BuildConfig.TMDB_KEY) }; tmdbOwn = t.isNotEmpty()

@@ -465,7 +465,7 @@ private fun DetailScreenFull(
                             }
                         } else Text(
                             raw = meta?.overview != null,
-                            text = meta?.overview ?: if (MetaRepo.usable(item)) "Keine Beschreibung gefunden." else "Tipp: Unter Einstellungen > API-Schlüssel einen eigenen TMDB-Schlüssel eintragen, dann erscheinen hier Beschreibung, Cover und Bewertungen.",
+                            text = meta?.overview ?: if (MetaRepo.usable(item) || !Rebrand.METADATA_SERVICES) "Keine Beschreibung gefunden." else "Tipp: Unter Einstellungen > API-Schlüssel einen eigenen TMDB-Schlüssel eintragen, dann erscheinen hier Beschreibung, Cover und Bewertungen.",
                             color = Tok.TextMid, fontSize = spx(17), lineHeight = spx(25),
                             // Short and medium descriptions (up to about 800 characters) are shown completely, without "Read more".
                             // In the cinema preview (without buttons) it is at most 6 lines.

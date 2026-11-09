@@ -262,6 +262,7 @@ object IntroDb {
     private val client = Net.base
 
     suspend fun get(tmdbId: Int, season: Int, episode: Int, durMs: Long): List<Seg> {
+        if (!Rebrand.METADATA_SERVICES) return emptyList()   // MR TV 2: no TheIntroDB
         val tv = if (season > 0 && episode > 0) "&season=$season&episode=$episode" else ""
         val url = "https://api.theintrodb.org/v3/media?tmdb_id=$tmdbId$tv&duration_ms=$durMs"
         val body = withContext(Dispatchers.IO) {

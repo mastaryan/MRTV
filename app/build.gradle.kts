@@ -45,8 +45,12 @@ android {
         // In-app updater: small JSON file on watchmrtv.com ({"versionCode":2,"versionName":"1.0.1","apk":"MRTV2-1.0.1.apk","notes":"..."}).
         buildConfigField("String", "UPDATE_URL", "\"https://watchmrtv.com/mrtv2-version.json\"")
 
-        buildConfigField("String", "TMDB_KEY", "\"${secret("TMDB_KEY")}\"")
-        buildConfigField("String", "OMDB_KEY", "\"${secret("OMDB_KEY")}\"")
+        // MR TV 2: third-party metadata services (TMDB, OMDb/IMDb/Rotten Tomatoes, TheIntroDB) are switched off.
+        // The app only uses the provider's own data (Xtream/M3U/Stalker), so no API keys are needed or read.
+        val metadataServices = false
+        buildConfigField("boolean", "METADATA_SERVICES", metadataServices.toString())
+        buildConfigField("String", "TMDB_KEY", "\"${if (metadataServices) secret("TMDB_KEY") else ""}\"")
+        buildConfigField("String", "OMDB_KEY", "\"${if (metadataServices) secret("OMDB_KEY") else ""}\"")
         buildConfigField("String", "GOOGLE_CLIENT_ID", "\"${secretId("GOOGLE_CLIENT_ID")}\"")
         buildConfigField("String", "GOOGLE_CLIENT_SECRET", "\"${secretId("GOOGLE_CLIENT_SECRET")}\"")
     }

@@ -17,6 +17,12 @@ object Rebrand {
     const val UPSTREAM_URL = "https://github.com/Emrodev/IPVIO-Stream"
     const val SOURCE_URL = "https://github.com/mastaryan/MRTV"
 
+    /**
+     * false = no third-party metadata services (TMDB, OMDb/IMDb/Rotten Tomatoes, TheIntroDB): no API keys, no key
+     * settings page. The app then uses only the provider's own data (Xtream/M3U/Stalker panel).
+     */
+    val METADATA_SERVICES: Boolean get() = BuildConfig.METADATA_SERVICES
+
     fun apply(s: String): String =
         if (s.indexOf("IPVIO") < 0) s
         else s.replace("IPVIO Stream", APP_NAME).replace("IPVIO", SHORT_NAME)
