@@ -150,7 +150,7 @@ object SportLeaders {
     private val cache = HashMap<String, Pair<Long, List<Category>>>()
 
     suspend fun fetch(l: SportData.League): List<Category> = withContext(Dispatchers.IO) {
-        if (l.kind != SportData.KIND_TEAM) return@withContext emptyList()
+        if (l.kind != SportData.KIND_TEAM || !l.leaders) return@withContext emptyList()
         val now = System.currentTimeMillis()
         val hit = synchronized(cache) { cache[l.path] }
         if (hit != null && now - hit.first < 600_000) return@withContext hit.second

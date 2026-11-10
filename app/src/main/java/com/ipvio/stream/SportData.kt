@@ -52,7 +52,12 @@ object SportData {
     const val KIND_CRICKET = 5
 
     /** [sport] = key of [SPORTS]; [kind] decides how the scoreboard is read. */
-    class League(val name: String, val path: String, val catName: String, val sport: String = "soccer", val kind: Int = KIND_TEAM)
+    /**
+     * [query] is added to the scoreboard address (e.g. "&groups=50": all Division I games instead of only the ranked
+     * ones); [leaders] = false skips the leader lists (ESPN's college "statistics" answer is over 20 MB).
+     */
+    class League(val name: String, val path: String, val catName: String, val sport: String = "soccer", val kind: Int = KIND_TEAM,
+                 val query: String = "", val leaders: Boolean = true)
 
     /** The ten sports of the hub in display order (key, German label). */
     class Sport(val key: String, val label: String)
@@ -73,6 +78,8 @@ object SportData {
         League("Champions League", "soccer/uefa.champions", "Fußball"),
         League("Europa League", "soccer/uefa.europa", "Fußball"),
         League("NBA", "basketball/nba", "Basketball", "basketball"),
+        // Men's college basketball, shown under Basketball next to the NBA; groups=50 = all of Division I
+        League("College Basketball", "basketball/mens-college-basketball", "College-Basketball", "basketball", query = "&groups=50", leaders = false),
         League("NFL", "football/nfl", "American Football", "nfl"),
         League("College Football", "football/college-football", "American Football", "nfl"),
         League("NHL", "hockey/nhl", "Eishockey", "nhl"),
@@ -86,7 +93,7 @@ object SportData {
     )
 
     /** Popular competitions for the overview (shown if active). */
-    val POPULAR = listOf("Premier League", "Champions League", "Bundesliga", "LaLiga", "NBA", "NFL", "NHL", "MLB")
+    val POPULAR = listOf("Premier League", "Champions League", "Bundesliga", "LaLiga", "NBA", "College Basketball", "NFL", "NHL", "MLB")
 
     fun league(name: String): League? = LEAGUES.firstOrNull { it.name == name }
     fun leagueOf(g: Game): League? = league(g.league)
@@ -369,9 +376,9 @@ object SportData {
         return out
     }
 
-    private fun urlFor(l: League, ymd: String?): String = when (l.kind) {
+    internal fun urlFor(l: League, ymd: String?): String = when (l.kind) {
         KIND_CRICKET -> "https://site.web.api.espn.com/apis/v2/scoreboard/header?sport=cricket"
-        KIND_TEAM -> "https://site.api.espn.com/apis/site/v2/sports/${l.path}/scoreboard?dates=$ymd"
+        KIND_TEAM -> "https://site.api.espn.com/apis/site/v2/sports/${l.path}/scoreboard?dates=$ymd${l.query}"
         // Tennis, F1, UFC, golf: the scoreboard shows the current events; days are filtered afterwards
         else -> "https://site.api.espn.com/apis/site/v2/sports/${l.path}/scoreboard"
     }
