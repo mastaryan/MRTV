@@ -10,7 +10,7 @@ GNU General Public License v3 (see `LICENSE`). Third-party components and their 
 
 Changes made to IPVIO Stream 1.2 (upstream commit `b65e838`):
 
-- New name **MR TV 2**, new app ID `com.watchmrtv.tv2`, version 1.0.0 (versionCode 1); current version 2.0.4 (versionCode 5).
+- New name **MR TV 2**, new app ID `com.watchmrtv.tv2`, version 1.0.0 (versionCode 1); current version 2.0.5 (versionCode 6).
 - MR TV logo as launcher icon, adaptive icon, Android TV / Fire TV banner, splash screen and in-app brand mark
   (`branding/`).
 - Default design uses the watchmrtv.com colors (silver `#C9CED6` / `#E2E6EC` on charcoal `#0D0E10`).
@@ -32,6 +32,8 @@ Changes made to IPVIO Stream 1.2 (upstream commit `b65e838`):
   Nielsen markets by state, then market; local channels from the playlist; saved markets per playlist; a team/league
   config incl. college basketball; switch in Settings > Live TV). Data from public sources (Nielsen ranks, county list,
   FCC station data), see `tools/locals/` and `assets/locals/`; MR TV turns it on in `MrtvLocals.kt`.
+- Sports Hub (version 2.0.5): College Basketball (ESPN `basketball/mens-college-basketball`, all Division I games via
+  `groups=50`) under Basketball next to the NBA, in Leagues, popular leagues, Live, Schedule and Teams.
 
 All fork changes are kept in small, separate places (`Rebrand.kt`, `DictMrtv.kt`, `MrtvCredits.kt`,
 `res/values*/mrtv_theme.xml`, `branding/`) so new IPVIO versions can be merged; see `docs/UPSTREAM-SYNC.md`.
