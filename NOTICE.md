@@ -10,7 +10,7 @@ GNU General Public License v3 (see `LICENSE`). Third-party components and their 
 
 Changes made to IPVIO Stream 1.2 (upstream commit `b65e838`):
 
-- New name **MR TV 2**, new app ID `com.watchmrtv.tv2`, version 1.0.0 (versionCode 1); current version 2.0.3 (versionCode 4).
+- New name **MR TV 2**, new app ID `com.watchmrtv.tv2`, version 1.0.0 (versionCode 1); current version 2.0.4 (versionCode 5).
 - MR TV logo as launcher icon, adaptive icon, Android TV / Fire TV banner, splash screen and in-app brand mark
   (`branding/`).
 - Default design uses the watchmrtv.com colors (silver `#C9CED6` / `#E2E6EC` on charcoal `#0D0E10`).
@@ -28,6 +28,10 @@ Changes made to IPVIO Stream 1.2 (upstream commit `b65e838`):
   star on channels, a two-page layout on narrow screens; "USA Locals" (Nielsen top-5 markets per state, call-sign
   matching, save whole cities or single channels to Favorites) ported from MR TV 1.3 (`UsaLocals.kt`, `DmaData.kt`,
   same author); sign-in in portrait with a TV guide loading step (`LoginFlow.kt`), then free rotation (`MobilePrefs.kt`).
+- US locals (version 2.0.4): the top-5 list was replaced by the separate package `com.ipvio.stream.locals` (all 210
+  Nielsen markets by state, then market; local channels from the playlist; saved markets per playlist; a team/league
+  config incl. college basketball; switch in Settings > Live TV). Data from public sources (Nielsen ranks, county list,
+  FCC station data), see `tools/locals/` and `assets/locals/`; MR TV turns it on in `MrtvLocals.kt`.
 
 All fork changes are kept in small, separate places (`Rebrand.kt`, `DictMrtv.kt`, `MrtvCredits.kt`,
 `res/values*/mrtv_theme.xml`, `branding/`) so new IPVIO versions can be merged; see `docs/UPSTREAM-SYNC.md`.
