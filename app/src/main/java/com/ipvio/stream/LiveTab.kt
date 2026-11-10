@@ -37,6 +37,9 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.ipvio.stream.locals.*
+import androidx.compose.ui.focus.focusProperties
+import androidx.compose.foundation.focusable
 
 object ZapContext {
     var list: List<Item> = emptyList()
@@ -94,15 +97,20 @@ fun LiveTab(liveAll: List<Item>, groupsAll: Map<String, List<Item>>, favsAll: Li
     val genres = remember(live) { LiveGenre.split(live) }
     val favs = remember(favsAll, srcK) { if (srcK < 0) favsAll else favsAll.filter { it.src == srcK } }
     CatFavs.init(ctx)
-    CityFavs.init(ctx)
+    // US local channels by Nielsen market (locals package; off unless turned on in the settings / by the build)
+    LocalsFeature.init(ctx)
+    val localsOn = LocalsFeature.enabled
+    val catalog = if (localsOn) remember { DmaCatalog.get(ctx) } else null
+    if (localsOn) LocalsStore.init(ctx)
+    val savedMkts = if (catalog != null) LocalsStore.saved.mapNotNull { catalog.market(it) } else emptyList()
     ChannelLists.init(ctx)
     remember { LiveQuality.init(ctx) }
     // Last chosen category / list (round 14): the same one again after Back from the player and after a restart
     var sel by remember {
         val saved = LiveMemory.sel(ctx)?.takeIf { k ->
-            (k == FAV_CAT && (favs.isNotEmpty() || CityFavs.list.isNotEmpty())) || k == UsaLocals.KEY || UsaLocals.isCity(k) || k == "ALL" || k == "HOME" || k in groups || (LiveGenre.isGenreKey(k) && genres.containsKey(k)) || ChannelLists.byKey(k) != null || k == "REC"
+            (k == FAV_CAT && (favs.isNotEmpty() || savedMkts.isNotEmpty())) || (localsOn && (k == LocalsKeys.PICKER || catalog?.market(LocalsKeys.codeOf(k)) != null)) || k == "ALL" || k == "HOME" || k in groups || (LiveGenre.isGenreKey(k) && genres.containsKey(k)) || ChannelLists.byKey(k) != null || k == "REC"
         }
-        mutableStateOf(saved ?: if (favs.isNotEmpty() || CityFavs.list.isNotEmpty()) FAV_CAT else "ALL")
+        mutableStateOf(saved ?: if (favs.isNotEmpty() || savedMkts.isNotEmpty()) FAV_CAT else "ALL")
     }
     HiddenCats.init(ctx)
     // Channel name search ("SEARCH" entry): text is kept while the tab is open
@@ -119,7 +127,7 @@ fun LiveTab(liveAll: List<Item>, groupsAll: Map<String, List<Item>>, favsAll: Li
     // Order: favorites, own channel lists, "New channel list", all channels, categories
     // Aufnahmen (Runde 20): eigene Kategorie, sobald es welche gibt
     val recs = remember(Recorder.active.size, sel == "REC") { Recorder.list(ctx).map { Recorder.itemOf(it) } }
-    val names = (if (PlaylistStore.lists.size > 1) listOf("PL") else emptyList()) + listOf("HOME", "GUIDE", "SEARCH", "MULTI", FAV_CAT, UsaLocals.KEY) + CityFavs.list.map { UsaLocals.cityKey(it) } + (if (recs.isNotEmpty()) listOf("REC") else emptyList()) + myLists.map { ChannelListLogic.key(it) } + listOf("NEW", "ALL") + genres.keys + favCats + groups.keys.filter { it !in favCats && it !in HiddenCats.list } + (if (HiddenCats.list.any { it in groups }) listOf("HIDDEN") else emptyList())
+    val names = (if (PlaylistStore.lists.size > 1) listOf("PL") else emptyList()) + listOf("HOME", "GUIDE", "SEARCH", "MULTI", FAV_CAT) + (if (localsOn) listOf(LocalsKeys.PICKER) + savedMkts.map { LocalsKeys.market(it.code) } else emptyList()) + (if (recs.isNotEmpty()) listOf("REC") else emptyList()) + myLists.map { ChannelListLogic.key(it) } + listOf("NEW", "ALL") + genres.keys + favCats + groups.keys.filter { it !in favCats && it !in HiddenCats.list } + (if (HiddenCats.list.any { it in groups }) listOf("HIDDEN") else emptyList())
     val curList = ChannelLists.byKey(sel)
     // Own list currently being filled (OK on a channel adds it); declared early because bundling depends on it
     var addTo by remember { mutableStateOf<Int?>(null) }
@@ -133,23 +141,27 @@ fun LiveTab(liveAll: List<Item>, groupsAll: Map<String, List<Item>>, favsAll: Li
         value = if (addTo != null && query.isBlank()) live
             else kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) { ChannelSearch.filter(live, query) }
     }
-    // MR TV 2 USA Locals (ported from MR TV 1.3): a city's local stations, matched in the background
-    val cityRank = UsaLocals.rankOf(sel)
-    var cityLoading by remember { mutableStateOf(false) }
-    val cityList by produceState(emptyList<Item>(), cityRank, live) {
+    // US locals: the chosen market's local channels, matched in the background (name, or a "Locals | City" category)
+    val market = catalog?.market(LocalsKeys.codeOf(sel))
+    var marketLoading by remember { mutableStateOf(false) }
+    val marketList by produceState(emptyList<Item>(), market, live) {
         value = emptyList()
-        val m = cityRank?.let { LocalMarkets.byKey(it) } ?: return@produceState
-        cityLoading = true
-        value = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) { UsaLocals.channels(m, live, { it.id }, { it.title }) }
-        cityLoading = false
+        val m = market ?: return@produceState
+        marketLoading = true
+        value = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) { LocalMatcher.channels(m, live, { it.title }, { it.group }) }
+        marketLoading = false
     }
-    // Favorites with saved cities: favorite channels grouped under their city, the rest below
-    val favGroups = remember(favs, CityFavs.list) { if (CityFavs.list.isEmpty()) null else UsaLocals.groupFavorites(CityFavs.list, favs) { it.title } }
-    var localsState by remember { mutableStateOf(UsaLocals.stateOf(cityRank ?: -1)) }
+    // Favorites with saved markets: favorite channels grouped under their market, the rest below
+    val favGroups = remember(favs, savedMkts) { if (savedMkts.isEmpty()) null else LocalMatcher.groupFavorites(savedMkts, favs) { it.title } }
+    // Picker level: null = states, otherwise the state whose markets are listed
+    var localsState by remember { mutableStateOf(market?.home) }
+    fun openMarket(m: Market) { LocalsStore.setMyMarket(ctx, m.code); sel = LocalsKeys.market(m.code) }
+    fun mktLabel(m: Market) = Lang.tr("Lokalsender") + " – " + m.name
+    fun savedToast(m: Market, now: Boolean) = Toast.makeText(ctx, Lang.tr(if (now) "Markt zu Favoriten hinzugefügt" else "Markt aus Favoriten entfernt") + ": " + m.name, Toast.LENGTH_SHORT).show()
     val rawList = when {
         sel == FAV_CAT -> favGroups?.flatMap { it.second } ?: favs
-        sel == UsaLocals.KEY -> emptyList()
-        cityRank != null -> cityList
+        sel == LocalsKeys.PICKER -> emptyList()
+        market != null -> marketList
         sel == "ALL" -> live
         sel == "SEARCH" -> searchRes
         sel == "HOME" -> emptyList()
@@ -161,7 +173,7 @@ fun LiveTab(liveAll: List<Item>, groupsAll: Map<String, List<Item>>, favsAll: Li
     // Favorites grouped by saved city: list index -> heading ("Locals – City" / "Weitere Favoriten")
     val favHeads: Map<Int, String> = if (sel != FAV_CAT || favGroups == null) emptyMap() else {
         val m = HashMap<Int, String>(); var at = 0
-        for ((r, l) in favGroups) { m[at] = if (r != null) UsaLocals.cityLabel(r) else Lang.tr("Weitere Favoriten"); at += l.size }
+        for ((r, l) in favGroups) { m[at] = if (r != null) mktLabel(r) else Lang.tr("Weitere Favoriten"); at += l.size }
         m
     }
     // Quality variants of one channel as a single row (not in favorites, own lists, recordings or while filling a list)
@@ -225,6 +237,40 @@ fun LiveTab(liveAll: List<Item>, groupsAll: Map<String, List<Item>>, favsAll: Li
         val noPanel = narrow || (MobilePrefs.mobile && maxWidth < 1300.dp && sel != "SEARCH")
         androidx.activity.compose.BackHandler(enabled = narrow && showContent) { showContent = false }
         fun opened() { if (narrow) showContent = true }
+        // US locals: Back goes up one level (market → the state's markets → state list), then as usual
+        // Remote: the focused row disappears when the level changes, so the focus is parked on an invisible target until the
+        // new level's first row (or the Back button) can take it; otherwise it would fall back to the category list.
+        var localsFocus by remember { mutableIntStateOf(0) }
+        var parking by remember { mutableStateOf(false) }
+        var parkFocused by remember { mutableStateOf(false) }
+        val parkReq = remember { FocusRequester() }
+        val localsBackReq = remember { FocusRequester() }
+        val inputMgr = androidx.compose.ui.platform.LocalInputModeManager.current
+        fun park() {
+            if (inputMgr.inputMode == androidx.compose.ui.input.InputMode.Touch) return
+            parking = true; runCatching { parkReq.requestFocus() }; localsFocus++
+        }
+        LaunchedEffect(localsFocus) {
+            if (localsFocus == 0) return@LaunchedEffect
+            // requestFocus() does not fail on a target that is not laid out yet, so success = the parking spot lost the focus
+            repeat(200) {
+                kotlinx.coroutines.delay(50)
+                if (!parkFocused) { parking = false; return@LaunchedEffect }
+                // a market's channels are still being matched (big playlists: a few seconds): wait so its first channel gets
+                // the focus; a market without matches gets the Back button
+                if (catalog?.market(LocalsKeys.codeOf(sel)) != null && marketList.isEmpty() && ((marketLoading && it < 199) || it < 4)) return@repeat
+                if (runCatching { firstChan.requestFocus() }.isFailure || parkFocused) runCatching { localsBackReq.requestFocus() }
+            }
+            if (parkFocused) runCatching { ContentFocus.req.requestFocus() }
+            parking = false
+        }
+        Box(
+            Modifier.size(1.dp)
+                .then(Modifier.focusProperties { canFocus = parking })
+                .focusRequester(parkReq).onFocusChanged { parkFocused = it.isFocused }.focusable()
+        )
+        androidx.activity.compose.BackHandler(enabled = market != null) { park(); localsState = localsState ?: market?.home; sel = LocalsKeys.PICKER }
+        androidx.activity.compose.BackHandler(enabled = sel == LocalsKeys.PICKER && localsState != null) { park(); localsState = null }
         FocusedBackdrop(focusedState, Modifier.fillMaxSize())
         Row(Modifier.fillMaxSize().padding(top = 20.dp)) {
             if (!narrow || !showContent) LazyColumn((if (narrow) Modifier.fillMaxWidth() else Modifier.width(270.dp)).fillMaxHeight().padding(start = 24.dp, end = 8.dp).testTag("live-cats"), state = catState, verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -311,30 +357,34 @@ fun LiveTab(liveAll: List<Item>, groupsAll: Map<String, List<Item>>, favsAll: Li
                         CatRow("Neue Senderliste", -1, false, Modifier, onFocus = {}, onRight = { runCatching { firstChan.requestFocus() } }, onFav = {}, icon = AIcon.Plus) { newList(null) }
                         return@itemsIndexed
                     }
-                    if (n == UsaLocals.KEY) {
-                        val localsSel = sel == n || (cityRank != null && !CityFavs.isSaved(cityRank))
+                    if (n == LocalsKeys.PICKER) {
+                        // "My Locals": OK / tap opens the saved market (Back goes up to its state and the state list), else the picker
+                        val localsSel = sel == n || (market != null && !LocalsStore.isSaved(market.code))
+                        val my = catalog?.market(LocalsStore.myMarket)
                         CatRow(
-                            "US-Lokalsender", -1, localsSel,
+                            Lang.tr("Meine Lokalsender") + (if (my != null) ": " + my.name else ""), -1, localsSel,
                             if (localsSel) Modifier.focusRequester(ContentFocus.req) else Modifier,
-                            onFocus = { if (UsaLocals.rankOf(sel) == null || CityFavs.isSaved(UsaLocals.rankOf(sel)!!)) sel = n },
-                            onRight = { runCatching { firstChan.requestFocus() } }, onFav = {}, icon = AIcon.Globe
-                        ) { sel = n; opened(); runCatching { firstChan.requestFocus() } }
+                            onFocus = { if (market == null || LocalsStore.isSaved(market.code)) { if (sel != n) localsState = null; sel = n } },
+                            onRight = { runCatching { firstChan.requestFocus() } }, onFav = {}, icon = AIcon.Globe, raw = true
+                        ) {
+                            if (my != null) { localsState = my.home; sel = LocalsKeys.market(my.code) } else sel = n
+                            opened(); runCatching { firstChan.requestFocus() }
+                        }
                         return@itemsIndexed
                     }
-                    val cityR = UsaLocals.rankOf(n)
-                    if (cityR != null) {
-                        var cityMenu by remember { mutableStateOf(false) }
+                    val mkt = catalog?.market(LocalsKeys.codeOf(n))
+                    if (mkt != null) {
+                        var mktMenu by remember { mutableStateOf(false) }
                         Box {
                             CatRow(
-                                UsaLocals.cityLabel(cityR), -1, n == sel,
+                                mktLabel(mkt), -1, n == sel,
                                 if (n == sel) Modifier.focusRequester(ContentFocus.req) else Modifier,
-                                onFocus = { sel = n }, onRight = { runCatching { firstChan.requestFocus() } },
-                                onFav = { cityMenu = true }, icon = AIcon.Star, raw = true
+                                onFocus = { sel = n; localsState = mkt.home }, onRight = { runCatching { firstChan.requestFocus() } },
+                                onFav = { mktMenu = true }, icon = AIcon.Star, raw = true
                             ) { opened(); runCatching { firstChan.requestFocus() } }
-                            if (cityMenu) OptionPopup(listOf("Stadt aus Favoriten entfernen"), -1, { cityMenu = false }, listOf(AIcon.Close)) {
-                                cityMenu = false
-                                CityFavs.toggle(ctx, cityR)
-                                Toast.makeText(ctx, Lang.tr("Stadt aus Favoriten entfernt") + ": " + UsaLocals.cityLabel(cityR), Toast.LENGTH_SHORT).show()
+                            if (mktMenu) OptionPopup(listOf("Markt aus Favoriten entfernen"), -1, { mktMenu = false }, listOf(AIcon.Close)) {
+                                mktMenu = false
+                                savedToast(mkt, LocalsStore.toggleSaved(ctx, mkt.code))
                             }
                         }
                         return@itemsIndexed
@@ -423,33 +473,35 @@ fun LiveTab(liveAll: List<Item>, groupsAll: Map<String, List<Item>>, favsAll: Li
                         color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
                     PillButton("Fertig", light = true) { finishAdd() }
                 }
-                // A city (USA Locals): back to its state, name, save the whole city to Favorites
-                if (cityRank != null) {
-                    val saved = CityFavs.isSaved(cityRank)
+                // A market (US locals): Back up to the state's markets, name, save the market to Favorites
+                if (market != null) {
+                    val saved = LocalsStore.isSaved(market.code)
+                    // Buttons on top, the market below: long names ("Greenville–Spartanburg–Asheville–Anderson") get the full width
                     Row(
-                        Modifier.fillMaxWidth().padding(bottom = 12.dp),
+                        Modifier.fillMaxWidth().padding(bottom = 8.dp),
                         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        PillButton("Zurück", Modifier.heightIn(min = touchMin()), icon = AIcon.Left) { localsState = UsaLocals.stateOf(cityRank); sel = UsaLocals.KEY }
-                        Text(raw = true, text = LocalMarkets.byKey(cityRank)?.name ?: "", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold,
-                            maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
-                        PillButton(if (saved) "Stadt gespeichert" else "Stadt speichern", Modifier.heightIn(min = touchMin()), light = !saved, icon = if (saved) AIcon.Star else AIcon.StarOutline) {
-                            val now = CityFavs.toggle(ctx, cityRank)
-                            Toast.makeText(ctx, Lang.tr(if (now) "Stadt zu Favoriten hinzugefügt" else "Stadt aus Favoriten entfernt") + ": " + (LocalMarkets.byKey(cityRank)?.name ?: ""), Toast.LENGTH_SHORT).show()
+                        PillButton("Zurück", Modifier.heightIn(min = touchMin()).testTag("locals-back").focusRequester(localsBackReq), icon = AIcon.Left) { park(); localsState = localsState ?: market.home; sel = LocalsKeys.PICKER }
+                        PillButton(if (saved) "Markt gespeichert" else "Markt speichern", Modifier.heightIn(min = touchMin()), light = !saved, icon = if (saved) AIcon.Star else AIcon.StarOutline) {
+                            savedToast(market, LocalsStore.toggleSaved(ctx, market.code))
                         }
+                    }
+                    Column(Modifier.fillMaxWidth().padding(start = 4.dp, bottom = 12.dp)) {
+                        Text(raw = true, text = market.name, color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                        Text(raw = true, text = market.states.joinToString(", ") + " · " + Lang.tr("Rang") + " " + market.rank, color = Muted, fontSize = 13.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
                     }
                 }
                 if (sel == "SEARCH") Field(query, { query = it.take(40) }, "Sendername eingeben", Modifier.padding(bottom = 12.dp), inner = Modifier.focusRequester(searchReq))
-                val favCities = if (sel == FAV_CAT) CityFavs.list else emptyList()
-                if (sel == UsaLocals.KEY) LocalsBrowser(localsState, { localsState = it }, firstChan) { r -> sel = UsaLocals.cityKey(r) }
+                val favCities = if (sel == FAV_CAT) savedMkts else emptyList()
+                if (sel == LocalsKeys.PICKER && catalog != null) LocalsPicker(catalog, localsState, { park(); localsState = it }, { park(); openMarket(it) }, firstChan, onSaved = { m, now -> savedToast(m, now) })
                 else if (list.isEmpty() && favCities.isEmpty()) EmptyState(
                     if (sel == FAV_CAT) AIcon.Heart else AIcon.Live,
                     if (sel == FAV_CAT) "Noch keine Favoriten" else if (sel == "SEARCH") (if (query.isBlank()) "Sender suchen" else "Keine Treffer") else if (curList != null) "Diese Liste ist noch leer"
-                        else if (cityRank != null) (if (cityLoading) "Lokalsender werden gesucht …" else "Keine Lokalsender gefunden") else "Keine Sender",
+                        else if (market != null) (if (marketLoading) "Lokalsender werden gesucht …" else "Keine Lokalsender gefunden") else "Keine Sender",
                     when {
-                        cityRank != null -> "Für diese Stadt wurden bei deinem Anbieter keine Lokalsender (ABC, NBC, CBS, FOX …) gefunden."
+                        market != null -> "Deine Playlist hat für diesen Markt keine Lokalsender (ABC, NBC, CBS, FOX …). Wähle mit „Zurück“ einen anderen Markt."
                         sel == "SEARCH" -> "Tippe rechts mit der Tastatur. Gesucht wird im Sendernamen und in der Kategorie."
-                        sel == FAV_CAT -> "Auf einem Sender OK gedrückt halten (am Handy: lange tippen oder den Stern) und „Zu Favoriten“ wählen. Ganze Städte speicherst du unter „US-Lokalsender“."
+                        sel == FAV_CAT -> "Auf einem Sender OK gedrückt halten (am Handy: lange tippen oder den Stern) und „Zu Favoriten“ wählen. Ganze Märkte speicherst du unter „Meine Lokalsender“."
                         curList != null -> "In „Alle Sender“ oder einer Kategorie auf einem Sender OK gedrückt halten und „Zu …“ wählen."
                         else -> "In dieser Kategorie gibt es keine Sender. Links eine andere Kategorie wählen."
                     }
@@ -467,18 +519,18 @@ fun LiveTab(liveAll: List<Item>, groupsAll: Map<String, List<Item>>, favsAll: Li
                 ) {
                     // Favorites: saved cities first (open = all its local channels), then favorite channels grouped by city
                     if (favCities.isNotEmpty()) {
-                        item(key = "cities-h", contentType = "h") { SectionHead("Gespeicherte Städte") }
-                        itemsIndexed(favCities, key = { _, r -> "city:$r" }, contentType = { _, _ -> "city" }) { ci, r ->
+                        item(key = "cities-h", contentType = "h") { SectionHead("Gespeicherte Märkte") }
+                        itemsIndexed(favCities, key = { _, r -> "mkt:" + r.code }, contentType = { _, _ -> "city" }) { ci, r ->
                             var cm by remember { mutableStateOf(false) }
                             Box {
                                 CatRow(
-                                    UsaLocals.cityLabel(r), -1, false,
+                                    mktLabel(r), -1, false,
                                     (if (ci == 0) Modifier.focusRequester(firstChan) else Modifier).clip(RoundedCornerShape(DS.RadiusS)).background(Color(0x0FFFFFFF)),
                                     onFocus = {}, onRight = {}, onFav = { cm = true }, icon = AIcon.Star, raw = true
-                                ) { sel = UsaLocals.cityKey(r) }
-                                if (cm) OptionPopup(listOf("Öffnen", "Stadt aus Favoriten entfernen"), -1, { cm = false }, listOf(AIcon.Right, AIcon.Close)) { i ->
+                                ) { localsState = r.home; sel = LocalsKeys.market(r.code) }
+                                if (cm) OptionPopup(listOf("Öffnen", "Markt aus Favoriten entfernen"), -1, { cm = false }, listOf(AIcon.Right, AIcon.Close)) { i ->
                                     cm = false
-                                    if (i == 0) sel = UsaLocals.cityKey(r) else CityFavs.toggle(ctx, r)
+                                    if (i == 0) { localsState = r.home; sel = LocalsKeys.market(r.code) } else savedToast(r, LocalsStore.toggleSaved(ctx, r.code))
                                 }
                             }
                         }
@@ -758,58 +810,5 @@ private fun RowScope.NarrowPage(narrow: Boolean, onBack: () -> Unit, content: @C
     Column(Modifier.weight(1f).fillMaxHeight()) {
         PillButton("Kategorien", Modifier.padding(start = 12.dp, bottom = 10.dp).heightIn(min = touchMin()), icon = AIcon.Left) { onBack() }
         Row(Modifier.weight(1f).fillMaxWidth().padding(start = 12.dp)) { content() }
-    }
-}
-
-/**
- * USA Locals browser (ported from MR TV 1.3 UsaLocalsPanel): states A–Z → the state's Nielsen top-5 markets → a city's
- * channels. Tap / OK opens; long-press, Menu, long OK or the star saves / removes a whole city in Favorites.
- */
-@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
-@Composable
-private fun LocalsBrowser(state: String?, onState: (String?) -> Unit, firstReq: FocusRequester, onCity: (Int) -> Unit) {
-    val ctx = LocalContext.current
-    val st = UsaLocals.state(state)
-    val ls = remember(state) { LazyListState() }
-    fun toggle(r: Int) {
-        val now = CityFavs.toggle(ctx, r)
-        Toast.makeText(ctx, Lang.tr(if (now) "Stadt zu Favoriten hinzugefügt" else "Stadt aus Favoriten entfernt") + ": " + (LocalMarkets.byKey(r)?.name ?: ""), Toast.LENGTH_SHORT).show()
-    }
-    if (st != null) androidx.activity.compose.BackHandler { onState(null) }
-    LazyColumn(Modifier.fillMaxSize().testTag("live-locals"), state = ls, verticalArrangement = Arrangement.spacedBy(4.dp), contentPadding = PaddingValues(bottom = 40.dp)) {
-        if (st == null) {
-            item(key = "h") { SectionHead("Bundesstaat wählen") }
-            itemsIndexed(UsaLocals.states, key = { _, s -> s.code }) { i, s ->
-                BrowseRow(s.name, null, if (i == 0) Modifier.focusRequester(firstReq) else Modifier, onStar = null) { onState(s.code) }
-            }
-        } else {
-            item(key = "back") { BrowseRow("‹ " + st.name, null, Modifier.focusRequester(firstReq), onStar = null) { onState(null) } }
-            itemsIndexed(UsaLocals.markets(st.code), key = { _, m -> m.rank }) { _, m ->
-                BrowseRow(st.label(m), CityFavs.isSaved(m.rank), Modifier, onStar = { toggle(m.rank) }) { onCity(m.rank) }
-            }
-        }
-    }
-}
-
-@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
-@Composable
-private fun BrowseRow(label: String, saved: Boolean?, modifier: Modifier, onStar: (() -> Unit)?, onClick: () -> Unit) {
-    var f by remember { mutableStateOf(false) }
-    val shape = RoundedCornerShape(DS.RadiusS)
-    Row(
-        modifier.fillMaxWidth().heightIn(min = maxOf(touchMin(), 48.dp)).clip(shape)
-            .background(if (f) Color(0x33FFFFFF) else Color(0x0AFFFFFF))
-            .onFocusChanged { f = it.isFocused }
-            .then(if (onStar != null) Modifier.favKeys { onStar() } else Modifier)
-            .combinedClickable(onClick = onClick, onLongClick = onStar?.let { touchOnly(it) })
-            .padding(start = 14.dp, end = 4.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(raw = true, text = label, color = Color.White, fontSize = 16.sp, maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f).padding(vertical = 10.dp))
-        if (saved != null && onStar != null) Box(
-            // Touch: the star saves / removes the whole city (not focusable: D-pad uses Menu / long OK)
-            Modifier.size(maxOf(touchMin(), 44.dp)).clip(RoundedCornerShape(50)).pointerInput(label) { detectTapGestures(onTap = { onStar() }) },
-            contentAlignment = Alignment.Center
-        ) { AppIcon(if (saved) AIcon.Star else AIcon.StarOutline, if (saved) DS.Gold else Muted, size = 24.dp) }
     }
 }

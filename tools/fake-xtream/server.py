@@ -11,6 +11,11 @@ for i,n in enumerate(["CNN","FOX News","MSNBC","CNBC","Newsmax"]): add("US: "+n,
 for n,e in [("US: ABC 7 CHICAGO","wls.us"),("US: NBC 5 Chicago WMAQ","wmaq.us"),("CHICAGO CBS 2 HD","wbbm.us"),("US: FOX 32 Chicago WFLD","wfld.us"),("WGN 9 Chicago","wgn.us")]: add(n,"3",e)
 for n,e in [("US: ABC 7 New York WABC","wabc.us"),("US: NBC 4 New York WNBC","wnbc.us"),("US: CBS 2 New York WCBS","wcbs.us"),("US: FOX 5 New York WNYW","wnyw.us"),("US: ABC 7 Los Angeles KABC","kabc.us"),("US: NBC 4 Los Angeles KNBC","knbc.us"),("US: WFAA ABC 8 Dallas","wfaa.us"),("US: WSB ABC 2 Atlanta","wsb.us")]: add(n,"4",e)
 for i in range(40): add("US: Entertainment %02d"%i, "4", "ent%d.us"%i)
+# Locals fixture (several Nielsen markets + look-alike national feeds), shared with LocalsFlowTest
+import os
+_L = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "locals_channels.json")))
+CATS += [(k, v) for k, v in _L["categories"].items()]
+for i, (cat, name) in enumerate(_L["channels"]): add(name, cat, "loc%d.us" % i)
 EPG_DELAY = float(sys.argv[2]) if len(sys.argv)>2 else 10.0
 def xmltv():
     now = int(time.time())//1800*1800

@@ -12,7 +12,6 @@ Anmelden¦Sign in
 Bitte Benutzername und Passwort eingeben.¦Please enter your username and password.
 Benutzername und Passwort eintragen und senden. Die Playlist wird danach automatisch geladen.¦Enter your username and password and send them. Your channels then load automatically.
 Die Stream-Info erscheint nur bei Filmen und Serien.¦The stream info only appears for movies and series.
-US-Lokalsender¦USA Locals
 Stadt aus Favoriten entfernen¦Remove city from Favorites
 Stadt aus Favoriten entfernt¦City removed from Favorites
 Stadt zu Favoriten hinzugefügt¦City added to Favorites
@@ -21,7 +20,7 @@ Stadt speichern¦Save city
 Lokalsender werden gesucht …¦Finding local channels…
 Keine Lokalsender gefunden¦No local channels found
 Für diese Stadt wurden bei deinem Anbieter keine Lokalsender (ABC, NBC, CBS, FOX …) gefunden.¦No local channels (ABC, NBC, CBS, FOX…) were found for this city on your service.
-Auf einem Sender OK gedrückt halten (am Handy: lange tippen oder den Stern) und „Zu Favoriten“ wählen. Ganze Städte speicherst du unter „US-Lokalsender“.¦Hold OK on a channel (on a phone: long-press it or tap the star) and choose "Add to favorites". Save whole cities under "USA Locals".
+Auf einem Sender OK gedrückt halten (am Handy: lange tippen oder den Stern) und „Zu Favoriten“ wählen. Ganze Märkte speicherst du unter „Meine Lokalsender“.¦Hold OK on a channel (on a phone: long-press it or tap the star) and choose "Add to favorites". Save whole markets under "My Locals".
 Gespeicherte Städte¦Saved cities
 Öffnen¦Open
 Weitere Favoriten¦Other favorites

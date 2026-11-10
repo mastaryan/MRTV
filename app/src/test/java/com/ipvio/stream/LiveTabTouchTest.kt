@@ -19,6 +19,8 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 import java.io.File
+import com.ipvio.stream.locals.LocalsFeature
+import com.ipvio.stream.locals.LocalsStore
 
 /**
  * MR TV 2: touch in Live TV, driven like a finger (taps and long-presses on the rows), at Samsung Galaxy Z Fold 7 sizes
@@ -46,6 +48,7 @@ class LiveTabTouchTest {
     @Before fun setUp() {
         MobilePrefs.mobile = true          // a phone (touch), as on the Fold
         LiveMemory.setSel(ctx, "ALL")
+        LocalsFeature.set(ctx, true)
         resetMemory()
     }
 
@@ -138,21 +141,21 @@ class LiveTabTouchTest {
     }
 
     @Test @Config(qualifiers = "w882dp-h344dp-land-420dpi")
-    fun usaLocals_saveWholeCity_andChannelInside_recalledAfterRestartAndReload() {
+    fun usaLocals_saveWholeMarket_andChannelInside_recalledAfterRestartAndReload() {
         show()
-        scrollRow("live-cats", "USA Locals").performTouchInput { click() }
+        scrollRow("live-cats", "My Locals").performTouchInput { click() }
         rule.waitForIdle()
         shot("cover-land-4-locals-states")
-        scrollRow("live-locals", "Illinois").performTouchInput { click() }
+        scrollRow("locals-picker", "Illinois").performTouchInput { click() }
         rule.waitForIdle()
         row("Chicago").performTouchInput { click() }
         rule.waitForIdle()
         rule.waitUntil(5_000) { chanCount("US: ABC 7 CHICAGO") > 0 }
         assertEquals(0, chanCount("US: ABC 7 New York WABC"))   // only Chicago's stations
         shot("cover-land-5-chicago")
-        rule.onNodeWithText("Save city").performTouchInput { click() }
+        rule.onNodeWithText("Save market").performTouchInput { click() }
         rule.waitForIdle()
-        assertTrue(CityFavs.isSaved(3))
+        assertTrue(LocalsStore.isSaved(602))
         rule.onNodeWithText("Locals – Chicago").assertExists()                   // pinned in the category list
         // a single channel inside the city: long-press -> Add to favorites
         rule.onNodeWithTag("live-channels").performScrollToNode(hasText("WGN 9 Chicago")); rule.waitForIdle()
@@ -162,13 +165,13 @@ class LiveTabTouchTest {
         rule.waitForIdle()
         assertTrue(Library.isFav("t303"))
         // persisted per playlist
-        val sp = Profiles.sp(ctx, "mrtv_cityfavs")
-        assertTrue(sp.all.values.any { (it as? String)?.split("\n")?.contains("3") == true })
+        val sp = Profiles.sp(ctx, "ipvio_locals")
+        assertTrue(sp.all.values.any { (it as? String)?.split("\n")?.contains("602") == true })
     }
 
     @Test @Config(qualifiers = "w882dp-h344dp-land-420dpi")
-    fun favorites_showSavedCityAndGroupedChannels_afterRestartAndReload() {
-        CityFavs.toggle(ctx, 3).let { if (!it) CityFavs.toggle(ctx, 3) }
+    fun favorites_showSavedMarketAndGroupedChannels_afterRestartAndReload() {
+        LocalsStore.init(ctx); if (!LocalsStore.isSaved(602)) LocalsStore.toggleSaved(ctx, 602)
         if (!Library.isFav("t303")) Library.toggleFav(ctx, "t303")
         if (!Library.isFav("t100")) Library.toggleFav(ctx, "t100")
         // "restart": in-memory state dropped, read back from storage
@@ -180,7 +183,7 @@ class LiveTabTouchTest {
         scrollRow("live-cats", "Favorites").performTouchInput { click() }
         rule.waitForIdle()
         shot("cover-land-6-favorites")
-        rule.onNodeWithText("Saved cities").assertExists()
+        rule.onNodeWithText("Saved markets").assertExists()
         rule.onAllNodesWithText("Locals – Chicago").onFirst().assertExists()
         rule.onNodeWithTag("live-channels").performScrollToNode(hasText("WGN 9 Chicago")); rule.waitForIdle()
         chan("WGN 9 Chicago").assertExists()
@@ -196,9 +199,9 @@ class LiveTabTouchTest {
         // remove the city the same way (long-press the pinned row)
         row("Locals – Chicago").performTouchInput { longClick() }
         rule.waitForIdle()
-        rule.onNodeWithText("Remove city from Favorites").performTouchInput { click() }
+        rule.onNodeWithText("Remove market from favorites").performTouchInput { click() }
         rule.waitForIdle()
-        assertFalse(CityFavs.isSaved(3))
+        assertFalse(LocalsStore.isSaved(602))
         Library.toggleFav(ctx, "t303"); Library.toggleFav(ctx, "t100")
     }
 
@@ -233,9 +236,9 @@ class LiveTabTouchTest {
         rule.waitForIdle()
         chan("US: ESPN 2").assertExists()
         shot("inner-land-1-general-sports")
-        scrollRow("live-cats", "USA Locals").performTouchInput { click() }
+        scrollRow("live-cats", "My Locals").performTouchInput { click() }
         rule.waitForIdle()
-        scrollRow("live-locals", "Illinois").performTouchInput { click() }
+        scrollRow("locals-picker", "Illinois").performTouchInput { click() }
         rule.waitForIdle()
         shot("inner-land-2-illinois")
         assertTouchTarget("Chicago")
@@ -269,7 +272,6 @@ class LiveTabTouchTest {
 
     private fun resetMemory() {
         Library.favs.clear(); Library.watch.clear(); Library.init(ctx)
-        val f = CityFavs::class.java.getDeclaredField("loadedFor"); f.isAccessible = true; f.set(CityFavs, null)
-        CityFavs.init(ctx)
+        LocalsStore.resetForTest(); LocalsStore.init(ctx)
     }
 }

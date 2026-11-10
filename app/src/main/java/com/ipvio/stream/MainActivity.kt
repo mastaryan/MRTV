@@ -38,6 +38,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         // Load settings early so colors and size are right in the very first frame.
         Profiles.init(this)
+        MrtvLocals.setup()
         val pick = Profiles.needsPicker(this)
         if (!pick) AppSettings.init(this)
         General.init(this)
