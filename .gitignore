@@ -31,3 +31,4 @@ crash.properties
 
 # MR TV 2 built-in server address – never commit
 server.properties
+__pycache__/

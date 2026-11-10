@@ -23,6 +23,7 @@ Keine Lokalsender gefunden¦No local channels found for this market
 Deine Playlist hat für diesen Markt keine Lokalsender (ABC, NBC, CBS, FOX …). Wähle mit „Zurück“ einen anderen Markt.¦Your playlist has no local channels (ABC, NBC, CBS, FOX…) for this market. Use Back to pick another market.
 Rang¦Rank
 Meine Teams¦My teams
+College-Basketball¦College Basketball
 Läuft jetzt¦On now
 Demnächst¦Coming up
 Keine Spiele deiner Teams im TV-Guide gefunden.¦No games of your teams found in the TV guide.

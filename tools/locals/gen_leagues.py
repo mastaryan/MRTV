@@ -2,8 +2,11 @@
 """Builds app/src/main/assets/locals/dma_leagues.json: US teams of the big leagues -> home Nielsen market (DMA code).
 Only public facts (team name, home city). Canadian teams are left out (US locals only).
 Entries whose home market is in flux are marked verify:true.
+NCAAB schools: tools/locals/ncaab.py.
 Usage: python3 tools/locals/gen_leagues.py app/src/main/assets/locals/dmas.json app/src/main/assets/locals/dma_leagues.json"""
-import json, sys, datetime
+import json, os, sys, datetime
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ncaab
 
 # league -> [(abbr, full name, nickname, market name in dmas.json, verify note or None)]
 T = {
@@ -99,15 +102,27 @@ for lg, teams in T.items():
         if note: t["verify"] = True; t["note"] = note
         out.append(t)
     leagues.append({"id": lg, "teams": out})
-doc = {"schema": "ipvio.locals.leagues/1", "version": 1, "updated": datetime.date.today().isoformat(),
-       "notes": "US teams only (Canadian teams left out); dma = Nielsen DMA code of the home market; verify = check before relying on it",
+# College: school + mascot is the full name; school, mascot and aliases are weaker names (see TeamFinder)
+out = []
+for sid, school, mascot, conf, mkt, aliases, note in ncaab.SCHOOLS:
+    if mkt not in by_name: sys.exit(f"unknown market {mkt!r} for {school}")
+    t = {"id": sid, "name": school + " " + mascot, "short": school, "mascot": mascot, "conf": conf, "dma": by_name[mkt]}
+    if aliases: t["aliases"] = aliases
+    if note: t["verify"] = True; t["note"] = note
+    out.append(t)
+leagues.append({"id": "NCAAB", "name": "College Basketball", "college": True, "season": "2025-26", "teams": out})
+doc = {"schema": "ipvio.locals.leagues/1", "version": 2, "updated": datetime.date.today().isoformat(),
+       "notes": "US teams only (Canadian teams left out); dma = Nielsen DMA code of the home market (college: of the campus county); NCAAB conferences as of 2025-26; verify = check before relying on it",
        "leagues": leagues}
-lines = ['{', f'  "schema": "{doc["schema"]}",', f'  "version": 1,', f'  "updated": "{doc["updated"]}",', f'  "notes": {json.dumps(doc["notes"])},', '  "leagues": [']
+lines = ['{', f'  "schema": "{doc["schema"]}",', f'  "version": 2,', f'  "updated": "{doc["updated"]}",', f'  "notes": {json.dumps(doc["notes"])},', '  "leagues": [']
 for i, l in enumerate(leagues):
-    lines.append('    {"id": "%s", "teams": [' % l["id"])
+    head = {k: v for k, v in l.items() if k != "teams"}
+    lines.append('    ' + json.dumps(head, ensure_ascii=False)[:-1] + ', "teams": [')
     lines += ['      ' + json.dumps(t, ensure_ascii=False) + (',' if j < len(l["teams"]) - 1 else '') for j, t in enumerate(l["teams"])]
     lines.append('    ]}' + (',' if i < len(leagues) - 1 else ''))
 lines += ['  ]', '}']
 open(sys.argv[2], "w").write("\n".join(lines) + "\n")
 json.load(open(sys.argv[2]))
+import collections
+print(dict(collections.Counter(t["conf"] for t in leagues[-1]["teams"])))
 print({l["id"]: len(l["teams"]) for l in leagues}, "verify:", sum(1 for l in leagues for t in l["teams"] if t.get("verify")))

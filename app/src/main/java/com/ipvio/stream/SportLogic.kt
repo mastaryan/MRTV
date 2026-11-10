@@ -10,7 +10,8 @@ object SportLogic {
         """\b(sports?|spor|sportklub|sportdigital|deportes?|esportes?|sportivo)\b|eurosport|dazn|espn|bein\s?sports?|sky\s?sports?|supersport|""" +
             """ziggo\s?sport|setanta|\btsn\d?\b|arena\s?sport|nova\s?sport|polsat\s?sport|eleven\s?sports?|\bfox\s?sports?\b|""" +
             """laliga|bundesliga|premier\s?league|champions\s?league|\b(nba|nfl|nhl|mlb|ufc|wwe|f1|motogp|ppv)\b|formula\s?1|formel\s?1|""" +
-            """\b(tennis|golf|rugby|cricket|racing|fight|fußball|fussball|football|soccer|futbol|calcio|darts|snooker)\b""",
+            """\b(tennis|golf|rugby|cricket|racing|fight|fußball|fussball|football|soccer|futbol|calcio|darts|snooker)\b|""" +
+            com.ipvio.stream.locals.CollegeHoops.PATTERN,
         RegexOption.IGNORE_CASE
     )
     // Show titles that are almost always sports (for shows on general channels)
@@ -19,7 +20,8 @@ object SportLogic {
             """dfb[-\s]?pokal|fa\s?cup|em\s?20\d\d|wm\s?20\d\d|world\s?cup|euro\s?20\d\d|olymp\w*|formel\s?1|formula\s?1|grand\s?prix|""" +
             """motogp|nba|nfl|nhl|mlb|ufc|wwe|boxen|boxing|tennis|wimbledon|roland\s?garros|us\s?open|australian\s?open|""" +
             """handball|basketball|volleyball|eishockey|ice\s?hockey|biathlon|ski\s?alpin|skispringen|tour\s?de\s?france|radsport|""" +
-            """darts|snooker|golf|rugby|cricket|sportschau|sportstudio|live:\s|fußball|fussball|football|soccer)\b""",
+            """darts|snooker|golf|rugby|cricket|sportschau|sportstudio|live:\s|fußball|fussball|football|soccer)\b|""" +
+            com.ipvio.stream.locals.CollegeHoops.PATTERN,
         RegexOption.IGNORE_CASE
     )
 
@@ -65,6 +67,8 @@ object SportLogic {
     /** Order matters: "American Football" before "Football", because both contain "football". */
     val CATS: List<Cat> = listOf(
         Cat("American Football", rx("""\b(nfl|american\s?football|super\s?bowl|ncaa\s?football|college\s?football|ncaaf)\b""")),
+        // US college basketball first ("NCAA Basketball" also contains "basketball"), see locals.CollegeHoops
+        Cat("College-Basketball", Regex(com.ipvio.stream.locals.CollegeHoops.PATTERN, RegexOption.IGNORE_CASE)),
         Cat("Basketball", rx("""\b(nba|wnba|basketball|euroleague|bbl|ncaa\s?basketball|acb)\b""")),
         Cat("Eishockey", rx("""\b(nhl|eishockey|ice\s?hockey|khl|del2?)\b""")),
         Cat("Fußball", rx("""\b(fußball|fussball|football|soccer|futbol|fútbol|calcio|fudbal|nogomet|bundesliga|champions\s?league|europa\s?league|conference\s?league|premier\s?league|la\s?liga|laliga|serie\s?a|ligue\s?1|eredivisie|s[üu]per\s?lig|dfb[-\s]?pokal|fa\s?cup|copa|em\s?20\d\d|wm\s?20\d\d|world\s?cup|euro\s?20\d\d|mls)\b""")),

@@ -16,13 +16,13 @@ class LeaguesTest {
     private val cfg by lazy { Leagues.parse(File("src/main/assets/locals/dma_leagues.json").readText(), dmas.markets.map { it.code }.toSet()) }
 
     @Test fun bundledFile_usTeamsOnly_everyTeamInAKnownMarket() {
-        assertEquals(listOf("NFL", "NBA", "NHL", "MLB", "MLS"), cfg.leagues)
+        assertEquals(listOf("NFL", "NBA", "NHL", "MLB", "MLS", "NCAAB"), cfg.leagues)
         val n = cfg.teams.groupingBy { it.league }.eachCount()
         assertEquals(32, n["NFL"]); assertEquals(29, n["NBA"]); assertEquals(25, n["NHL"]); assertEquals(29, n["MLB"]); assertEquals(27, n["MLS"])
         for (c in listOf("Toronto", "Montreal", "Vancouver", "Calgary", "Edmonton", "Ottawa", "Winnipeg"))
             assertTrue("$c is not a US team", cfg.teams.none { it.name.contains(c) })
         assertEquals(setOf("Chicago Bears", "Chicago Bulls", "Chicago Blackhawks", "Chicago Cubs", "Chicago White Sox", "Chicago Fire FC"),
-            cfg.teamsIn(602).map { it.name }.toSet())
+            cfg.teamsIn(602).filter { !it.college }.map { it.name }.toSet())
         assertTrue(cfg.teamsIn(658).any { it.name == "Green Bay Packers" })
         val ath = cfg.teams.first { it.league == "MLB" && it.id == "ATH" }
         assertTrue(ath.verify); assertNotNull(ath.note)
@@ -52,7 +52,7 @@ class LeaguesTest {
             f.writeText("""{"schema":"ipvio.locals.leagues/1","version":9,"leagues":[]}""")
             Leagues.set(null); assertEquals(9, Leagues.get(ctx).version); assertNull(Leagues.overrideError)
             f.writeText("broken")
-            Leagues.set(null); assertEquals(142, Leagues.get(ctx).teams.size); assertNotNull(Leagues.overrideError)
+            Leagues.set(null); assertEquals(142, Leagues.get(ctx).teams.count { !it.college }); assertNotNull(Leagues.overrideError)
         } finally { f.delete(); Leagues.set(null) }
     }
 
