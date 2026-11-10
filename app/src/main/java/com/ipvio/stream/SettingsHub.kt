@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.ui.platform.testTag
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.*
@@ -51,9 +52,9 @@ private val CATS = listOf(
     Cat(AIcon.Lists, "Menü", "Reihenfolge und Einträge"),
     Cat(AIcon.Play, "Player", "Spulen, Intro, Qualität, defekte Links"),
     Cat(AIcon.Music, "Ton & Untertitel", "Sprachen, CC, Untertitel-Stil"),
-    Cat(AIcon.Tag, "Genres & Kategorien", "Automatische Genres, Kategorien"),
+    Cat(AIcon.Tag, "Hide content groups", "Countries in Live TV, provider tags"),   // MR TV 2 (2.0.6): was "Genres & Categories"
     Cat(AIcon.Live, "Live-TV & Guide", "TV-Programm, Senderlisten, Erinnerungen"),
-    Cat(AIcon.Download, "Playlists", "Verwalten, Sprachen, Aktualisieren"),
+    Cat(AIcon.Download, "Account", "Subscription, login, playlists"),   // MR TV 2 (2.0.6): was "Playlists"
     Cat(AIcon.Person, "Profile", "Verlauf, Favoriten, Jugendschutz je Person"),
     Cat(AIcon.Star, "", ""),   // MR TV 2: upstream page 11 (API keys) was removed; the slot keeps the page numbers
     Cat(AIcon.Lock, "Jugendschutz", "PIN, Inhalte ab 18"),
@@ -65,8 +66,8 @@ private val CATS = listOf(
     Cat(AIcon.Info, "Über IPVIO Stream", "Version, Quellen, Zurücksetzen")
 )
 
-/** MR TV 2: 11 = removed API keys page (the slot keeps the page numbers). */
-private fun hiddenSettingsPages(): Set<Int> = setOf(11)
+/** MR TV 2: 11 = removed API keys page, 15 = list import (the slots keep the page numbers). */
+private fun hiddenSettingsPages(): Set<Int> = setOf(11, 15)   // 2.0.6: 15 = Import lists (Letterboxd, Trakt, MyAnimeList) removed from the menu
 
 /** Open a settings page directly (e.g. profile circle at the top with only one profile: page "Profiles"). */
 object SettingsNav {
@@ -212,8 +213,8 @@ private fun SettingsBack(modifier: Modifier, onClick: () -> Unit) {
 }
 
 @Composable
-internal fun Hint(text: String) {
-    Text(text, color = Muted, fontSize = DS.TextSmall, lineHeight = 20.sp, modifier = Modifier.widthIn(max = 680.dp))
+internal fun Hint(text: String, raw: Boolean = false) {
+    Text(text, color = Muted, fontSize = DS.TextSmall, lineHeight = 20.sp, modifier = Modifier.widthIn(max = 680.dp), raw = raw)
 }
 
 @Composable
@@ -268,7 +269,7 @@ private fun Swatch(rgb: Int, selected: Boolean, onFocus: ((Boolean) -> Unit)? = 
 
 /** Switch row as in standard apps: title, explanation and an on/off switch. OK toggles. */
 @Composable
-internal fun ToggleRow(title: String, desc: String?, checked: Boolean, onChange: (Boolean) -> Unit) {
+internal fun ToggleRow(title: String, desc: String?, checked: Boolean, lead: (@Composable () -> Unit)? = null, raw: Boolean = false, onChange: (Boolean) -> Unit) {
     var f by remember { mutableStateOf(false) }
     val shape = RoundedCornerShape(DS.RadiusM)
     Row(
@@ -280,9 +281,10 @@ internal fun ToggleRow(title: String, desc: String?, checked: Boolean, onChange:
             .padding(horizontal = 18.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+        if (lead != null) lead()
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
-            Text(title, color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
-            if (desc != null) Text(desc, color = Muted, fontSize = 13.sp, lineHeight = 17.sp)
+            Text(title, color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.SemiBold, raw = raw)
+            if (desc != null) Text(desc, color = Muted, fontSize = 13.sp, lineHeight = 17.sp, raw = raw)
         }
         Box(
             Modifier.width(54.dp).height(30.dp).clip(RoundedCornerShape(50))
@@ -842,6 +844,8 @@ private fun DesignPage(ctx: Context) {
     }
 }
 
+private const val SEND_BUSY = "Sending…"
+
 @Composable
 private fun DiagPage(ctx: Context, reload: () -> Unit) {
     val cfg = LocalConfiguration.current
@@ -878,10 +882,23 @@ private fun DiagPage(ctx: Context, reload: () -> Unit) {
         }
     }
     // Hint before the buttons: text below the last button never scrolls the list into view (nothing below is selectable)
-    Hint("Der Bericht enthält keine Adressen, Benutzernamen oder Passwörter. Er wird nur in die Zwischenablage kopiert und nirgendwohin gesendet.")
-    Hint("Auf dem Fernseher lässt sich die Zwischenablage oft nicht nutzen: Unter Einstellungen > Speicher > „Übertragung im WLAN starten“ kannst du den Bericht am Handy öffnen (Seite „Letzten Absturzbericht anzeigen“) und dort kopieren.")
+    // MR TV 2 (2.0.6): crashes are sent to MR TV automatically on the next start; this button sends the report above on request
+    Hint("Crashes are sent to MR TV automatically the next time the app opens. If something else is wrong, press \"Send report to MR TV\": it sends the details above. The report never contains server addresses, usernames or passwords.")
+    var sendState by remember { mutableStateOf("") }
+    val sendScope = rememberCoroutineScope()
+    if (sendState.isNotBlank()) Text(sendState, color = Accent2, fontSize = 15.sp, raw = true)
     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-        PillButton("Playlist neu laden", light = true, icon = AIcon.Refresh) { reload() }
+        PillButton(if (sendState == SEND_BUSY) SEND_BUSY else "Send report to MR TV", light = true, icon = AIcon.Check) {
+            if (sendState == SEND_BUSY) return@PillButton
+            if (!CrashReporter.enabled) { sendState = "Sending isn't set up in this build. Use \"Copy report\" instead."; return@PillButton }
+            sendState = SEND_BUSY
+            val text = lines.joinToString("\n") { it.first + ": " + it.second }
+            sendScope.launch {
+                val ok = withContext(Dispatchers.IO) { CrashReporter.sendManual(text) }
+                sendState = if (ok) "Report sent to MR TV. Thank you!" else "Couldn't send the report. Check the internet connection and try again."
+            }
+        }
+        PillButton("Playlist neu laden", icon = AIcon.Refresh) { reload() }
         PillButton("Bericht kopieren") {
             val text = lines.joinToString("\n") { it.first + ": " + it.second }
             runCatching {
@@ -954,10 +971,47 @@ private val OUTLINE_OFFSETS = listOf(-1.5f to 0f, 1.5f to 0f, 0f to -1.5f, 0f to
 
 @Composable
 private fun FilterPage(ctx: Context, onLanguages: () -> Unit) {
+    // MR TV 2 (2.0.6): this page hides content. Countries first (Live TV), then languages and provider tags.
+    Hint("Everything your login includes is shown. Use this page only if you want to hide something: it disappears everywhere right away, nothing has to be reloaded. Nothing here is turned off unless you turn it off.")
+    CountryHideSection(ctx)
     SectionTitle("Sprachen der Inhalte")
     Hint("Welche Sprachen geladen werden, stellst du unter „Playlists“ ein – das bestimmt, was aus der Playlist geladen wird.")
     PillButton("Sprachen der Inhalte öffnen", icon = AIcon.Globe) { onLanguages() }
     IgnoredGroupsSection(ctx)
+}
+
+/** MR TV 2 (2.0.6): readable names for the provider's tags on the "Hide content groups" page. */
+internal object TagNames {
+    private val NAMES = mapOf(
+        "NA" to "North America", "EN" to "English", "UK" to "United Kingdom", "AR" to "Arabic", "AM" to "Americas",
+        "SA" to "South America & Caribbean", "EU" to "Europe", "AS" to "Asia", "AF" to "Africa", "BLN" to "Balkans",
+        "ALB" to "Albania", "XX" to "Adults", "VOD" to "Movies (no country tag)", "SRS" to "Series (no country tag)",
+        "MULTISUB" to "Multiple subtitles"
+    )
+    fun label(tag: String): String = NAMES[tag.uppercase()]?.let { "$tag · $it" } ?: tag
+}
+
+/**
+ * MR TV 2 (2.0.6): one switch per country of the Live TV categories (flag, name, channel count). Off = every category
+ * of that country is hidden everywhere (Live TV, guide, search, home). Default: all on.
+ */
+@Composable
+private fun CountryHideSection(ctx: Context) {
+    IgnoredGroups.init(ctx)
+    LiveCats.init(ctx)
+    val ver = IgnoredGroups.version
+    val all = PlaylistStore.channels
+    val countries by produceState<List<Pair<LiveCats.Country, Int>>>(emptyList(), all.size, LiveCats.version) {
+        value = withContext(Dispatchers.Default) { CountryHide.countries(PlaylistStore.unfilteredChannels()) }
+    }
+    SectionTitle("Countries in Live TV")
+    Hint("Your login shows the countries your MR TV plan includes. Turn a country off to hide all of its channels on this device. Turn it back on any time.")
+    if (countries.isEmpty()) { Hint("Noch keine Playlist geladen."); return }
+    for ((c, n) in countries) {
+        val key = IgnoredGroups.countryKey(c.id)
+        ToggleRow(c.name, "$n channels", !IgnoredGroups.has(key), lead = { CountryFlag(c, 20.dp) }, raw = true) { on -> IgnoredGroups.set(ctx, key, !on) }
+    }
+    if (ver < 0) Spacer(Modifier.height(0.dp))
 }
 
 /**
@@ -982,8 +1036,8 @@ private fun IgnoredGroupsSection(ctx: Context) {
             out
         }
     }
-    SectionTitle("Gruppen ignorieren")
-    Hint("Titel und Sender sind nach der Kennung deines Anbieters gebündelt (z. B. „TR |“, „[EN]“, „AR:“). Schalte Bündel aus, die du nicht brauchst: Sie verschwinden sofort überall, ohne die Playlist neu zu laden. Ausgeschaltet heißt ignoriert. Hilft dort, wo der Sprachfilter eine Kennung nicht erkennt.")
+    SectionTitle("Provider tags")
+    Hint("Movies, series and channels grouped by the short tag your service puts in front of them, for example \"NA\" (North America), \"EN\" (English) or \"AR\" (Arabic). Turn a tag off to hide everything with it.")
     if (stats.isEmpty() || stats.values.all { it.isEmpty() }) { Hint("Noch keine Playlist geladen."); return }
     if (!IgnoredGroups.isEmpty) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -998,7 +1052,7 @@ private fun IgnoredGroupsSection(ctx: Context) {
         for ((tag, n) in list) {
             val key = IgnoredGroups.bundleKey(kind, tag)
             ToggleRow(
-                if (tag.isEmpty()) "Ohne Kennung" else tag,
+                if (tag.isEmpty()) "Ohne Kennung" else TagNames.label(tag),
                 n.toString() + " Titel",
                 !IgnoredGroups.has(key)
             ) { on -> IgnoredGroups.set(ctx, key, !on) }
@@ -1109,6 +1163,10 @@ private fun PlaylistPage(ctx: Context, onAdd: () -> Unit, reload: () -> Unit) {
     var editing by remember { mutableIntStateOf(-1) }
     var name by remember { mutableStateOf("") }
     PlaylistStore.savedUrl(ctx)
+    // MR TV 2 (2.0.6): subscription end date from the panel (read at every app start)
+    SectionTitle("Subscription")
+    Text(Renewal.label(), raw = true, color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold, modifier = Modifier.testTag("acct-expires"))
+    Hint("To renew, see Settings > About for the payment options, then contact MR TV.", raw = true)
     if (Secrets.plainFallback) Hint("Dieses Gerät hat keinen sicheren Schlüsselspeicher: Playlist-Adressen mit Zugangsdaten werden unverschlüsselt gespeichert.")
     Text("Meine Playlists (${PlaylistStore.lists.size})", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold)
     if (PlaylistStore.lists.size > 1) Hint("Die Hauptliste ist die Playlist, mit der die App arbeitet. „Zusätzlich anzeigen“ blendet eine weitere Playlist dazu ein; sie ersetzt die Hauptliste nicht.")
@@ -1241,6 +1299,10 @@ private fun AboutPage(ctx: Context) {
     Text("IPVIO Stream · Version " + appVersion(ctx), color = Color.White, fontSize = 18.sp)
     Hint("IPVIO Stream ist ein Player und liefert selbst keine Inhalte. Nutze nur Quellen, für die du eine Berechtigung hast.")
     Hint("IPVIO Stream ist freie Software unter der GNU General Public License v3 (GPL-3.0). Verwendete Bibliotheken: AndroidX/Jetpack Compose, Media3 (Apache 2.0), OkHttp, Coil (Apache 2.0), Jellyfin FFmpeg-Decoder (GPL-3.0), Schriften Outfit und Inter (SIL Open Font License).")
+    // MR TV 2 (2.0.6): how to renew (same payment info as the reminder; nothing opens a browser)
+    SectionTitle("Renew MR TV")
+    Text(Renewal.label(), raw = true, color = Color.White, fontSize = 17.sp, fontWeight = FontWeight.Bold)
+    Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterStart) { RenewBlock({}, compact = true) }
     MrtvCredits()
     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
         PillButton("Systemeinstellungen der App") {
@@ -1290,7 +1352,7 @@ private fun UpdateSection(ctx: Context) {
         }
     }
     if (status.isNotBlank()) Text(status, color = Muted, fontSize = 16.sp)
-    Hint("Updates kommen von der Projektseite auf GitHub. Deine Playlists, Favoriten, der Verlauf und die Einstellungen bleiben bei einem Update erhalten. Android fragt vor der Installation einmal nach.")
+    Hint("Updates come from MR TV (watchmrtv.com). Your playlists, favorites, history and settings are kept when updating. Android asks once before installing.", raw = true)
     var url by remember { mutableStateOf(AppUpdate.url(ctx).takeIf { it != AppUpdate.DEFAULT_URL }.orEmpty()) }
     Field(url, { url = it; AppUpdate.setUrl(ctx, it) }, "Eigene Update-Adresse (leer = watchmrtv.com)")
 }

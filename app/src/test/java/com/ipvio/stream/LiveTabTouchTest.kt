@@ -107,13 +107,13 @@ class LiveTabTouchTest {
     fun coverLandscape_tapCategorySelectsIt_andChannelsAreTappable() {
         show()
         shot("cover-land-1-start")
-        scrollRow("live-cats", "USA General Sports").performTouchInput { click() }
+        scrollRow("live-cats", "General Sports").performTouchInput { click() }
         rule.waitForIdle()
         chan("US: ESPN 2").assertExists()
         assertEquals(0, chanCount("US: CNN"))
         shot("cover-land-2-general-sports")
-        assertTouchTarget("USA General Sports")
-        scrollRow("live-cats", "USA News").performTouchInput { click() }
+        assertTouchTarget("General Sports")
+        scrollRow("live-cats", "News").performTouchInput { click() }
         rule.waitForIdle()
         chan("US: CNN").assertExists()
         assertEquals(0, chanCount("US: ESPN 2"))
@@ -125,7 +125,7 @@ class LiveTabTouchTest {
     @Test @Config(qualifiers = "w882dp-h344dp-land-420dpi")
     fun longPressChannelOpensMenu_andStarSavesFavorite_persisted() {
         show()
-        scrollRow("live-cats", "USA General Sports").performTouchInput { click() }
+        scrollRow("live-cats", "General Sports").performTouchInput { click() }
         rule.waitForIdle()
         chan("US: FS1").performTouchInput { longClick() }
         rule.waitForIdle()
@@ -209,30 +209,30 @@ class LiveTabTouchTest {
     fun coverPortrait_categoriesThenChannelsPage() {
         show()
         shot("cover-port-1-categories")
-        assertTouchTarget("USA General Sports")
-        scrollRow("live-cats", "USA General Sports").performTouchInput { click() }
+        assertTouchTarget("General Sports")
+        scrollRow("live-cats", "General Sports").performTouchInput { click() }
         rule.waitForIdle()
         chan("US: ESPN 2").assertExists()
         shot("cover-port-2-channels")
         row("Categories").performTouchInput { click() }
         rule.waitForIdle()
-        rule.onNodeWithText("USA News").assertExists()
+        rule.onNodeWithText("News").assertExists()
     }
 
     @Test @Config(qualifiers = "w750dp-h832dp-port-420dpi")
     fun innerPortrait_tapCategory() {
         show()
-        scrollRow("live-cats", "USA General Sports").performTouchInput { click() }
+        scrollRow("live-cats", "General Sports").performTouchInput { click() }
         rule.waitForIdle()
         chan("US: ESPN 2").assertExists()
         shot("inner-port-1-general-sports")
-        assertTouchTarget("USA General Sports")
+        assertTouchTarget("General Sports")
     }
 
     @Test @Config(qualifiers = "w832dp-h750dp-land-420dpi")
     fun innerLandscape_tapCategory_andLocalsBrowser() {
         show()
-        scrollRow("live-cats", "USA General Sports").performTouchInput { click() }
+        scrollRow("live-cats", "General Sports").performTouchInput { click() }
         rule.waitForIdle()
         chan("US: ESPN 2").assertExists()
         shot("inner-land-1-general-sports")
@@ -251,10 +251,10 @@ class LiveTabTouchTest {
         show()
         // remote: focus selects (as before); no tap anywhere
         rule.runOnIdle { inputMode!!.requestInputMode(androidx.compose.ui.input.InputMode.Keyboard) }
-        scrollRow("live-cats", "USA News")
-        row("USA News").performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.RequestFocus)
+        scrollRow("live-cats", "News")
+        row("News").performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.RequestFocus)
         rule.waitForIdle()
-        row("USA News").assertIsFocused()
+        row("News").assertIsFocused()
         chan("US: CNN").assertExists()
         assertEquals(0, chanCount("US: ESPN 2"))
         rule.onNode(isFocused()).performKeyInput { pressKey(androidx.compose.ui.input.key.Key.DirectionRight) }

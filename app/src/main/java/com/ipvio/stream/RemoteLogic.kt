@@ -152,7 +152,7 @@ function cats(){msg(L.load);api('cats').then(function(a){list.innerHTML='';
  var mark=el('div','msg',L.cats);list.appendChild(mark);if(!a.length){return}
  a.forEach(function(c){list.appendChild(row(c.g,c.n+'',null,function(){chans(c.g)}))})}).catch(function(e){if(e!==0)msg(L.err)})}
 function importList(){var f=document.createElement('input');f.type='file';f.onchange=function(){var x=f.files[0];if(!x)return;msg(L.load);
- fetch('/listimport?name='+encodeURIComponent(x.name),{method:'POST',body:x}).then(function(r){if(!r.ok)throw 1;toast(L.impDone);cats()}).catch(function(){toast(L.err)})};f.click()}
+ fetch('/listimport?code='+encodeURIComponent(code)+'&name='+encodeURIComponent(x.name),{method:'POST',body:x}).then(function(r){if(!r.ok)throw 1;toast(L.impDone);cats()}).catch(function(){toast(L.err)})};f.click()}
 function chans(g){chList('channels',{g:g},cats,L.cats,null)}
 function manage(){msg(L.load);api('groups').then(function(a){list.innerHTML='';var bk=el('button','back','< '+L.back);bk.onclick=cats;list.appendChild(bk);
  list.appendChild(el('div','msg',L.manageHint));

@@ -1,4 +1,5 @@
 import java.util.Properties
+import java.security.SecureRandom
 
 plugins {
     alias(libs.plugins.android.application)
@@ -34,6 +35,11 @@ val serverUrl: String =
     ((project.findProperty("MRTV2_SERVER_URL") as String?) ?: System.getenv("MRTV2_SERVER_URL") ?: serverProps.getProperty("MRTV2_SERVER_URL") ?: "")
         .trim().trimEnd('/').replace("\\", "").replace("\"", "")
 
+// MR TV 2 (2.0.6): scrambled server address (see defaultConfig and ServerObf.kt). Fresh random key for every build.
+val obfKey: ByteArray = ByteArray(32).also { SecureRandom().nextBytes(it) }
+val obfData: ByteArray = serverUrl.toByteArray(Charsets.UTF_8).mapIndexed { i, b -> (b.toInt() xor obfKey[i % obfKey.size].toInt() xor (i * 31 and 0xFF)).toByte() }.toByteArray()
+fun hex(b: ByteArray): String = b.joinToString("") { "%02x".format(it.toInt() and 0xFF) }
+
 // Release signing from "keystore.properties" (ignored by Git, see docs/RELEASE.md). Every release MUST be signed with the
 // same key: only then does Android install an update over the old version and keep history, favorites and settings.
 val keystore = Properties().apply {
@@ -55,15 +61,18 @@ android {
         minSdk = 24
         targetSdk = 37
         // Raise both for every release; the GitHub release tag must match versionName (e.g. tag "v1.1").
-        versionCode = 6
-        versionName = "2.0.5"
+        versionCode = 7
+        versionName = "2.0.6"
         // Name unter dem Symbol; der Debug-Build überschreibt ihn (siehe buildTypes)
         manifestPlaceholders["appLabel"] = "MR TV 2"
         // In-app updater: small JSON file on watchmrtv.com ({"versionCode":2,"versionName":"1.0.1","apk":"MRTV2-1.0.1.apk","notes":"..."}).
         buildConfigField("String", "UPDATE_URL", "\"https://watchmrtv.com/mrtv2-version.json\"")
 
         // MR TV 2: outside movie-info and rating services were removed; the app only uses the provider's own data.
-        buildConfigField("String", "SERVER_URL", "\"$serverUrl\"")
+        // MR TV 2 (2.0.6): the server address is never stored as plain text in the APK. It is XORed with a key that is
+        // generated fresh for every build and both are stored as hex; Rebrand.SERVER_URL decodes it at runtime (ServerObf).
+        buildConfigField("String", "SERVER_X", "\"${hex(obfData)}\"")
+        buildConfigField("String", "SERVER_K", "\"${hex(obfKey)}\"")
         // MR TV 2 crash reports: webhook URL and Authorization value come only from the build machine
         // (env MRTV_CRASH_WEBHOOK_URL / MRTV_CRASH_WEBHOOK_KEY, -P properties, or the git-ignored crash.properties).
         // The key is sent as "Authorization: Bearer <key>".

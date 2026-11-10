@@ -1,0 +1,2799 @@
+{
+ "version": 1,
+ "updated": "2026-11-10",
+ "note": "MR TV 2 Live TV categories: country, clean English label, icon topic and order per provider category. Unknown categories are parsed from their |XX| tag. Upload to https://watchmrtv.com/mrtv2-categories.json.",
+ "countries": [
+  {
+   "id": "US",
+   "name": "United States",
+   "flag": "us"
+  },
+  {
+   "id": "WORLD",
+   "name": "International"
+  },
+  {
+   "id": "AF",
+   "name": "Afghanistan",
+   "flag": "af"
+  },
+  {
+   "id": "AL",
+   "name": "Albania",
+   "flag": "al"
+  },
+  {
+   "id": "DZ",
+   "name": "Algeria",
+   "flag": "dz"
+  },
+  {
+   "id": "ARAB",
+   "name": "Arabic (MENA)"
+  },
+  {
+   "id": "AR",
+   "name": "Argentina",
+   "flag": "ar"
+  },
+  {
+   "id": "AM",
+   "name": "Armenia",
+   "flag": "am"
+  },
+  {
+   "id": "AU",
+   "name": "Australia",
+   "flag": "au"
+  },
+  {
+   "id": "AT",
+   "name": "Austria",
+   "flag": "at"
+  },
+  {
+   "id": "AZ",
+   "name": "Azerbaijan",
+   "flag": "az"
+  },
+  {
+   "id": "BH",
+   "name": "Bahrain",
+   "flag": "bh"
+  },
+  {
+   "id": "BD",
+   "name": "Bangladesh",
+   "flag": "bd"
+  },
+  {
+   "id": "BY",
+   "name": "Belarus",
+   "flag": "by"
+  },
+  {
+   "id": "BE",
+   "name": "Belgium",
+   "flag": "be"
+  },
+  {
+   "id": "BO",
+   "name": "Bolivia",
+   "flag": "bo"
+  },
+  {
+   "id": "BA",
+   "name": "Bosnia & Herzegovina",
+   "flag": "ba"
+  },
+  {
+   "id": "BALKANS",
+   "name": "Balkans"
+  },
+  {
+   "id": "BR",
+   "name": "Brazil",
+   "flag": "br"
+  },
+  {
+   "id": "BG",
+   "name": "Bulgaria",
+   "flag": "bg"
+  },
+  {
+   "id": "CM",
+   "name": "Cameroon",
+   "flag": "cm"
+  },
+  {
+   "id": "CA",
+   "name": "Canada",
+   "flag": "ca"
+  },
+  {
+   "id": "CARIB",
+   "name": "Caribbean"
+  },
+  {
+   "id": "CL",
+   "name": "Chile",
+   "flag": "cl"
+  },
+  {
+   "id": "CO",
+   "name": "Colombia",
+   "flag": "co"
+  },
+  {
+   "id": "CG",
+   "name": "Congo & Gabon",
+   "flag": "cg"
+  },
+  {
+   "id": "CR",
+   "name": "Costa Rica",
+   "flag": "cr"
+  },
+  {
+   "id": "HR",
+   "name": "Croatia",
+   "flag": "hr"
+  },
+  {
+   "id": "CY",
+   "name": "Cyprus",
+   "flag": "cy"
+  },
+  {
+   "id": "CZ",
+   "name": "Czechia",
+   "flag": "cz"
+  },
+  {
+   "id": "DK",
+   "name": "Denmark",
+   "flag": "dk"
+  },
+  {
+   "id": "DO",
+   "name": "Dominican Republic",
+   "flag": "do"
+  },
+  {
+   "id": "EC",
+   "name": "Ecuador",
+   "flag": "ec"
+  },
+  {
+   "id": "EG",
+   "name": "Egypt",
+   "flag": "eg"
+  },
+  {
+   "id": "SV",
+   "name": "El Salvador",
+   "flag": "sv"
+  },
+  {
+   "id": "FI",
+   "name": "Finland",
+   "flag": "fi"
+  },
+  {
+   "id": "FR",
+   "name": "France",
+   "flag": "fr"
+  },
+  {
+   "id": "GE",
+   "name": "Georgia",
+   "flag": "ge"
+  },
+  {
+   "id": "DE",
+   "name": "Germany",
+   "flag": "de"
+  },
+  {
+   "id": "GH",
+   "name": "Ghana",
+   "flag": "gh"
+  },
+  {
+   "id": "GR",
+   "name": "Greece",
+   "flag": "gr"
+  },
+  {
+   "id": "GT",
+   "name": "Guatemala",
+   "flag": "gt"
+  },
+  {
+   "id": "HT",
+   "name": "Haiti",
+   "flag": "ht"
+  },
+  {
+   "id": "HN",
+   "name": "Honduras",
+   "flag": "hn"
+  },
+  {
+   "id": "HK",
+   "name": "Hong Kong",
+   "flag": "hk"
+  },
+  {
+   "id": "HU",
+   "name": "Hungary",
+   "flag": "hu"
+  },
+  {
+   "id": "IN",
+   "name": "India",
+   "flag": "in"
+  },
+  {
+   "id": "ID",
+   "name": "Indonesia",
+   "flag": "id"
+  },
+  {
+   "id": "IR",
+   "name": "Iran",
+   "flag": "ir"
+  },
+  {
+   "id": "IQ",
+   "name": "Iraq",
+   "flag": "iq"
+  },
+  {
+   "id": "IE",
+   "name": "Ireland",
+   "flag": "ie"
+  },
+  {
+   "id": "IL",
+   "name": "Israel",
+   "flag": "il"
+  },
+  {
+   "id": "IT",
+   "name": "Italy",
+   "flag": "it"
+  },
+  {
+   "id": "JP",
+   "name": "Japan",
+   "flag": "jp"
+  },
+  {
+   "id": "JO",
+   "name": "Jordan",
+   "flag": "jo"
+  },
+  {
+   "id": "XK",
+   "name": "Kosovo",
+   "flag": "xk"
+  },
+  {
+   "id": "KURD",
+   "name": "Kurdistan"
+  },
+  {
+   "id": "KW",
+   "name": "Kuwait",
+   "flag": "kw"
+  },
+  {
+   "id": "LATAM",
+   "name": "Latin America"
+  },
+  {
+   "id": "LV",
+   "name": "Latvia",
+   "flag": "lv"
+  },
+  {
+   "id": "LB",
+   "name": "Lebanon",
+   "flag": "lb"
+  },
+  {
+   "id": "LY",
+   "name": "Libya",
+   "flag": "ly"
+  },
+  {
+   "id": "LT",
+   "name": "Lithuania",
+   "flag": "lt"
+  },
+  {
+   "id": "MY",
+   "name": "Malaysia",
+   "flag": "my"
+  },
+  {
+   "id": "ML",
+   "name": "Mali",
+   "flag": "ml"
+  },
+  {
+   "id": "MT",
+   "name": "Malta",
+   "flag": "mt"
+  },
+  {
+   "id": "MR",
+   "name": "Mauritania",
+   "flag": "mr"
+  },
+  {
+   "id": "MX",
+   "name": "Mexico",
+   "flag": "mx"
+  },
+  {
+   "id": "ME",
+   "name": "Montenegro",
+   "flag": "me"
+  },
+  {
+   "id": "MA",
+   "name": "Morocco",
+   "flag": "ma"
+  },
+  {
+   "id": "NP",
+   "name": "Nepal",
+   "flag": "np"
+  },
+  {
+   "id": "NL",
+   "name": "Netherlands",
+   "flag": "nl"
+  },
+  {
+   "id": "NZ",
+   "name": "New Zealand",
+   "flag": "nz"
+  },
+  {
+   "id": "NI",
+   "name": "Nicaragua",
+   "flag": "ni"
+  },
+  {
+   "id": "NG",
+   "name": "Nigeria",
+   "flag": "ng"
+  },
+  {
+   "id": "MK",
+   "name": "North Macedonia",
+   "flag": "mk"
+  },
+  {
+   "id": "NO",
+   "name": "Norway",
+   "flag": "no"
+  },
+  {
+   "id": "OM",
+   "name": "Oman",
+   "flag": "om"
+  },
+  {
+   "id": "PK",
+   "name": "Pakistan",
+   "flag": "pk"
+  },
+  {
+   "id": "PS",
+   "name": "Palestine",
+   "flag": "ps"
+  },
+  {
+   "id": "PA",
+   "name": "Panama",
+   "flag": "pa"
+  },
+  {
+   "id": "PY",
+   "name": "Paraguay",
+   "flag": "py"
+  },
+  {
+   "id": "PE",
+   "name": "Peru",
+   "flag": "pe"
+  },
+  {
+   "id": "PH",
+   "name": "Philippines",
+   "flag": "ph"
+  },
+  {
+   "id": "PL",
+   "name": "Poland",
+   "flag": "pl"
+  },
+  {
+   "id": "PT",
+   "name": "Portugal",
+   "flag": "pt"
+  },
+  {
+   "id": "QA",
+   "name": "Qatar",
+   "flag": "qa"
+  },
+  {
+   "id": "RO",
+   "name": "Romania",
+   "flag": "ro"
+  },
+  {
+   "id": "RU",
+   "name": "Russia",
+   "flag": "ru"
+  },
+  {
+   "id": "SA",
+   "name": "Saudi Arabia",
+   "flag": "sa"
+  },
+  {
+   "id": "SN",
+   "name": "Senegal",
+   "flag": "sn"
+  },
+  {
+   "id": "RS",
+   "name": "Serbia",
+   "flag": "rs"
+  },
+  {
+   "id": "SI",
+   "name": "Slovenia",
+   "flag": "si"
+  },
+  {
+   "id": "SO",
+   "name": "Somalia",
+   "flag": "so"
+  },
+  {
+   "id": "KR",
+   "name": "South Korea",
+   "flag": "kr"
+  },
+  {
+   "id": "ES",
+   "name": "Spain",
+   "flag": "es"
+  },
+  {
+   "id": "LK",
+   "name": "Sri Lanka",
+   "flag": "lk"
+  },
+  {
+   "id": "SD",
+   "name": "Sudan",
+   "flag": "sd"
+  },
+  {
+   "id": "SR",
+   "name": "Suriname",
+   "flag": "sr"
+  },
+  {
+   "id": "SE",
+   "name": "Sweden",
+   "flag": "se"
+  },
+  {
+   "id": "CH",
+   "name": "Switzerland",
+   "flag": "ch"
+  },
+  {
+   "id": "SY",
+   "name": "Syria",
+   "flag": "sy"
+  },
+  {
+   "id": "TH",
+   "name": "Thailand",
+   "flag": "th"
+  },
+  {
+   "id": "TN",
+   "name": "Tunisia",
+   "flag": "tn"
+  },
+  {
+   "id": "TR",
+   "name": "Turkey",
+   "flag": "tr"
+  },
+  {
+   "id": "AE",
+   "name": "United Arab Emirates",
+   "flag": "ae"
+  },
+  {
+   "id": "GB",
+   "name": "United Kingdom",
+   "flag": "gb"
+  },
+  {
+   "id": "UA",
+   "name": "Ukraine",
+   "flag": "ua"
+  },
+  {
+   "id": "UY",
+   "name": "Uruguay",
+   "flag": "uy"
+  },
+  {
+   "id": "VN",
+   "name": "Vietnam",
+   "flag": "vn"
+  },
+  {
+   "id": "YE",
+   "name": "Yemen",
+   "flag": "ye"
+  },
+  {
+   "id": "AFRICA",
+   "name": "Africa"
+  },
+  {
+   "id": "ADULT",
+   "name": "Adults"
+  }
+ ],
+ "first": [
+  "US",
+  "WORLD"
+ ],
+ "last": [
+  "ADULT"
+ ],
+ "tags": {
+  "NA": "US",
+  "US": "US",
+  "USA": "US",
+  "EN": "US",
+  "UK": "GB",
+  "GB": "GB",
+  "IE": "IE",
+  "AU": "AU",
+  "NZ": "NZ",
+  "NL": "NL",
+  "ES": "ES",
+  "DE": "DE",
+  "IT": "IT",
+  "PT": "PT",
+  "PL": "PL",
+  "GR": "GR",
+  "FR": "FR",
+  "TH": "TH",
+  "AZ": "AZ",
+  "MT": "MT",
+  "ALB": "AL",
+  "BLN": "BALKANS",
+  "AR": "ARAB",
+  "AF": "AFRICA",
+  "AS": "WORLD",
+  "EU": "WORLD",
+  "AM": "LATAM",
+  "SA": "LATAM",
+  "TR": "TR",
+  "CA": "CA",
+  "MX": "MX",
+  "BR": "BR",
+  "IN": "IN",
+  "BE": "BE",
+  "CH": "CH",
+  "AT": "AT",
+  "SE": "SE",
+  "DK": "DK",
+  "NO": "NO",
+  "FI": "FI",
+  "RO": "RO",
+  "BG": "BG",
+  "HU": "HU",
+  "CZ": "CZ",
+  "RU": "RU",
+  "UA": "UA",
+  "IL": "IL",
+  "IR": "IR",
+  "PK": "PK",
+  "4K": "WORLD"
+ },
+ "words": {
+  "USA": "US",
+  "UNITED STATES": "US",
+  "CANADA": "CA",
+  "MEXICO": "MX",
+  "AUSTRALIA": "AU",
+  "IRELAND": "IE",
+  "NEW ZEALAND": "NZ",
+  "LATVIA": "LV",
+  "HAITI": "HT",
+  "NEDERLAND": "NL",
+  "NETHERLANDS": "NL",
+  "ESPAÑA": "ES",
+  "SPAIN": "ES",
+  "AUSTRIA": "AT",
+  "SWISS": "CH",
+  "SWITZERLAND": "CH",
+  "POLAND": "PL",
+  "ISRAEL": "IL",
+  "ROMANIA": "RO",
+  "RUSSIA": "RU",
+  "BELARUS": "BY",
+  "LITHUANIA": "LT",
+  "BULGARIA": "BG",
+  "HUNGARY": "HU",
+  "DOMINICANA REP": "DO",
+  "DOMINICAN REPUBLIC": "DO",
+  "HONDURAS": "HN",
+  "COLOMBIA": "CO",
+  "ARGENTINA": "AR",
+  "BOLIVIA": "BO",
+  "CHILE": "CL",
+  "GUATEMALA": "GT",
+  "ECUADOR": "EC",
+  "EL SALVADOR": "SV",
+  "PANAMA": "PA",
+  "PARAGUAY": "PY",
+  "PERU": "PE",
+  "URUGUAY": "UY",
+  "COSTA RICA": "CR",
+  "NICARAGUA": "NI",
+  "UKRAINE": "UA",
+  "BRAZIL": "BR",
+  "IRAN": "IR",
+  "INDIA": "IN",
+  "PAKISTAN": "PK",
+  "NEPAL": "NP",
+  "SRILANKA": "LK",
+  "SRI LANKA": "LK",
+  "AFGHANISTAN": "AF",
+  "SWEDEN": "SE",
+  "SW": "SE",
+  "DENMARK": "DK",
+  "NORWAY": "NO",
+  "FINLAND": "FI",
+  "ARMENIA": "AM",
+  "GEORGIE": "GE",
+  "GEORGIA": "GE",
+  "VIETNAM": "VN",
+  "HONGKONG": "HK",
+  "HONG KONG": "HK",
+  "PHILIPPINES": "PH",
+  "SOUTH KOREA": "KR",
+  "CYPRUS": "CY",
+  "MALAYSIA": "MY",
+  "SURINAME": "SR",
+  "THAILANDE": "TH",
+  "THAILAND": "TH",
+  "AZERBAYCAN": "AZ",
+  "AZERBAIJAN": "AZ",
+  "JAPAN": "JP",
+  "MALTA": "MT",
+  "INDONESIA": "ID",
+  "FRANCE": "FR",
+  "FR": "FR",
+  "BELGIQUE": "BE",
+  "BELGIUM": "BE",
+  "BE": "BE",
+  "CZECH": "CZ",
+  "KOSOVO": "XK",
+  "SERBIA": "RS",
+  "CROATIA": "HR",
+  "BOSNIA": "BA",
+  "SLOVENIA": "SI",
+  "MACEDONIA": "MK",
+  "MONTENEGRO": "ME",
+  "TURKEY": "TR",
+  "KURDISTAN": "KURD",
+  "MOROCCO": "MA",
+  "ALGERIA": "DZ",
+  "TUNISIA": "TN",
+  "EGYPT": "EG",
+  "LEBANON": "LB",
+  "UAE": "AE",
+  "MAURITANIA": "MR",
+  "LIBYA": "LY",
+  "OMAN": "OM",
+  "BAHRAIN": "BH",
+  "JORDAN": "JO",
+  "YEMEN": "YE",
+  "SAOUDI": "SA",
+  "SAUDI": "SA",
+  "SYRIA": "SY",
+  "IRAQ": "IQ",
+  "SUDAN": "SD",
+  "PALESTINE": "PS",
+  "QATAR": "QA",
+  "KUWAIT": "KW",
+  "SOMALIA": "SO",
+  "SENEGAL": "SN",
+  "CONGO/GABON": "CG",
+  "CAMEROON": "CM",
+  "GHANA": "GH",
+  "NIGERIA": "NG",
+  "MALI": "ML",
+  "GERMANY": "DE",
+  "ITALY": "IT",
+  "PORTUGAL": "PT",
+  "GREECE": "GR",
+  "ALBANIA": "AL",
+  "CARRIBEAN": "CARIB",
+  "CARIBBEAN": "CARIB",
+  "LATINO": "LATAM",
+  "BANGLA": "BD"
+ },
+ "labels": {
+  "GENERAL": "General",
+  "GÉNÉRAL": "General",
+  "ALLGEMEINES": "General",
+  "ALGEMEEN": "General",
+  "GENERALE": "General",
+  "EMGERAL": "General",
+  "OGÓLNE": "General",
+  "Γενικά": "General",
+  "ULUSAL": "National",
+  "HD": "General",
+  "FHD": "General",
+  "4K ULTRA": "4K Ultra",
+  "HEVC": "HEVC",
+  "FR": "French",
+  "VL": "Flemish",
+  "WL": "Walloon",
+  "NEWS": "News",
+  "INFO": "News",
+  "INFORMACJE": "News",
+  "SPORTS": "Sports",
+  "SPORT": "Sports",
+  "DEPORTES": "Sports",
+  "DESPORTO": "Sports",
+  "SPORTOWE": "Sports",
+  "Αθλητικά": "Sports",
+  "SPOR": "Sports",
+  "KIDS": "Kids",
+  "KINDER": "Kids",
+  "KINDEREN": "Kids",
+  "NIÑOS": "Kids",
+  "BAMBINI": "Kids",
+  "CRIANÇAS": "Kids",
+  "Παιδικά": "Kids",
+  "COCUK": "Kids",
+  "ENFANTS": "Kids",
+  "CHILDREN": "Kids",
+  "MOVIES": "Movies",
+  "CINEMA": "Movies",
+  "FILMOWE": "Movies",
+  "κινηματογράφος": "Movies",
+  "SINEMA": "Movies",
+  "FILMS EN SERIES": "Movies & Series",
+  "FILMES E SÉRIES": "Movies & Series",
+  "SKY FILM UND SERIE": "Sky Movies & Series",
+  "M.PELICULAS": "M+ Movies",
+  "ENTERTAINMENT": "Entertainment",
+  "UNTERHALTUNG": "Entertainment",
+  "DOCUMENTARY": "Documentary",
+  "DOCUMENTALES": "Documentary",
+  "DOCUMENTARIO": "Documentary",
+  "DOCUMENTARIOS": "Documentary",
+  "DOKUMENTALNE": "Documentary",
+  "Ντοκιμαντέρ": "Documentary",
+  "DOCUMENTAIRE": "Documentary",
+  "MUSIC": "Music",
+  "MUZIEK": "Music",
+  "MUSIQUE": "Music",
+  "Μουσικά": "Music",
+  "MUZYKA | DZIECI": "Music & Kids",
+  "NATUUR": "Nature",
+  "NATUR": "Nature",
+  "REGIONAAL": "Regional",
+  "REGIONAL": "Regional",
+  "BUITENLAND": "Abroad",
+  "INTERNACIONAL": "International",
+  "Κυπριακά": "Cypriot",
+  "DIGER": "Other",
+  "ISLAMIC": "Islamic",
+  "CHRISTIAN": "Christian",
+  "LOCALS": "Locals"
+ },
+ "topicOrder": {
+  "general": 10,
+  "network": 20,
+  "news": 30,
+  "sports": 40,
+  "league": 50,
+  "streaming": 70,
+  "kids": 80,
+  "movies": 81,
+  "entertainment": 82,
+  "documentary": 83,
+  "nature": 84,
+  "music": 85,
+  "regional": 86,
+  "language": 88,
+  "religious": 89,
+  "ppv": 100,
+  "replay": 105,
+  "uhd": 108,
+  "twentyfour": 110,
+  "adult": 200
+ },
+ "topics": [
+  {
+   "t": "adult",
+   "re": "ADULT|XXX|\\+18|FOR ADULTS"
+  },
+  {
+   "t": "twentyfour",
+   "re": "24/7"
+  },
+  {
+   "t": "ppv",
+   "re": "\\bPPV\\b|EVENT"
+  },
+  {
+   "t": "replay",
+   "re": "REPLAY|REPETICI"
+  },
+  {
+   "t": "uhd",
+   "re": "\\b4K\\b|\\b8K\\b|UHD|ᵁᴴᴰ"
+  },
+  {
+   "t": "news",
+   "re": "NEWS|\\bINFO|NOTICIAS|INFORMACJE"
+  },
+  {
+   "t": "kids",
+   "re": "KIDS|KINDER|ENFANTS|NIÑOS|BAMBINI|CRIAN|CHILDREN|COCUK|Παιδικά"
+  },
+  {
+   "t": "league",
+   "re": "\\b(NBA|WNBA|NFL|NHL|MLB|MILB|MLS|NCAA|AHL|EPL|EFL|AFL|HOCKEY LEAGUE|LIGUE 1|LA ?LIGA|SOCCER|FOOTBALL)\\b"
+  },
+  {
+   "t": "sports",
+   "re": "SPORT|DEPORT|DESPORT|SPOR\\b|Αθλητικά|BEIN|DAZN|ESPN|EUROSPORT|CRICKET|FORMULA"
+  },
+  {
+   "t": "movies",
+   "re": "MOVIE|CINEMA|FILM|PELICUL|SINEMA|κινηματογράφος|BOX OFFICE"
+  },
+  {
+   "t": "documentary",
+   "re": "DOCU|DOKU|Ντοκιμαντέρ|FACTUAL"
+  },
+  {
+   "t": "nature",
+   "re": "NATU"
+  },
+  {
+   "t": "music",
+   "re": "MUSIC|MUZI|MUSIQ|Μουσικά|MUZYKA"
+  },
+  {
+   "t": "religious",
+   "re": "ISLAM|CHRIST|QURAN|RELIGI"
+  },
+  {
+   "t": "streaming",
+   "re": "NETFLIX|HULU|HBO|MAX\\b|PEACOCK|PARAMOUNT|PRIME|DISNEY|SHAHID|STARZ|OSN|APPLE"
+  },
+  {
+   "t": "entertainment",
+   "re": "ENTERTAIN|UNTERHALT|DRAMA|COMEDY"
+  },
+  {
+   "t": "regional",
+   "re": "REGIONA|LOCAL"
+  }
+ ],
+ "categories": {
+  "|NA| USA GENERAL": {
+   "c": "US",
+   "n": "General",
+   "t": "general",
+   "o": 10
+  },
+  "|NA| USA CW & MY": {
+   "c": "US",
+   "n": "CW & MyNetwork",
+   "t": "network",
+   "o": 25
+  },
+  "|NA| USA NEWS": {
+   "c": "US",
+   "n": "News",
+   "t": "news",
+   "o": 30
+  },
+  "|NA| USA SPECTRUM NETWORK": {
+   "c": "US",
+   "n": "Spectrum News",
+   "t": "news",
+   "o": 31
+  },
+  "|NA| USA KIDS": {
+   "c": "US",
+   "n": "Kids",
+   "t": "kids",
+   "o": 80
+  },
+  "|NA| USA MOVIES": {
+   "c": "US",
+   "n": "Movies",
+   "t": "movies",
+   "o": 81
+  },
+  "|NA| USA SPORTS": {
+   "c": "US",
+   "n": "Sports",
+   "t": "sports",
+   "o": 40
+  },
+  "|NA| USA ABC": {
+   "c": "US",
+   "n": "ABC",
+   "t": "network",
+   "o": 20
+  },
+  "|NA| USA CBS": {
+   "c": "US",
+   "n": "CBS",
+   "t": "network",
+   "o": 21
+  },
+  "|NA| USA FOX": {
+   "c": "US",
+   "n": "FOX",
+   "t": "network",
+   "o": 22
+  },
+  "|NA| USA NBC": {
+   "c": "US",
+   "n": "NBC",
+   "t": "network",
+   "o": 23
+  },
+  "|NA| USA PBS": {
+   "c": "US",
+   "n": "PBS",
+   "t": "network",
+   "o": 24
+  },
+  "|NA| USA HULU NETWORK": {
+   "c": "US",
+   "n": "Hulu",
+   "t": "streaming",
+   "o": 73
+  },
+  "|NA| USA HBO MAX NETWORK": {
+   "c": "US",
+   "n": "HBO Max",
+   "t": "streaming",
+   "o": 72
+  },
+  "|NA| USA PEACOCK NETWORK": {
+   "c": "US",
+   "n": "Peacock",
+   "t": "streaming",
+   "o": 70
+  },
+  "|NA| USA PARAMOUNT+": {
+   "c": "US",
+   "n": "Paramount+",
+   "t": "streaming",
+   "o": 71
+  },
+  "|NA| USA ESPN+": {
+   "c": "US",
+   "n": "ESPN+ events",
+   "t": "sports",
+   "o": 60
+  },
+  "|NA| USA NBA": {
+   "c": "US",
+   "n": "NBA",
+   "t": "league",
+   "o": 50
+  },
+  "|NA| USA WNBA": {
+   "c": "US",
+   "n": "WNBA",
+   "t": "league",
+   "o": 55
+  },
+  "|NA| USA NFL": {
+   "c": "US",
+   "n": "NFL",
+   "t": "league",
+   "o": 51
+  },
+  "|NA| USA NHL": {
+   "c": "US",
+   "n": "NHL",
+   "t": "league",
+   "o": 52
+  },
+  "|NA| USA NBCS": {
+   "c": "US",
+   "n": "NBC Sports (regional)",
+   "t": "sports",
+   "o": 42
+  },
+  "|NA| USA MLB": {
+   "c": "US",
+   "n": "MLB",
+   "t": "league",
+   "o": 53
+  },
+  "|NA| USA MILB": {
+   "c": "US",
+   "n": "MiLB (minor league baseball)",
+   "t": "league",
+   "o": 57
+  },
+  "|NA| USA NCAA": {
+   "c": "US",
+   "n": "NCAA (college)",
+   "t": "league",
+   "o": 56
+  },
+  "|NA| USA DAZN PPV": {
+   "c": "US",
+   "n": "DAZN PPV",
+   "t": "ppv",
+   "o": 101
+  },
+  "|NA| USA B1G+ PPV": {
+   "c": "US",
+   "n": "Big Ten+ PPV",
+   "t": "ppv",
+   "o": 102
+  },
+  "|NA| USA ESPN PLAY": {
+   "c": "US",
+   "n": "ESPN Play events",
+   "t": "sports",
+   "o": 61
+  },
+  "|NA| USA MLS": {
+   "c": "US",
+   "n": "MLS",
+   "t": "league",
+   "o": 54
+  },
+  "|NA| USA NETFLIX PPV": {
+   "c": "US",
+   "n": "Netflix live events",
+   "t": "streaming",
+   "o": 74
+  },
+  "|NA| USA FLO PPV": {
+   "c": "US",
+   "n": "FloSports PPV",
+   "t": "ppv",
+   "o": 103
+  },
+  "|NA| USA FLO": {
+   "c": "US",
+   "n": "FloSports",
+   "t": "sports",
+   "o": 62
+  },
+  "|NA| TUDN SPORTS": {
+   "c": "US",
+   "n": "TUDN",
+   "t": "language",
+   "o": 92
+  },
+  "|NA| PPV LIVE EVENT": {
+   "c": "US",
+   "n": "PPV live events",
+   "t": "ppv",
+   "o": 100
+  },
+  "|NA| TELEMUNDO": {
+   "c": "US",
+   "n": "Telemundo",
+   "t": "language",
+   "o": 90
+  },
+  "|NA| UNIVISION": {
+   "c": "US",
+   "n": "Univision",
+   "t": "language",
+   "o": 91
+  },
+  "|NA| 24/7 ENGLISH": {
+   "c": "US",
+   "n": "24/7",
+   "t": "twentyfour",
+   "o": 110
+  },
+  "|EN| 24/7 ENGLISH 4K": {
+   "c": "US",
+   "n": "24/7 in 4K",
+   "t": "twentyfour",
+   "o": 111
+  },
+  "4K UHD": {
+   "c": "WORLD",
+   "n": "4K UHD",
+   "t": "uhd",
+   "o": 10
+  },
+  "4K UHD RELAX": {
+   "c": "WORLD",
+   "n": "4K Relax",
+   "t": "uhd",
+   "o": 11
+  },
+  "|AU| AUSTRALIA": {
+   "c": "AU",
+   "n": "General",
+   "t": "general"
+  },
+  "|AU| STAN PPV": {
+   "c": "AU",
+   "n": "Stan PPV",
+   "t": "ppv"
+  },
+  "|AU| AFL PPV": {
+   "c": "AU",
+   "n": "AFL PPV",
+   "t": "ppv"
+  },
+  "|AU| AU ESPN PLAY PPV": {
+   "c": "AU",
+   "n": "ESPN Play PPV",
+   "t": "ppv"
+  },
+  "|UK| ITVX": {
+   "c": "GB",
+   "n": "ITVX",
+   "t": "streaming"
+  },
+  "|UK| GENERAL": {
+   "c": "GB",
+   "n": "General",
+   "t": "general"
+  },
+  "|UK| MOVIES": {
+   "c": "GB",
+   "n": "Movies",
+   "t": "movies"
+  },
+  "|UK| NEWS": {
+   "c": "GB",
+   "n": "News",
+   "t": "news"
+  },
+  "|UK| ENTERTAINMENT": {
+   "c": "GB",
+   "n": "Entertainment",
+   "t": "entertainment"
+  },
+  "|UK| PSF PPV": {
+   "c": "GB",
+   "n": "PSF PPV",
+   "t": "ppv"
+  },
+  "|UK| SPORTS": {
+   "c": "GB",
+   "n": "Sports",
+   "t": "sports"
+  },
+  "|UK| EPL+ PPV": {
+   "c": "GB",
+   "n": "Premier League+ PPV",
+   "t": "ppv"
+  },
+  "|UK| EPL SOCCER": {
+   "c": "GB",
+   "n": "Premier League",
+   "t": "league"
+  },
+  "|UK| NATIONAL LEAGUE": {
+   "c": "GB",
+   "n": "National League",
+   "t": "league"
+  },
+  "|UK| EFL SOCCER": {
+   "c": "GB",
+   "n": "EFL",
+   "t": "league"
+  },
+  "|UK| AMAZON PRIME": {
+   "c": "GB",
+   "n": "Amazon Prime",
+   "t": "streaming"
+  },
+  "|UK| DISCOVERY+ PPV": {
+   "c": "GB",
+   "n": "Discovery+ PPV",
+   "t": "ppv"
+  },
+  "|UK| DAZN PPV": {
+   "c": "GB",
+   "n": "DAZN PPV",
+   "t": "ppv"
+  },
+  "|UK| NETFLIX PPV": {
+   "c": "GB",
+   "n": "Netflix live events",
+   "t": "streaming"
+  },
+  "|UK| SKY STORE": {
+   "c": "GB",
+   "n": "Sky Store",
+   "t": "movies"
+  },
+  "|UK| VIAPLAY PPV": {
+   "c": "GB",
+   "n": "Viaplay PPV",
+   "t": "ppv"
+  },
+  "|UK| KIDS": {
+   "c": "GB",
+   "n": "Kids",
+   "t": "kids"
+  },
+  "|UK| 24/7 KIDS": {
+   "c": "GB",
+   "n": "24/7 Kids",
+   "t": "twentyfour"
+  },
+  "|UK| DOCUMENTARY": {
+   "c": "GB",
+   "n": "Documentary",
+   "t": "documentary"
+  },
+  "|UK| DISCOVERY+": {
+   "c": "GB",
+   "n": "Discovery+",
+   "t": "documentary"
+  },
+  "|UK| 24/7 FLEX": {
+   "c": "GB",
+   "n": "24/7",
+   "t": "twentyfour"
+  },
+  "|UK| MUSIC": {
+   "c": "GB",
+   "n": "Music",
+   "t": "music"
+  },
+  "|UK| PPV EVENTS": {
+   "c": "GB",
+   "n": "PPV events",
+   "t": "ppv"
+  },
+  "|UK| WORLD SPORTS": {
+   "c": "GB",
+   "n": "World Sports",
+   "t": "sports"
+  },
+  "|UK| CYMRU FOOTBALL PPV": {
+   "c": "GB",
+   "n": "Welsh Football PPV",
+   "t": "ppv"
+  },
+  "|UK| SOCCER REPLAY": {
+   "c": "GB",
+   "n": "Soccer replays",
+   "t": "replay"
+  },
+  "|UK| SCOTTISH FOOTBALL": {
+   "c": "GB",
+   "n": "Scottish Football",
+   "t": "league"
+  },
+  "|UK| OTHER SPORTS": {
+   "c": "GB",
+   "n": "Other Sports",
+   "t": "sports"
+  },
+  "|IE| IRELAND": {
+   "c": "IE",
+   "n": "General",
+   "t": "general"
+  },
+  "|IE| CLUBBER PPV": {
+   "c": "IE",
+   "n": "Clubber PPV",
+   "t": "ppv"
+  },
+  "|IE| SETANTA PPV": {
+   "c": "IE",
+   "n": "Setanta PPV",
+   "t": "ppv"
+  },
+  "|IE| LOI PPV": {
+   "c": "IE",
+   "n": "League of Ireland PPV",
+   "t": "ppv"
+  },
+  "|UK| SKY SPORT+": {
+   "c": "GB",
+   "n": "Sky Sport+",
+   "t": "sports"
+  },
+  "FORMULA 1 + MOTO GP": {
+   "c": "WORLD",
+   "n": "Formula 1 & MotoGP",
+   "t": "sports",
+   "o": 20
+  },
+  "|EU| LATVIA": {
+   "c": "LV",
+   "n": "General",
+   "t": "general"
+  },
+  "|AM| CANADA": {
+   "c": "CA",
+   "n": "General",
+   "t": "general"
+  },
+  "|NA| CANADA FR": {
+   "c": "CA",
+   "n": "French",
+   "t": "language"
+  },
+  "|NA| HOCKEY LEAGUE": {
+   "c": "US",
+   "n": "AHL Hockey",
+   "t": "league",
+   "o": 58
+  },
+  "|AM| CANADA DAZN PPV": {
+   "c": "CA",
+   "n": "DAZN PPV",
+   "t": "ppv"
+  },
+  "|AM| AHL PPV": {
+   "c": "CA",
+   "n": "AHL PPV",
+   "t": "ppv"
+  },
+  "|SA| CARRIBEAN": {
+   "c": "CARIB",
+   "n": "General",
+   "t": "general"
+  },
+  "|SA| HAITI": {
+   "c": "HT",
+   "n": "General",
+   "t": "general"
+  },
+  "|NL| ALGEMEEN": {
+   "c": "NL",
+   "n": "General",
+   "t": "general"
+  },
+  "|NL| SPORT": {
+   "c": "NL",
+   "n": "Sports",
+   "t": "sports"
+  },
+  "|NL| VIAPLAY SPORT": {
+   "c": "NL",
+   "n": "Viaplay Sport",
+   "t": "sports"
+  },
+  "|NL| ESPN PPV": {
+   "c": "NL",
+   "n": "ESPN PPV",
+   "t": "ppv"
+  },
+  "|NL| KINDEREN": {
+   "c": "NL",
+   "n": "Kids",
+   "t": "kids"
+  },
+  "|NL| FILMS EN SERIES": {
+   "c": "NL",
+   "n": "Movies & Series",
+   "t": "movies"
+  },
+  "|NL| ENTERTAINMENT": {
+   "c": "NL",
+   "n": "Entertainment",
+   "t": "entertainment"
+  },
+  "|NL| MUZIEK": {
+   "c": "NL",
+   "n": "Music",
+   "t": "music"
+  },
+  "|NL| NATUUR": {
+   "c": "NL",
+   "n": "Nature",
+   "t": "nature"
+  },
+  "|NL| REGIONAAL": {
+   "c": "NL",
+   "n": "Regional",
+   "t": "regional"
+  },
+  "|NL| BUITENLAND": {
+   "c": "NL",
+   "n": "Abroad",
+   "t": "general"
+  },
+  "|EU| NEDERLAND 4K ULTRA": {
+   "c": "NL",
+   "n": "4K Ultra",
+   "t": "uhd"
+  },
+  "|ES| REPETICIÓN DE FÚTBOL": {
+   "c": "ES",
+   "n": "Soccer replays",
+   "t": "replay"
+  },
+  "|ES| ESPAÑA HEVC": {
+   "c": "ES",
+   "n": "HEVC",
+   "t": "general",
+   "o": 11
+  },
+  "|ES| TIVIFY": {
+   "c": "ES",
+   "n": "Tivify",
+   "t": "streaming"
+  },
+  "|ES| ESPAÑA DAZN PPV": {
+   "c": "ES",
+   "n": "DAZN PPV",
+   "t": "ppv"
+  },
+  "|ES| GENERAL": {
+   "c": "ES",
+   "n": "General",
+   "t": "general"
+  },
+  "|ES| DEPORTES": {
+   "c": "ES",
+   "n": "Sports",
+   "t": "sports"
+  },
+  "|ES| M+ LIGA DE CAMPEONES": {
+   "c": "ES",
+   "n": "M+ Champions League",
+   "t": "league"
+  },
+  "|ES| M+ BALONCESTO": {
+   "c": "ES",
+   "n": "M+ Basketball",
+   "t": "league"
+  },
+  "|ES| FEF TV EVENTOS": {
+   "c": "ES",
+   "n": "FEF TV events",
+   "t": "ppv"
+  },
+  "|ES| CINEMA": {
+   "c": "ES",
+   "n": "Movies",
+   "t": "movies"
+  },
+  "|ES| NIÑOS": {
+   "c": "ES",
+   "n": "Kids",
+   "t": "kids"
+  },
+  "|ES| DOCUMENTALES": {
+   "c": "ES",
+   "n": "Documentary",
+   "t": "documentary"
+  },
+  "|ES| LOCALS": {
+   "c": "ES",
+   "n": "Locals",
+   "t": "regional"
+  },
+  "|ES| M.PELICULAS": {
+   "c": "ES",
+   "n": "M+ Movies",
+   "t": "movies"
+  },
+  "|ES| 24/7 SPANISH": {
+   "c": "ES",
+   "n": "24/7",
+   "t": "twentyfour"
+  },
+  "|DE| ALLGEMEINES": {
+   "c": "DE",
+   "n": "General",
+   "t": "general"
+  },
+  "|DE| SPORT": {
+   "c": "DE",
+   "n": "Sports",
+   "t": "sports"
+  },
+  "|DE| AMAZON PRIME WIMBLEDON PPV": {
+   "c": "DE",
+   "n": "Amazon Prime Wimbledon PPV",
+   "t": "ppv"
+  },
+  "|DE| SPORT DEUTSCHLAND PPV": {
+   "c": "DE",
+   "n": "Sport Deutschland PPV",
+   "t": "ppv"
+  },
+  "|DE| DAZN PRIME": {
+   "c": "DE",
+   "n": "DAZN & Prime",
+   "t": "sports"
+  },
+  "|DE| DYN NETWORK": {
+   "c": "DE",
+   "n": "Dyn",
+   "t": "sports"
+  },
+  "|DE| SKY FILM UND SERIE": {
+   "c": "DE",
+   "n": "Sky Movies & Series",
+   "t": "movies"
+  },
+  "|DE| KINDER": {
+   "c": "DE",
+   "n": "Kids",
+   "t": "kids"
+  },
+  "|DE| UNTERHALTUNG": {
+   "c": "DE",
+   "n": "Entertainment",
+   "t": "entertainment"
+  },
+  "|DE| REGIONAL": {
+   "c": "DE",
+   "n": "Regional",
+   "t": "regional"
+  },
+  "|DE| 4K+ PAKET": {
+   "c": "DE",
+   "n": "4K+ package",
+   "t": "uhd"
+  },
+  "|DE| NATUR": {
+   "c": "DE",
+   "n": "Nature",
+   "t": "nature"
+  },
+  "|DE| 24/7 GERMANY": {
+   "c": "DE",
+   "n": "24/7",
+   "t": "twentyfour"
+  },
+  "|EU| AUSTRIA HD": {
+   "c": "AT",
+   "n": "General",
+   "t": "general"
+  },
+  "|IT| GENERALE": {
+   "c": "IT",
+   "n": "General",
+   "t": "general"
+  },
+  "|IT| CINEMA": {
+   "c": "IT",
+   "n": "Movies",
+   "t": "movies"
+  },
+  "|IT| SPORT": {
+   "c": "IT",
+   "n": "Sports",
+   "t": "sports"
+  },
+  "|IT| BAMBINI": {
+   "c": "IT",
+   "n": "Kids",
+   "t": "kids"
+  },
+  "|IT| DOCUMENTARIO": {
+   "c": "IT",
+   "n": "Documentary",
+   "t": "documentary"
+  },
+  "|PT| EMGERAL": {
+   "c": "PT",
+   "n": "General",
+   "t": "general"
+  },
+  "|PT| DESPORTO": {
+   "c": "PT",
+   "n": "Sports",
+   "t": "sports"
+  },
+  "|PT| FILMES E SÉRIES": {
+   "c": "PT",
+   "n": "Movies & Series",
+   "t": "movies"
+  },
+  "|PT| DOCUMENTARIOS": {
+   "c": "PT",
+   "n": "Documentary",
+   "t": "documentary"
+  },
+  "|PT| CRIANÇAS": {
+   "c": "PT",
+   "n": "Kids",
+   "t": "kids"
+  },
+  "|PT| INTERNACIONAL": {
+   "c": "PT",
+   "n": "International",
+   "t": "general"
+  },
+  "|EU| SWISS HD": {
+   "c": "CH",
+   "n": "General",
+   "t": "general"
+  },
+  "|PL| POLAND FHD": {
+   "c": "PL",
+   "n": "General (FHD)",
+   "t": "general",
+   "o": 11
+  },
+  "|PL| INFORMACJE": {
+   "c": "PL",
+   "n": "News",
+   "t": "news"
+  },
+  "|PL| FILMOWE": {
+   "c": "PL",
+   "n": "Movies",
+   "t": "movies"
+  },
+  "|PL| DOKUMENTALNE": {
+   "c": "PL",
+   "n": "Documentary",
+   "t": "documentary"
+  },
+  "|PL| MUZYKA | DZIECI": {
+   "c": "PL",
+   "n": "Music & Kids",
+   "t": "music"
+  },
+  "|PL| OGÓLNE": {
+   "c": "PL",
+   "n": "General",
+   "t": "general"
+  },
+  "|PL| SPORTOWE": {
+   "c": "PL",
+   "n": "Sports",
+   "t": "sports"
+  },
+  "|PL| NA HD": {
+   "c": "PL",
+   "n": "Polish TV abroad",
+   "t": "general",
+   "o": 12
+  },
+  "|PL| WALKI PPV": {
+   "c": "PL",
+   "n": "Fight PPV",
+   "t": "ppv"
+  },
+  "|PL| VIAPLAY SPORT": {
+   "c": "PL",
+   "n": "Viaplay Sport",
+   "t": "sports"
+  },
+  "|PL| MAX PPV": {
+   "c": "PL",
+   "n": "Max PPV",
+   "t": "ppv"
+  },
+  "|EU| ISRAEL": {
+   "c": "IL",
+   "n": "General",
+   "t": "general"
+  },
+  "|EU| ROMANIA": {
+   "c": "RO",
+   "n": "General",
+   "t": "general"
+  },
+  "|GR| ΓΕΝΙΚΆ": {
+   "c": "GR",
+   "n": "General",
+   "t": "general"
+  },
+  "|GR| ΝΤΟΚΙΜΑΝΤΈΡ": {
+   "c": "GR",
+   "n": "Documentary",
+   "t": "documentary"
+  },
+  "|GR| ΑΘΛΗΤΙΚΆ": {
+   "c": "GR",
+   "n": "Sports",
+   "t": "sports"
+  },
+  "|GR| ΜΟΥΣΙΚΆ": {
+   "c": "GR",
+   "n": "Music",
+   "t": "music"
+  },
+  "|GR| ΚΥΠΡΙΑΚΆ": {
+   "c": "GR",
+   "n": "Cypriot",
+   "t": "regional"
+  },
+  "|GR| ΚΙΝΗΜΑΤΟΓΡΆΦΟΣ": {
+   "c": "GR",
+   "n": "Movies",
+   "t": "movies"
+  },
+  "|GR| ΠΑΙΔΙΚΆ": {
+   "c": "GR",
+   "n": "Kids",
+   "t": "kids"
+  },
+  "|EU| RUSSIA": {
+   "c": "RU",
+   "n": "General",
+   "t": "general"
+  },
+  "|EU| BELARUS": {
+   "c": "BY",
+   "n": "General",
+   "t": "general"
+  },
+  "|EU| LITHUANIA": {
+   "c": "LT",
+   "n": "General",
+   "t": "general"
+  },
+  "|EU| BULGARIA": {
+   "c": "BG",
+   "n": "General",
+   "t": "general"
+  },
+  "|EU| HUNGARY": {
+   "c": "HU",
+   "n": "General",
+   "t": "general"
+  },
+  "|AM| DOMINICANA REP": {
+   "c": "DO",
+   "n": "General",
+   "t": "general"
+  },
+  "|AM| MEXICO": {
+   "c": "MX",
+   "n": "General",
+   "t": "general"
+  },
+  "|SA| LATINO": {
+   "c": "LATAM",
+   "n": "General",
+   "t": "general"
+  },
+  "|AM| HONDURAS": {
+   "c": "HN",
+   "n": "General",
+   "t": "general"
+  },
+  "|AM| COLOMBIA": {
+   "c": "CO",
+   "n": "General",
+   "t": "general"
+  },
+  "|AM| ARGENTINA": {
+   "c": "AR",
+   "n": "General",
+   "t": "general"
+  },
+  "|AM| BOLIVIA": {
+   "c": "BO",
+   "n": "General",
+   "t": "general"
+  },
+  "|AM| CHILE": {
+   "c": "CL",
+   "n": "General",
+   "t": "general"
+  },
+  "|AM| GUATEMALA": {
+   "c": "GT",
+   "n": "General",
+   "t": "general"
+  },
+  "|AM| ECUADOR": {
+   "c": "EC",
+   "n": "General",
+   "t": "general"
+  },
+  "|AM| ECUADOR DAZN PPV": {
+   "c": "EC",
+   "n": "DAZN PPV",
+   "t": "ppv"
+  },
+  "|AM| EL SALVADOR": {
+   "c": "SV",
+   "n": "General",
+   "t": "general"
+  },
+  "|AM| PANAMA": {
+   "c": "PA",
+   "n": "General",
+   "t": "general"
+  },
+  "|AM| PARAGUAY": {
+   "c": "PY",
+   "n": "General",
+   "t": "general"
+  },
+  "|AM| PERU": {
+   "c": "PE",
+   "n": "General",
+   "t": "general"
+  },
+  "|AM| URUGUAY": {
+   "c": "UY",
+   "n": "General",
+   "t": "general"
+  },
+  "|AM| COSTA RICA": {
+   "c": "CR",
+   "n": "General",
+   "t": "general"
+  },
+  "|AM| NICARAGUA": {
+   "c": "NI",
+   "n": "General",
+   "t": "general"
+  },
+  "|EU| UKRAINE": {
+   "c": "UA",
+   "n": "General",
+   "t": "general"
+  },
+  "|AM| BRAZIL": {
+   "c": "BR",
+   "n": "General",
+   "t": "general"
+  },
+  "|AS| IRAN": {
+   "c": "IR",
+   "n": "General",
+   "t": "general"
+  },
+  "WORLD CRICKET": {
+   "c": "WORLD",
+   "n": "Cricket",
+   "t": "sports",
+   "o": 21
+  },
+  "|AS| INDIA - EU": {
+   "c": "IN",
+   "n": "General (Europe)",
+   "t": "general",
+   "o": 11
+  },
+  "|AS| INDIA": {
+   "c": "IN",
+   "n": "General",
+   "t": "general"
+  },
+  "|AS| PAKISTAN": {
+   "c": "PK",
+   "n": "General",
+   "t": "general"
+  },
+  "|AS| TAMIL": {
+   "c": "IN",
+   "n": "Tamil",
+   "t": "language"
+  },
+  "|AS| SPORTS": {
+   "c": "IN",
+   "n": "Sports",
+   "t": "sports"
+  },
+  "|AS| ENGLISH": {
+   "c": "IN",
+   "n": "English",
+   "t": "language"
+  },
+  "|AS| BANGLA": {
+   "c": "BD",
+   "n": "General",
+   "t": "general"
+  },
+  "|AS| PUNJABI": {
+   "c": "IN",
+   "n": "Punjabi",
+   "t": "language"
+  },
+  "|AS| GUJARATI": {
+   "c": "IN",
+   "n": "Gujarati",
+   "t": "language"
+  },
+  "|AS| MALAYALAM": {
+   "c": "IN",
+   "n": "Malayalam",
+   "t": "language"
+  },
+  "|AS| MARATHI": {
+   "c": "IN",
+   "n": "Marathi",
+   "t": "language"
+  },
+  "|AS| TELUGU": {
+   "c": "IN",
+   "n": "Telugu",
+   "t": "language"
+  },
+  "|AS| KANNADA": {
+   "c": "IN",
+   "n": "Kannada",
+   "t": "language"
+  },
+  "|AS| BHOJPURI": {
+   "c": "IN",
+   "n": "Bhojpuri",
+   "t": "language"
+  },
+  "|AS| ASSAM": {
+   "c": "IN",
+   "n": "Assamese",
+   "t": "language"
+  },
+  "|AS| NEPAL": {
+   "c": "NP",
+   "n": "General",
+   "t": "general"
+  },
+  "|AS| SRILANKA": {
+   "c": "LK",
+   "n": "General",
+   "t": "general"
+  },
+  "|AS| AFGHANISTAN": {
+   "c": "AF",
+   "n": "General",
+   "t": "general"
+  },
+  "|EU| SWEDEN HD": {
+   "c": "SE",
+   "n": "General",
+   "t": "general"
+  },
+  "|EU| SWEDEN VIAPLAY PPV": {
+   "c": "SE",
+   "n": "Viaplay PPV",
+   "t": "ppv"
+  },
+  "|EU| SW MAX PPV": {
+   "c": "SE",
+   "n": "Max PPV",
+   "t": "ppv"
+  },
+  "|EU| DENMARK HD": {
+   "c": "DK",
+   "n": "General",
+   "t": "general"
+  },
+  "|EU| NORWAY HD": {
+   "c": "NO",
+   "n": "General",
+   "t": "general"
+  },
+  "|EU| FINLAND HD": {
+   "c": "FI",
+   "n": "General",
+   "t": "general"
+  },
+  "|AS| ARMENIA": {
+   "c": "AM",
+   "n": "General",
+   "t": "general"
+  },
+  "|EU| GEORGIE": {
+   "c": "GE",
+   "n": "General",
+   "t": "general"
+  },
+  "|AS| VIETNAM": {
+   "c": "VN",
+   "n": "General",
+   "t": "general"
+  },
+  "|AS| HONGKONG": {
+   "c": "HK",
+   "n": "General",
+   "t": "general"
+  },
+  "|AS| PHILIPPINES": {
+   "c": "PH",
+   "n": "General",
+   "t": "general"
+  },
+  "|AS| SOUTH KOREA": {
+   "c": "KR",
+   "n": "General",
+   "t": "general"
+  },
+  "|EU| CYPRUS": {
+   "c": "CY",
+   "n": "General",
+   "t": "general"
+  },
+  "|AS| MALAYSIA": {
+   "c": "MY",
+   "n": "General",
+   "t": "general"
+  },
+  "|SA| SURINAME": {
+   "c": "SR",
+   "n": "General",
+   "t": "general"
+  },
+  "|TH| THAILANDE": {
+   "c": "TH",
+   "n": "General",
+   "t": "general"
+  },
+  "|AZ| AZERBAYCAN": {
+   "c": "AZ",
+   "n": "General",
+   "t": "general"
+  },
+  "JAPAN": {
+   "c": "JP",
+   "n": "General",
+   "t": "general",
+   "o": 10
+  },
+  "|MT| MALTA": {
+   "c": "MT",
+   "n": "General",
+   "t": "general"
+  },
+  "|AS| INDONESIA": {
+   "c": "ID",
+   "n": "General",
+   "t": "general"
+  },
+  "FOR ADULTS": {
+   "c": "ADULT",
+   "n": "Adults",
+   "t": "adult",
+   "o": 200
+  },
+  "|EU| DAZN LA LIGA": {
+   "c": "FR",
+   "n": "DAZN LaLiga",
+   "t": "sports"
+  },
+  "|EU| DISNEY+ PPV": {
+   "c": "FR",
+   "n": "Disney+ PPV",
+   "t": "ppv"
+  },
+  "|EU| FRANCE HEVC": {
+   "c": "FR",
+   "n": "HEVC",
+   "t": "general",
+   "o": 11
+  },
+  "|EU| FRANCE GÉNÉRAL": {
+   "c": "FR",
+   "n": "General",
+   "t": "general"
+  },
+  "|EU| FRANCE SPORTS": {
+   "c": "FR",
+   "n": "Sports",
+   "t": "sports"
+  },
+  "|EU| L'EQUIPE LIVE": {
+   "c": "FR",
+   "n": "L'Équipe Live",
+   "t": "sports"
+  },
+  "|FR| EUROSPORTS 360": {
+   "c": "FR",
+   "n": "Eurosport 360",
+   "t": "sports"
+  },
+  "|EU| LIGUE 1+ VIP": {
+   "c": "FR",
+   "n": "Ligue 1+ VIP",
+   "t": "league"
+  },
+  "|EU| LIGUE 1+": {
+   "c": "FR",
+   "n": "Ligue 1+",
+   "t": "league"
+  },
+  "|EU| FR SOCCER PPV": {
+   "c": "FR",
+   "n": "Soccer PPV",
+   "t": "ppv"
+  },
+  "|EU| FRANCE DAZN PPV": {
+   "c": "FR",
+   "n": "DAZN PPV",
+   "t": "ppv"
+  },
+  "|EU| FRANCE CANAL+ LIVE": {
+   "c": "FR",
+   "n": "Canal+ Live",
+   "t": "ppv"
+  },
+  "|EU| FRANCE ENFANTS": {
+   "c": "FR",
+   "n": "Kids",
+   "t": "kids"
+  },
+  "|EU| FRANCE INFO": {
+   "c": "FR",
+   "n": "News",
+   "t": "news"
+  },
+  "|EU| FRANCE CINEMA": {
+   "c": "FR",
+   "n": "Movies",
+   "t": "movies"
+  },
+  "|EU| FRANCE DOCUMENTAIRE": {
+   "c": "FR",
+   "n": "Documentary",
+   "t": "documentary"
+  },
+  "|EU| FRANCE MUSIQUE": {
+   "c": "FR",
+   "n": "Music",
+   "t": "music"
+  },
+  "|EU| LE MEILLEUR DES FILMS": {
+   "c": "FR",
+   "n": "Best Movies",
+   "t": "movies"
+  },
+  "|EU| FRANCE NETFLIX 24/7": {
+   "c": "FR",
+   "n": "Netflix 24/7",
+   "t": "twentyfour"
+  },
+  "|EU| FRANCE CARRIBEAN": {
+   "c": "FR",
+   "n": "Caribbean",
+   "t": "regional"
+  },
+  "|EU| FRANCE 4K": {
+   "c": "FR",
+   "n": "4K",
+   "t": "uhd"
+  },
+  "|EU| BELGIQUE HD": {
+   "c": "BE",
+   "n": "General",
+   "t": "general"
+  },
+  "|EU| BELGIUM VL": {
+   "c": "BE",
+   "n": "Flemish",
+   "t": "language"
+  },
+  "|EU| BELGIUM WL": {
+   "c": "BE",
+   "n": "Walloon (French)",
+   "t": "language"
+  },
+  "|EU| BE DAZN PPV VIP": {
+   "c": "BE",
+   "n": "DAZN PPV VIP",
+   "t": "ppv"
+  },
+  "|EU| BE DAZN PPV": {
+   "c": "BE",
+   "n": "DAZN PPV",
+   "t": "ppv"
+  },
+  "|EU| CZECH": {
+   "c": "CZ",
+   "n": "General",
+   "t": "general"
+  },
+  "|ALB| GENERAL": {
+   "c": "AL",
+   "n": "General",
+   "t": "general"
+  },
+  "|ALB| NEWS": {
+   "c": "AL",
+   "n": "News",
+   "t": "news"
+  },
+  "|ALB| MOVIES": {
+   "c": "AL",
+   "n": "Movies",
+   "t": "movies"
+  },
+  "|ALB| DOCUMENTARY": {
+   "c": "AL",
+   "n": "Documentary",
+   "t": "documentary"
+  },
+  "|ALB| CHILDREN": {
+   "c": "AL",
+   "n": "Kids",
+   "t": "kids"
+  },
+  "|ALB| SPORTS": {
+   "c": "AL",
+   "n": "Sports",
+   "t": "sports"
+  },
+  "|ALB| MUSIC": {
+   "c": "AL",
+   "n": "Music",
+   "t": "music"
+  },
+  "|ALB| ISLAMIC": {
+   "c": "AL",
+   "n": "Islamic",
+   "t": "religious"
+  },
+  "|ALB| KOSOVO": {
+   "c": "XK",
+   "n": "General",
+   "t": "general"
+  },
+  "|BLN| SERBIA": {
+   "c": "RS",
+   "n": "General",
+   "t": "general"
+  },
+  "|BLN| CROATIA": {
+   "c": "HR",
+   "n": "General",
+   "t": "general"
+  },
+  "|BLN| BOSNIA": {
+   "c": "BA",
+   "n": "General",
+   "t": "general"
+  },
+  "|BLN| SLOVENIA": {
+   "c": "SI",
+   "n": "General",
+   "t": "general"
+  },
+  "|BLN| MACEDONIA": {
+   "c": "MK",
+   "n": "General",
+   "t": "general"
+  },
+  "|BLN| MONTENEGRO": {
+   "c": "ME",
+   "n": "General",
+   "t": "general"
+  },
+  "|BLN| SPORTS": {
+   "c": "BALKANS",
+   "n": "Sports",
+   "t": "sports"
+  },
+  "|AS| TURKEY | ULUSAL": {
+   "c": "TR",
+   "n": "National",
+   "t": "general"
+  },
+  "|AS| TURKEY | SPOR": {
+   "c": "TR",
+   "n": "Sports",
+   "t": "sports"
+  },
+  "|AS| TURKEY | DIGER": {
+   "c": "TR",
+   "n": "Other",
+   "t": "entertainment"
+  },
+  "|AS| TURKEY | COCUK": {
+   "c": "TR",
+   "n": "Kids",
+   "t": "kids"
+  },
+  "|AS| TURKEY | SINEMA": {
+   "c": "TR",
+   "n": "Movies",
+   "t": "movies"
+  },
+  "|AS| TURKEY | TABII SPOR": {
+   "c": "TR",
+   "n": "Tabii Sports",
+   "t": "sports"
+  },
+  "|AS| TURKEY | REDBOX": {
+   "c": "TR",
+   "n": "Redbox",
+   "t": "movies"
+  },
+  "|AS| KURDISTAN": {
+   "c": "KURD",
+   "n": "General",
+   "t": "general"
+  },
+  "|AR| BEIN SPORTS AFC": {
+   "c": "ARAB",
+   "n": "beIN Sports AFC",
+   "t": "sports"
+  },
+  "|AR| BEIN SPORTS 8K": {
+   "c": "ARAB",
+   "n": "beIN Sports 8K",
+   "t": "sports"
+  },
+  "|AR| BEIN SPORTS G": {
+   "c": "ARAB",
+   "n": "beIN Sports G",
+   "t": "sports"
+  },
+  "|AR| BEIN SPORTS NX": {
+   "c": "ARAB",
+   "n": "beIN Sports NX",
+   "t": "sports"
+  },
+  "|AR| BEIN REPLAY": {
+   "c": "ARAB",
+   "n": "beIN replays",
+   "t": "replay"
+  },
+  "|AR| BEIN SPORTS 4K": {
+   "c": "ARAB",
+   "n": "beIN Sports 4K",
+   "t": "sports"
+  },
+  "|AR| BEIN SPORTS ᵁᴴᴰ": {
+   "c": "ARAB",
+   "n": "beIN Sports UHD",
+   "t": "sports"
+  },
+  "|AR| BEIN SPORTS (UK)": {
+   "c": "ARAB",
+   "n": "beIN Sports (UK)",
+   "t": "sports"
+  },
+  "|AR| DAZN PPV": {
+   "c": "ARAB",
+   "n": "DAZN PPV",
+   "t": "ppv"
+  },
+  "|AR| SHAHID SPORTS LIVE": {
+   "c": "ARAB",
+   "n": "Shahid Sports Live",
+   "t": "sports"
+  },
+  "|AR| SHASHA SPORT": {
+   "c": "ARAB",
+   "n": "Shasha Sport",
+   "t": "sports"
+  },
+  "|AR| ALWAN SPORT": {
+   "c": "ARAB",
+   "n": "Alwan Sport",
+   "t": "sports"
+  },
+  "|AR| SHAHID PPV": {
+   "c": "ARAB",
+   "n": "Shahid PPV",
+   "t": "ppv"
+  },
+  "|AR| STARZPLAY / AD SPORTS": {
+   "c": "ARAB",
+   "n": "STARZPLAY & AD Sports",
+   "t": "sports"
+  },
+  "|AR| THMANYAH": {
+   "c": "ARAB",
+   "n": "Thmanyah",
+   "t": "sports"
+  },
+  "|AR| SPORT": {
+   "c": "ARAB",
+   "n": "Sports",
+   "t": "sports"
+  },
+  "|AR| BEIN ENTERTAINMENT": {
+   "c": "ARAB",
+   "n": "beIN Entertainment",
+   "t": "entertainment"
+  },
+  "|AR| BEIN PREMIUM PLAY": {
+   "c": "ARAB",
+   "n": "beIN Premium Play",
+   "t": "movies"
+  },
+  "|AR| ARABIC NEWS & FACTUAL": {
+   "c": "ARAB",
+   "n": "News & Factual",
+   "t": "news"
+  },
+  "|AR| ARABIC FULL SD": {
+   "c": "ARAB",
+   "n": "All channels (SD)",
+   "t": "general",
+   "o": 12
+  },
+  "|AR| SPORT FULL SD": {
+   "c": "ARAB",
+   "n": "Sports (SD)",
+   "t": "sports"
+  },
+  "|AR| MOROCCO": {
+   "c": "MA",
+   "n": "General",
+   "t": "general"
+  },
+  "|AR| ALGERIA": {
+   "c": "DZ",
+   "n": "General",
+   "t": "general"
+  },
+  "|AR| TUNISIA": {
+   "c": "TN",
+   "n": "General",
+   "t": "general"
+  },
+  "|AR| ISLAMIC": {
+   "c": "ARAB",
+   "n": "Islamic",
+   "t": "religious"
+  },
+  "|AR| ARABIC KIDS": {
+   "c": "ARAB",
+   "n": "Kids",
+   "t": "kids"
+  },
+  "|AR| ROTANA | ART": {
+   "c": "ARAB",
+   "n": "Rotana & ART",
+   "t": "entertainment"
+  },
+  "|AR| MBC": {
+   "c": "ARAB",
+   "n": "MBC",
+   "t": "entertainment"
+  },
+  "|AR| OSN": {
+   "c": "ARAB",
+   "n": "OSN",
+   "t": "streaming"
+  },
+  "|AR| AL FAJER": {
+   "c": "ARAB",
+   "n": "Al Fajer",
+   "t": "entertainment"
+  },
+  "|AR| EGYPT": {
+   "c": "EG",
+   "n": "General",
+   "t": "general"
+  },
+  "|AR| LEBANON": {
+   "c": "LB",
+   "n": "General",
+   "t": "general"
+  },
+  "|AR| UAE": {
+   "c": "AE",
+   "n": "General",
+   "t": "general"
+  },
+  "|AR| ABU DHABI SPORTS": {
+   "c": "AE",
+   "n": "Abu Dhabi Sports",
+   "t": "sports"
+  },
+  "|AR| MAURITANIA": {
+   "c": "MR",
+   "n": "General",
+   "t": "general"
+  },
+  "|AR| LIBYA": {
+   "c": "LY",
+   "n": "General",
+   "t": "general"
+  },
+  "|AR| OMAN": {
+   "c": "OM",
+   "n": "General",
+   "t": "general"
+  },
+  "|AR| BAHRAIN": {
+   "c": "BH",
+   "n": "General",
+   "t": "general"
+  },
+  "|AR| JORDAN": {
+   "c": "JO",
+   "n": "General",
+   "t": "general"
+  },
+  "|AR| YEMEN": {
+   "c": "YE",
+   "n": "General",
+   "t": "general"
+  },
+  "|AR| SAOUDI": {
+   "c": "SA",
+   "n": "General",
+   "t": "general"
+  },
+  "|AR| SYRIA": {
+   "c": "SY",
+   "n": "General",
+   "t": "general"
+  },
+  "|AR| IRAQ": {
+   "c": "IQ",
+   "n": "General",
+   "t": "general"
+  },
+  "|AR| SUDAN": {
+   "c": "SD",
+   "n": "General",
+   "t": "general"
+  },
+  "|AR| CHRISTIAN": {
+   "c": "ARAB",
+   "n": "Christian",
+   "t": "religious"
+  },
+  "|AR| PALESTINE": {
+   "c": "PS",
+   "n": "General",
+   "t": "general"
+  },
+  "|AR| QATAR": {
+   "c": "QA",
+   "n": "General",
+   "t": "general"
+  },
+  "|AR| KUWAIT": {
+   "c": "KW",
+   "n": "General",
+   "t": "general"
+  },
+  "|AR| ARABIC VIP": {
+   "c": "ARAB",
+   "n": "VIP",
+   "t": "general",
+   "o": 11
+  },
+  "|AR| WATCHBOX 4K": {
+   "c": "ARAB",
+   "n": "Watchbox 4K",
+   "t": "streaming"
+  },
+  "|AR| ACTORS 4K": {
+   "c": "ARAB",
+   "n": "Actors 4K",
+   "t": "streaming"
+  },
+  "|AR| ROYA": {
+   "c": "ARAB",
+   "n": "Roya",
+   "t": "streaming"
+  },
+  "|AR| WEYYAK": {
+   "c": "ARAB",
+   "n": "Weyyak",
+   "t": "streaming"
+  },
+  "|AR| MAJESTIC 4K": {
+   "c": "ARAB",
+   "n": "Majestic 4K",
+   "t": "streaming"
+  },
+  "|AR| NETFLIX": {
+   "c": "ARAB",
+   "n": "Netflix",
+   "t": "streaming"
+  },
+  "|AR| SHAHID. CINEMA": {
+   "c": "ARAB",
+   "n": "Shahid Cinema",
+   "t": "streaming"
+  },
+  "|AR| GOBX GROUP": {
+   "c": "ARAB",
+   "n": "GOBX",
+   "t": "streaming"
+  },
+  "|AR| SHAHID. VIP": {
+   "c": "ARAB",
+   "n": "Shahid VIP",
+   "t": "streaming"
+  },
+  "|AR| DRAMA PLAY": {
+   "c": "ARAB",
+   "n": "Drama Play",
+   "t": "streaming"
+  },
+  "|AR| COMEDY PLAY": {
+   "c": "ARAB",
+   "n": "Comedy Play",
+   "t": "streaming"
+  },
+  "|AR| WATCH IT": {
+   "c": "ARAB",
+   "n": "Watch It",
+   "t": "streaming"
+  },
+  "|AR| STARZ PLAY": {
+   "c": "ARAB",
+   "n": "STARZPLAY",
+   "t": "streaming"
+  },
+  "|AR| ALWAN": {
+   "c": "ARAB",
+   "n": "Alwan",
+   "t": "streaming"
+  },
+  "|AR| STARZ MOVIES": {
+   "c": "ARAB",
+   "n": "Starz Movies",
+   "t": "streaming"
+  },
+  "|AR| HOME CINEMA": {
+   "c": "ARAB",
+   "n": "Home Cinema",
+   "t": "streaming"
+  },
+  "|AR| KTV MOVIES": {
+   "c": "ARAB",
+   "n": "KTV Movies",
+   "t": "streaming"
+  },
+  "|AR| AMAZON PRIME": {
+   "c": "ARAB",
+   "n": "Amazon Prime",
+   "t": "streaming"
+  },
+  "|AR| HBO": {
+   "c": "ARAB",
+   "n": "HBO",
+   "t": "streaming"
+  },
+  "|AR| HULU": {
+   "c": "ARAB",
+   "n": "Hulu",
+   "t": "streaming"
+  },
+  "|AR| TOD": {
+   "c": "ARAB",
+   "n": "TOD",
+   "t": "streaming"
+  },
+  "|AR| VIVO": {
+   "c": "ARAB",
+   "n": "Vivo",
+   "t": "streaming"
+  },
+  "|AR| PREMIUM PLAY": {
+   "c": "ARAB",
+   "n": "Premium Play",
+   "t": "movies"
+  },
+  "|AR| MUSIC": {
+   "c": "ARAB",
+   "n": "Music",
+   "t": "music"
+  },
+  "|AR| CHEF OMAR": {
+   "c": "ARAB",
+   "n": "Chef Omar",
+   "t": "entertainment"
+  },
+  "|AF| C+ AFRIQUE": {
+   "c": "AFRICA",
+   "n": "Canal+ Afrique",
+   "t": "general"
+  },
+  "|AF| DSTV AFRIQUE": {
+   "c": "AFRICA",
+   "n": "DStv",
+   "t": "general"
+  },
+  "|AF| AZAM NETWORK": {
+   "c": "AFRICA",
+   "n": "Azam",
+   "t": "general"
+  },
+  "|AF| SOMALIA": {
+   "c": "SO",
+   "n": "General",
+   "t": "general"
+  },
+  "|AF| SENEGAL": {
+   "c": "SN",
+   "n": "General",
+   "t": "general"
+  },
+  "|AF| AFRIQUE OTHERS": {
+   "c": "AFRICA",
+   "n": "Other channels",
+   "t": "general"
+  },
+  "|AF| CONGO/GABON": {
+   "c": "CG",
+   "n": "General",
+   "t": "general"
+  },
+  "|AF| CAMEROON": {
+   "c": "CM",
+   "n": "General",
+   "t": "general"
+  },
+  "|AF| GHANA": {
+   "c": "GH",
+   "n": "General",
+   "t": "general"
+  },
+  "|AF| NIGERIA": {
+   "c": "NG",
+   "n": "General",
+   "t": "general"
+  },
+  "|AF| MALI": {
+   "c": "ML",
+   "n": "General",
+   "t": "general"
+  },
+  "|NZ| NEW ZEALAND": {
+   "c": "NZ",
+   "n": "General",
+   "t": "general"
+  }
+ },
+ "virtual": [
+  {
+   "id": "ESPN",
+   "c": "US",
+   "n": "ESPN",
+   "t": "sports",
+   "o": 41,
+   "from": [
+    "US"
+   ],
+   "include": "^(?:[A-Z]{2,3}\\s*[-:|]\\s*)?(?:ESPN(?:\\s?2|\\s?U|\\s?NEWS|EWS|\\s?DEPORTES)?|SEC\\s?NETWORK|SECN|SEC\\s?NETWORK\\s?PLUS|ACC\\s?NETWORK|ACCN|LONGHORN\\s?NETWORK)\\b",
+   "exclude": "ESPN\\s?\\+|ESPN\\s?PLAY|\\bPPV\\b|EVENT|\\(ESPN",
+   "excludeCats": [
+    "USA ESPN+",
+    "USA ESPN PLAY"
+   ]
+  }
+ ]
+}

@@ -106,6 +106,41 @@ object CrashReporter {
         return runCatching { Net.base.newCall(rb.build()).execute().use { it.isSuccessful } }.getOrDefault(false)
     }
 
+    /**
+     * MR TV 2 (2.0.6): "Send report to MR TV" in Settings > Diagnostics. Sends the shown diagnostics as a report of kind
+     * "manual" through the same webhook. The text is scrubbed like crash reports (no addresses or credentials). Blocking:
+     * call off the main thread. True = the webhook accepted it.
+     */
+    fun sendManual(report: String): Boolean {
+        val o = JSONObject()
+            .put("kind", "manual")
+            .put("app", Rebrand.APP_NAME)
+            .put("applicationId", BuildConfig.APPLICATION_ID)
+            .put("versionName", BuildConfig.VERSION_NAME)
+            .put("versionCode", BuildConfig.VERSION_CODE)
+            .put("buildType", BuildConfig.BUILD_TYPE)
+            .put("manufacturer", Build.MANUFACTURER ?: "?")
+            .put("model", Build.MODEL ?: "?")
+            .put("android", Build.VERSION.RELEASE ?: "?")
+            .put("sdk", Build.VERSION.SDK_INT)
+            .put("message", "Report sent from Settings > Diagnostics")
+            .put("report", scrubReport(report).take(16_000))
+            .put("screen", screen)
+            .put("breadcrumbs", JSONArray(synchronized(this) { crumbs.toList() }))
+            .put("timestamp", java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", java.util.Locale.US).format(java.util.Date()))
+        return post(o.toString())
+    }
+
+    private val HOST_RE = Regex("""(?i)\b(?:[a-z0-9-]+\.)+(?:com|net|org|ru|tv|io|cc|me|xyz|info|live|pro|club|online|top|site)(?::\d+)?\b""")
+    private val IP_RE = Regex("""\b\d{1,3}(?:\.\d{1,3}){3}(?::\d+)?\b""")
+
+    /** Like [scrub], plus bare host names and IP addresses (the playlist line can name the server). */
+    fun scrubReport(s: String): String {
+        var t = scrub(s)
+        if (Rebrand.SERVER_URL.isNotEmpty()) t = t.replace(Rebrand.SERVER_URL, "<server>")
+        return IP_RE.replace(HOST_RE.replace(t, "<host>"), "<ip>")
+    }
+
     /** Sends saved reports; each accepted one is deleted, the rest stays for the next start. */
     private val uploadLock = Any()
 

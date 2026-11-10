@@ -2,9 +2,7 @@ package com.ipvio.stream
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -27,12 +25,10 @@ internal fun MrtvCredits() {
                 "It is free software under the GNU General Public License v3 (GPL-3.0) and comes with no warranty.",
             raw = true, color = Muted, fontSize = 14.sp, lineHeight = 20.sp
         )
-        Row(horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
-            QrImage(Rebrand.SOURCE_URL, 110.dp)
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text("Source code of MR TV 2:", raw = true, color = Muted, fontSize = 14.sp)
-                Text(Rebrand.SOURCE_URL, raw = true, color = Accent2, fontSize = 15.sp)
-            }
+        // 2.0.6: no QR code here any more; the source address stays as text (GPL-3.0)
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text("Source code of MR TV 2:", raw = true, color = Muted, fontSize = 14.sp)
+            Text(Rebrand.SOURCE_URL, raw = true, color = Accent2, fontSize = 15.sp)
         }
     }
 }

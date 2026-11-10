@@ -93,8 +93,11 @@ fun LiveTab(liveAll: List<Item>, groupsAll: Map<String, List<Item>>, favsAll: Li
             for ((g, l) in groupsAll) { val f = l.filter { it.src == srcK }; if (f.isNotEmpty()) m[g] = f }
         }
     }
-    // Genres (sports, movies, documentary, kids, news, music) – detected by category and channel name
-    val genres = remember(live) { LiveGenre.split(live) }
+    // MR TV 2 (2.0.6): clean categories by country (flags, English labels, icons) and virtual groups such as ESPN,
+    // from the category table (LiveCats); replaces the six guessed genres of 1.2
+    LiveCats.init(ctx)
+    val catVer = LiveCats.version
+    val genres = remember(live, catVer) { LiveCats.virtuals(live) }
     val favs = remember(favsAll, srcK) { if (srcK < 0) favsAll else favsAll.filter { it.src == srcK } }
     CatFavs.init(ctx)
     // US local channels by Nielsen market (locals package; off unless turned on in the settings / by the build)
@@ -108,7 +111,7 @@ fun LiveTab(liveAll: List<Item>, groupsAll: Map<String, List<Item>>, favsAll: Li
     // Last chosen category / list (round 14): the same one again after Back from the player and after a restart
     var sel by remember {
         val saved = LiveMemory.sel(ctx)?.takeIf { k ->
-            (k == FAV_CAT && (favs.isNotEmpty() || savedMkts.isNotEmpty())) || (localsOn && (k == LocalsKeys.PICKER || catalog?.market(LocalsKeys.codeOf(k)) != null)) || k == "ALL" || k == "HOME" || k in groups || (LiveGenre.isGenreKey(k) && genres.containsKey(k)) || ChannelLists.byKey(k) != null || k == "REC"
+            (k == FAV_CAT && (favs.isNotEmpty() || savedMkts.isNotEmpty())) || (localsOn && (k == LocalsKeys.PICKER || catalog?.market(LocalsKeys.codeOf(k)) != null)) || k == "ALL" || k == "HOME" || k in groups || (LiveCats.isVirtualKey(k) && genres.containsKey(k)) || ChannelLists.byKey(k) != null || k == "REC"
         }
         mutableStateOf(saved ?: if (favs.isNotEmpty() || savedMkts.isNotEmpty()) FAV_CAT else "ALL")
     }
@@ -127,7 +130,15 @@ fun LiveTab(liveAll: List<Item>, groupsAll: Map<String, List<Item>>, favsAll: Li
     // Order: favorites, own channel lists, "New channel list", all channels, categories
     // Aufnahmen (Runde 20): eigene Kategorie, sobald es welche gibt
     val recs = remember(Recorder.active.size, sel == "REC") { Recorder.list(ctx).map { Recorder.itemOf(it) } }
-    val names = (if (PlaylistStore.lists.size > 1) listOf("PL") else emptyList()) + listOf("HOME", "GUIDE", "SEARCH", "MULTI", FAV_CAT) + (if (localsOn) listOf(LocalsKeys.PICKER) + savedMkts.map { LocalsKeys.market(it.code) } else emptyList()) + (if (recs.isNotEmpty()) listOf("REC") else emptyList()) + myLists.map { ChannelListLogic.key(it) } + listOf("NEW", "ALL") + genres.keys + favCats + groups.keys.filter { it !in favCats && it !in HiddenCats.list } + (if (HiddenCats.list.any { it in groups }) listOf("HIDDEN") else emptyList())
+    // Country sections: United States first, the rest A–Z, Adults last. A section with one category is a single row with
+    // its flag; bigger ones get a header row (flag, country, channel count) that opens or closes them.
+    val hiddenNow = HiddenCats.list.toSet()
+    val sections = remember(groups, genres, catVer, hiddenNow, favCats) {
+        LiveCats.sections(groups.filterKeys { it !in favCats && it !in hiddenNow }, genres)
+    }
+    var expanded by remember { mutableStateOf(LiveCatsUi.initialExpanded(sections, sel)) }
+    val sectionNames = LiveCatsUi.flatten(sections, expanded)
+    val names = (if (PlaylistStore.lists.size > 1) listOf("PL") else emptyList()) + listOf("HOME", "GUIDE", "SEARCH", "MULTI", FAV_CAT) + (if (localsOn) listOf(LocalsKeys.PICKER) + savedMkts.map { LocalsKeys.market(it.code) } else emptyList()) + (if (recs.isNotEmpty()) listOf("REC") else emptyList()) + myLists.map { ChannelListLogic.key(it) } + listOf("NEW", "ALL") + favCats + sectionNames + (if (HiddenCats.list.any { it in groups }) listOf("HIDDEN") else emptyList())
     val curList = ChannelLists.byKey(sel)
     // Own list currently being filled (OK on a channel adds it); declared early because bundling depends on it
     var addTo by remember { mutableStateOf<Int?>(null) }
@@ -165,7 +176,7 @@ fun LiveTab(liveAll: List<Item>, groupsAll: Map<String, List<Item>>, favsAll: Li
         sel == "ALL" -> live
         sel == "SEARCH" -> searchRes
         sel == "HOME" -> emptyList()
-        LiveGenre.isGenreKey(sel) -> genres[sel].orEmpty()
+        LiveCats.isVirtualKey(sel) -> genres[sel].orEmpty()
         sel == "REC" -> recs
         curList != null -> ChannelListLogic.resolve(curList, byIdLazy.value)
         else -> groups[sel].orEmpty()
@@ -389,20 +400,32 @@ fun LiveTab(liveAll: List<Item>, groupsAll: Map<String, List<Item>>, favsAll: Li
                         }
                         return@itemsIndexed
                     }
+                    if (LiveCats.isHeaderKey(n)) {
+                        val sec = sections.firstOrNull { it.key == n }
+                        if (sec != null) {
+                            val open = sec.country.id in expanded
+                            CatRow(sec.country.name, sec.total, false, Modifier.testTag("cat-head-" + sec.country.id), onFocus = {}, onRight = { runCatching { firstChan.requestFocus() } }, onFav = {},
+                                raw = true, lead = { CountryFlag(sec.country) }, caret = if (open) AIcon.Up else AIcon.Down, heading = true) {
+                                expanded = if (open) expanded - sec.country.id else expanded + sec.country.id
+                            }
+                        }
+                        return@itemsIndexed
+                    }
+                    val ci = if (groups.containsKey(n) || LiveCats.isVirtualKey(n)) LiveCatsUi.rowOf(sections, n) else null
                     val label = when {
+                        ci != null -> ci.second
                         n == FAV_CAT -> "Favoriten"
                         n == "HOME" -> "Start"
                         n == "ALL" -> "Alle Sender"
                         n == "REC" -> "Aufnahmen"
-                        LiveGenre.isGenreKey(n) -> LiveGenre.byKey(n)?.label ?: n
                         ml != null -> ml.name
+                        groups.containsKey(n) -> LiveCats.title(n)
                         else -> n
                     }
                     val icon = when {
                         n == FAV_CAT || n in CatFavs.list -> AIcon.Star
                         n == "REC" -> AIcon.Download
                         n == "HOME" -> AIcon.Live
-                        LiveGenre.isGenreKey(n) -> AIcon.Live
                         ml != null -> AIcon.Lists
                         else -> null
                     }
@@ -411,20 +434,27 @@ fun LiveTab(liveAll: List<Item>, groupsAll: Map<String, List<Item>>, favsAll: Li
                         n == "ALL" -> live.size
                         n == "HOME" -> 0
                         n == "REC" -> recs.size
-                        LiveGenre.isGenreKey(n) -> genres[n]?.size ?: 0
+                        LiveCats.isVirtualKey(n) -> genres[n]?.size ?: 0
                         ml != null -> ChannelListLogic.resolve(ml, byIdLazy.value).size
                         else -> groups[n]?.size ?: 0
                     }
                     var listMenu by remember { mutableStateOf(false) }
                     var catMenu by remember { mutableStateOf(false) }
-                    val plainCat = ml == null && n != FAV_CAT && n != "ALL" && n != "REC" && n != "HOME" && !LiveGenre.isGenreKey(n) && groups.containsKey(n)
+                    val plainCat = ml == null && n != FAV_CAT && n != "ALL" && n != "REC" && n != "HOME" && !LiveCats.isVirtualKey(n) && groups.containsKey(n)
                     Box {
                         CatRow(
                             label, count, n == sel,
                             if (n == sel) Modifier.focusRequester(ContentFocus.req) else Modifier,
                             onFocus = { sel = n }, onRight = { runCatching { firstChan.requestFocus() } },
-                            onFav = { if (ml != null) listMenu = true else if (plainCat) catMenu = true else if (n != FAV_CAT && n != "ALL" && n != "REC" && !LiveGenre.isGenreKey(n)) CatFavs.toggle(ctx, n) },
-                            icon = icon, raw = ml != null
+                            onFav = { if (ml != null) listMenu = true else if (plainCat) catMenu = true else if (n != FAV_CAT && n != "ALL" && n != "REC" && !LiveCats.isVirtualKey(n)) CatFavs.toggle(ctx, n) },
+                            icon = if (n in CatFavs.list) AIcon.Star else if (ci != null) null else icon, raw = ml != null || ci != null || groups.containsKey(n),
+                            lead = when {
+                                n in CatFavs.list -> null
+                                ci != null && ci.third != null -> { { CountryFlag(ci.third!!) } }
+                                ci != null -> { { CatTopicIcon(ci.first) } }
+                                else -> null
+                            },
+                            indent = ci != null && ci.third == null && LiveCatsUi.inSection(sections, n)
                         ) { opened(); runCatching { firstChan.requestFocus() } }
                         // Menu of a provider category: favorite on/off, hide
                         if (catMenu && plainCat) OptionPopup(listOf(if (n in CatFavs.list) "Aus Favoriten entfernen" else "Zu Favoriten hinzufügen", "Kategorie ausblenden"), -1, { catMenu = false }) { i ->
@@ -608,7 +638,8 @@ private fun NameDialog(title: String, initial: String, onDismiss: () -> Unit, on
 @Composable
 private fun CatRow(
     label: String, count: Int, selected: Boolean, modifier: Modifier,
-    onFocus: () -> Unit, onRight: () -> Unit, onFav: () -> Unit, icon: AIcon? = null, raw: Boolean = false, onClick: () -> Unit
+    onFocus: () -> Unit, onRight: () -> Unit, onFav: () -> Unit, icon: AIcon? = null, raw: Boolean = false,
+    lead: (@Composable () -> Unit)? = null, caret: AIcon? = null, heading: Boolean = false, indent: Boolean = false, onClick: () -> Unit
 ) {
     var f by remember { mutableStateOf(false) }
     val shape = RoundedCornerShape(DS.RadiusS)
@@ -623,15 +654,19 @@ private fun CatRow(
             // MR TV 2: a tap selects the row too (touch does not move focus, so onFocus alone never fired on a phone);
             // long-press = the same as Menu / long OK. D-pad: OK on the focused row behaves as before.
             .combinedClickable(onClick = { onFocus(); onClick() }, onLongClick = touchOnly(onFav))
-            .padding(horizontal = 14.dp, vertical = 12.dp),
+            .padding(start = if (indent) 26.dp else 14.dp, end = 14.dp, top = 12.dp, bottom = 12.dp),
         horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically
     ) {
         Row(Modifier.weight(1f, fill = false), horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
-            if (icon != null) AppIcon(icon, if (icon == AIcon.Star) DS.Gold else Color.White, size = 17.dp)
-            Text(label, color = Color.White, fontSize = 16.sp, fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+            if (lead != null) lead()
+            else if (icon != null) AppIcon(icon, if (icon == AIcon.Star) DS.Gold else Color.White, size = 17.dp)
+            Text(label, color = Color.White, fontSize = if (heading) 17.sp else 16.sp, fontWeight = if (selected || heading) FontWeight.Bold else FontWeight.Normal,
                 maxLines = 1, overflow = TextOverflow.Ellipsis, raw = raw)
         }
-        if (count >= 0) Text("$count", color = Muted, fontSize = 13.sp)
+        Row(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
+            if (count >= 0) Text("$count", color = Muted, fontSize = 13.sp)
+            if (caret != null) AppIcon(caret, Muted, size = 14.dp)
+        }
     }
 }
 
@@ -691,7 +726,7 @@ private fun ChannelLine(item: Item, modifier: Modifier, inList: ChList?, onNewLi
                     Box(Modifier.fillMaxWidth(frac).fillMaxHeight().background(Accent2))
                 }
                 if (nextE != null) Text(raw = true, text = "${hhmm(nextE.start)}  ${nextE.title}", color = Muted, fontSize = 13.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
-            } else Text(raw = true, text = item.group, color = Muted, fontSize = 13.sp, maxLines = 1)
+            } else Text(raw = true, text = if (item.kind == Kind.LIVE) LiveCats.title(item.group) else item.group, color = Muted, fontSize = 13.sp, maxLines = 1)
         }
         if (Catchup.version >= 0 && Catchup.has(item)) AppIcon(AIcon.Catchup, Accent2, size = 20.dp)
         if (DeadLinks.isDead(item.url)) AppIcon(AIcon.Warning, DS.Gold, size = 20.dp)
@@ -778,7 +813,7 @@ private fun LiveHome(live: List<Item>, genres: Map<String, List<Item>>, favs: Li
     val rows = ArrayList<Pair<String, List<Item>>>()
     if (recent.isNotEmpty()) rows.add("Zuletzt gesehen" to recent)
     if (favs.isNotEmpty()) rows.add("Favoriten" to favs.take(40))
-    for ((k, l) in genres) rows.add((LiveGenre.byKey(k)?.label ?: k) to l.take(40))
+    for ((k, l) in genres) rows.add((LiveCats.virtualOf(k)?.label ?: k) to l.take(40))
     if (rows.isEmpty()) rows.add("Alle Sender" to live.take(40))
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = 48.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         itemsIndexed(rows, key = { i, r -> "$i|" + r.first }) { ri, r ->

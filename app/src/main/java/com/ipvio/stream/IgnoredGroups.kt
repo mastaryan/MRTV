@@ -9,7 +9,9 @@ import androidx.compose.runtime.setValue
  * "Ignore": titles and channels you do not need disappear everywhere (home, movies, series, Live TV, search),
  * without reloading the playlist. Grouping is by the provider's tag – "TR |", "[EN]", "DE:" – first from the
  * category name, otherwise from the title. This complements the language filter for cases where its detection is not enough.
- * Keys: bundle = "t:KIND|TAG" (KIND = LIVE, MOVIE, SERIES), single category = "g:KIND|CATEGORY".
+ * Keys: bundle = "t:KIND|TAG" (KIND = LIVE, MOVIE, SERIES), single category = "g:KIND|CATEGORY",
+ * MR TV 2 (2.0.6): whole country of Live TV = "c:LIVE|US" (country from the category table, see [LiveCats]).
+ * Nothing is hidden by default: a login shows every category the panel gives it.
  */
 object IgnoredGroups {
     private const val PREFS = "ipvio_ignored"
@@ -24,11 +26,12 @@ object IgnoredGroups {
 
     fun init(c: Context) {
         val s = (Profiles.sp(c, PREFS).getString("k", "") ?: "").split("\n").filter { it.isNotBlank() }.toSet()
-        if (s != keys) { keys = s; version++ }
+        if (s != keys) { keys = s; hasCountry = s.any { it.startsWith("c:") }; version++ }
     }
 
     private fun save(c: Context, s: Set<String>) {
         keys = s
+        hasCountry = s.any { it.startsWith("c:") }
         Profiles.sp(c, PREFS).edit().putString("k", s.joinToString("\n")).apply()
         version++
     }
@@ -50,8 +53,12 @@ object IgnoredGroups {
     fun bundleKey(kind: Kind, tag: String) = "t:" + kind.name + "|" + tag
     fun groupKey(kind: Kind, group: String) = "g:" + kind.name + "|" + group
 
+    fun countryKey(country: String) = "c:LIVE|$country"
+    private var hasCountry = false
+
     fun isIgnored(i: Item): Boolean {
         if (keys.isEmpty()) return false
+        if (hasCountry && i.kind == Kind.LIVE && countryKey(LiveCats.info(i.group).country) in keys) return true
         if (("g:" + i.kind.name + "|" + i.group) in keys) return true
         val t = tagOf(i)
         return t.isNotEmpty() && ("t:" + i.kind.name + "|" + t) in keys

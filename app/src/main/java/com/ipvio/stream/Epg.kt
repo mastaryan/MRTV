@@ -43,8 +43,8 @@ fun epgZone(): TimeZone = General.zone()
 /** Clock time in the chosen format (24 h / 12 h) and in the chosen time zone. The formatters are reused per thread. */
 fun hhmm(sec: Long): String = fmt(SettingsLogic.timePattern(General.timeFmt, General.sys24)).format(Date(sec * 1000))
 
-/** Day "Mo 19.10." in the chosen time zone and language. */
-fun dayLabel(sec: Long): String = fmt("EE dd.MM.").format(Date(sec * 1000))
+/** MR TV 2: US day "Wed 11/11" in the chosen time zone and language (was "Mi 11.11."). */
+fun dayLabel(sec: Long): String = fmt(UsDates.DAY).format(Date(sec * 1000))
 
 /** Shared network access for program info: one client (connections are reused) and at most 6 requests at the same time. */
 object EpgNet {

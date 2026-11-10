@@ -229,7 +229,7 @@ fun HomeScreen(
         if (live.isEmpty()) return@LaunchedEffect
         delay(2500)
         withContext(Dispatchers.Default) {
-            runCatching { LiveGenre.split(live) }
+            runCatching { LiveCats.virtuals(live) }
             if (General.bundleLive) runCatching { LiveBundleLogic.bundle(live) }
             runCatching { SportWatch.prewarm(live) }
         }

@@ -25,6 +25,16 @@ The libraries are downloaded by Gradle at build time and are not stored in this 
 
 The font files in `app/src/main/res/font/` are subsets/copies of the original fonts and remain under the OFL.
 
+## Country flags (MR TV 2, 2.0.6)
+
+| Artwork | License | Files |
+|---|---|---|
+| Noto Color Emoji flag glyphs (Google LLC) | SIL Open Font License 1.1 | `app/src/main/res/drawable-nodpi/flag_*.png` |
+
+The flag images for Live TV categories are rendered from the Noto Color Emoji font by `tools/categories/make_flags.py`
+(bundled as images because older Fire OS versions do not draw flag emoji). They remain under the OFL 1.1
+(text: https://openfontlicense.org/open-font-license-official-text/).
+
 ## Online services (optional, user-supplied keys)
 
 | Service | Purpose | Notes |

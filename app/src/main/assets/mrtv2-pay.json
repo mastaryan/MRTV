@@ -1,0 +1,11 @@
+{
+ "version": 1,
+ "note": "MR TV 2 payment options for the renewal reminder. Upload to https://watchmrtv.com/mrtv2-pay.json to change them without a new APK. qr = link shown as a QR code (https only); big = text shown instead of a QR code.",
+ "options": [
+  {"id": "cashapp", "name": "Cash App", "label": "Cash App $ApexKingDigital", "qr": "https://cash.app/$ApexKingDigital", "color": "#00D64F"},
+  {"id": "venmo", "name": "Venmo", "label": "Venmo", "qr": "https://venmo.com/code?user_id=2750865173643264152&created=1794338203", "color": "#008CFF"},
+  {"id": "zelle", "name": "Zelle", "label": "Zelle 606-657-1545", "big": "606-657-1545", "color": "#6D1ED4"}
+ ],
+ "warning": "In the payment note, put only your name. Never write \"TV\" or your order will be canceled.",
+ "hint": "Scan or send from your phone, then contact MR TV to renew."
+}

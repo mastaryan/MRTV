@@ -389,15 +389,13 @@ object SportNews {
 
 // ───────────────────────── Tabs: Leagues, Teams, Favorites ─────────────────────────
 
-/** Leagues tab: all competitions grouped by sport; OK opens the League Center. */
+/** Leagues tab (2.0.6): sports A–Z ("Soccer", not "Football (soccer)"), leagues A–Z inside each; OK opens the League Center. */
 @Composable
 internal fun HubLeagues(hub: HubCtx) {
     LazyColumn(contentPadding = PaddingValues(horizontal = DS.PageX, vertical = dpx(8)), verticalArrangement = Arrangement.spacedBy(dpx(14))) {
-        SportData.SPORTS.forEach { s ->
-            val ls = SportData.LEAGUES.filter { it.sport == s.key }
-            if (ls.isEmpty()) return@forEach
+        SportData.leaguesAz().forEach { (s, ls) ->
             item(key = "s" + s.key) {
-                HubSectionTitle(Lang.tr(s.label), raw = true)
+                HubSectionTitle(SportData.sportLabel(s.key), raw = true)
                 Spacer(Modifier.height(dpx(8)))
                 LazyRow(horizontalArrangement = Arrangement.spacedBy(dpx(14)), contentPadding = PaddingValues(vertical = dpx(8))) {
                     items(ls, key = { it.path }) { l ->
@@ -409,26 +407,32 @@ internal fun HubLeagues(hub: HubCtx) {
     }
 }
 
-/** Teams tab: favorite teams first, below all teams of the chosen league; OK opens the Team Center. */
+/**
+ * Teams tab (2.0.6): the side rail picks the sport (team sports only), only that sport's teams show. A sport with
+ * several leagues (Soccer) gets one small row of its leagues; favorite teams stay on top.
+ */
 @Composable
-internal fun HubTeams(hub: HubCtx) {
-    val leagues = SportLeagues.enabled().filter { it.kind == SportData.KIND_TEAM }
-    var sel by remember { mutableStateOf<SportData.League?>(null) }
-    val cur = sel ?: leagues.firstOrNull()
+internal fun HubTeams(hub: HubCtx, sport: String?, onSport: (String?) -> Unit) {
+    val sports = SportRailLogic.teamSports()
+    val cur0 = sport?.takeIf { it in sports } ?: "nfl".takeIf { it in sports } ?: sports.firstOrNull()
+    val leagues = SportLeagues.enabled().filter { it.kind == SportData.KIND_TEAM && it.sport == cur0 }
+    var sel by remember(cur0) { mutableStateOf<SportData.League?>(null) }
+    val cur = sel?.takeIf { s -> leagues.any { it.path == s.path } } ?: leagues.firstOrNull()
     var retry by remember { mutableStateOf(0) }
     val groups by produceState<List<SportStandings.Group>?>(null, cur?.path, retry) {
         value = null
         if (cur != null) value = SportStandings.fetch(cur)
     }
-    Column(Modifier.fillMaxSize()) {
-        LazyRow(contentPadding = PaddingValues(horizontal = DS.PageX, vertical = dpx(4)), horizontalArrangement = Arrangement.spacedBy(dpx(10))) {
+    val entries: List<String?> = sports
+    SportRailFrame(entries, cur0, null, { if (it != null) onSport(it) }) {
+        if (leagues.size > 1) LazyRow(contentPadding = PaddingValues(horizontal = DS.PageX, vertical = dpx(4)), horizontalArrangement = Arrangement.spacedBy(dpx(10))) {
             items(leagues, key = { it.path }) { l -> FilterPill(l.name, cur?.path == l.path, Modifier.trackFocus(), raw = true) { sel = l } }
         }
         val teams = groups?.flatMap { it.rows.map { r -> r.team } }?.distinctBy { it.id + it.name }?.sortedBy { it.name }
-        val favs = SportHubFavs.teamList()
+        val favs = SportHubFavs.teamList().filter { f -> leagues.any { it.path == f.path } }
         LazyColumn(contentPadding = PaddingValues(horizontal = DS.PageX, vertical = dpx(8)), verticalArrangement = Arrangement.spacedBy(dpx(12))) {
             if (favs.isNotEmpty()) item(key = "fav") {
-                HubSectionTitle("Meine Teams")
+                HubSectionTitle("My teams", raw = true)
                 LazyRow(horizontalArrangement = Arrangement.spacedBy(dpx(14)), contentPadding = PaddingValues(vertical = dpx(8))) {
                     items(favs, key = { it.key }) { f ->
                         LogoTile(f.name, f.logo, f.short, marked = true) {
@@ -438,12 +442,12 @@ internal fun HubTeams(hub: HubCtx) {
                     }
                 }
             }
-            item(key = "title") { HubSectionTitle(cur?.name ?: Lang.tr("Teams"), raw = true) }
+            item(key = "title") { HubSectionTitle(cur?.name ?: SportRailLogic.label(cur0), raw = true) }
             when {
-                cur == null -> item(key = "none") { HubEmpty(AIcon.Info, "Keine Liga aktiv.", "Ligen schaltest du im Reiter „Sender“ unter „Ligen“ ein.") }
-                teams == null -> item(key = "load") { HubLoading("Lade Teams …") }
-                teams.isEmpty() -> item(key = "err") { HubEmpty(AIcon.Warning, "Keine Teams gefunden.", "Die Daten konnten nicht geladen werden. Bitte versuche es erneut.", "Erneut versuchen") { retry++ } }
-                else -> teams.chunked(7).forEachIndexed { i, row ->
+                cur == null -> item(key = "none") { HubEmpty(AIcon.Info, "This league is turned off.", "Turn leagues on under Sports › Channels › Leagues.") }
+                teams == null -> item(key = "load") { HubLoading("Loading teams…") }
+                teams.isEmpty() -> item(key = "err") { HubEmpty(AIcon.Warning, "No teams found.", "The data couldn't be loaded. Please try again.", "Try again") { retry++ } }
+                else -> teams.chunked(6).forEachIndexed { i, row ->
                     item(key = "r$i") {
                         Row(horizontalArrangement = Arrangement.spacedBy(dpx(14))) {
                             row.forEach { t -> LogoTile(t.name, t.logo, t.abbr, marked = SportFavs.has(t)) { cur?.let { c -> hub.nav.open(HubPage.Team(c, t)) } } }

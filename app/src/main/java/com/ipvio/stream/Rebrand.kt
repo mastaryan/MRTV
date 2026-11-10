@@ -21,11 +21,11 @@ object Rebrand {
     val USER_AGENT: String = "MRTV2/" + BuildConfig.VERSION_NAME.filter { it.isLetterOrDigit() || it in ".-_" }.ifEmpty { "2" }
 
     /**
-     * MR TV 2: the MR TV Xtream server, built in at build time (BuildConfig.SERVER_URL from the git-ignored
+     * MR TV 2: the MR TV Xtream server, built in at build time (scrambled in BuildConfig.SERVER_X/SERVER_K, from the git-ignored
      * server.properties, -PMRTV2_SERVER_URL or the MRTV2_SERVER_URL environment variable). Empty = normal IPVIO login.
      * When set, the login screen only asks for username and password and the address is not shown in the app.
      */
-    val SERVER_URL: String = BuildConfig.SERVER_URL.trim().trimEnd('/')
+    val SERVER_URL: String by lazy { ServerObf.decode(BuildConfig.SERVER_X, BuildConfig.SERVER_K).trim().trimEnd('/') }
     val SERVER_LOCKED: Boolean get() = SERVER_URL.isNotEmpty()
 
     /** True if [url] (playlist/Xtream address) points to the built-in MR TV server. */

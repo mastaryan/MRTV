@@ -427,7 +427,7 @@ object ResumeLog {
     }
     fun add(c: Context, msg: String) {
         init(c)
-        val t = java.text.SimpleDateFormat("dd.MM. HH:mm:ss", java.util.Locale.US).format(java.util.Date())
+        val t = java.text.SimpleDateFormat("MM/dd HH:mm:ss", java.util.Locale.US).format(java.util.Date())
         lines.add(0, "$t  $msg")
         while (lines.size > 25) lines.removeAt(lines.lastIndex)
         prefs(c).edit().putString("l", lines.joinToString("\n")).apply()

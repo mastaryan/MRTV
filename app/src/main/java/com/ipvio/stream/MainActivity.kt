@@ -10,6 +10,7 @@ import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.foundation.background
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -254,6 +255,7 @@ private fun AppContent() {
     LaunchedEffect(all) { kotlinx.coroutines.delay(8_000); Classifier.restart(ctx, all) }   // after the first screen is up, and debounced while the list is still changing
 
     fun start(item: Item, title: String, url: String, startMs: Long = 0L) {
+        Renewal.playbackStarted = true   // MR TV 2: the renewal popup never shows over playback
         History.add(ctx, item.id)
         val sm = SE_RE.find(title)
         val season = sm?.groupValues?.get(1)?.toIntOrNull() ?: 0
@@ -376,9 +378,17 @@ private fun AppContent() {
 
     // Settings "Play last channel / last movie or series at start" (once per app start).
     // What counts is what ran last: a channel or a movie / series.
+    // MR TV 2 (2.0.6): read the subscription end date once per app start (popup in the last 5 days, ended screen)
+    LaunchedEffect(Unit) { Renewal.loadSaved(ctx); PayInfo.init(ctx); Renewal.checkAtStart(ctx) }
     LaunchedEffect(all.isNotEmpty()) {
         if (all.isNotEmpty() && !General.startupHandled) {
             General.startupHandled = true
+            // Like MR TV 1.3.1: a startup channel waits for the account check and for the popup to close
+            if (General.resumeLive || General.resumeVod) {
+                kotlinx.coroutines.withTimeoutOrNull(RenewLogic.STARTUP_WAIT_MS) { Renewal.done.await() }
+                snapshotFlow { Renewal.popupExp }.first { it == null }
+                if (Renewal.ended) return@LaunchedEffect
+            }
             val lastId = History.ids.firstOrNull()
             val last = if (lastId == null || playing != null) null else all.firstOrNull { it.id == lastId }
             if (last != null && last.kind == Kind.LIVE && General.resumeLive) start(last, last.title, last.url)
@@ -503,6 +513,9 @@ private fun AppContent() {
         }
         // Genre-Erkennung im Hintergrund: dezent oben rechts, nie im Player
         if (p == null && !adding) MetaBadge(Modifier.align(Alignment.TopEnd).padding(top = 16.dp, end = 22.dp))
+        // MR TV 2: renewal reminder only at app open (never over playback), ended screen with payment info
+        Renewal.popupExp?.let { e -> if (p == null && !adding) RenewPopup(e) { Renewal.popupExp = null } else if (p != null) SideEffect { Renewal.popupExp = null } }
+        if (Renewal.ended && p == null && !adding) SubscriptionEnded(onChangeLogin = { Renewal.ended = false; adding = true }, onActive = { Renewal.ended = false })
         remindNow?.let { r ->
             ReminderCard(r, Modifier.align(Alignment.TopCenter).padding(top = 24.dp), onClose = { remindNow = null }) {
                 remindNow = null

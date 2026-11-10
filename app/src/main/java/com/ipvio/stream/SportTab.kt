@@ -205,7 +205,7 @@ fun SportTab(live: List<Item>, onPlay: (Item, List<Item>) -> Unit) {
                         // Other days of the week: only results and schedule of the leagues
                         items(5, key = { "dx$it" }) { k ->
                             val d = k + 2
-                            val f = java.text.SimpleDateFormat("EEE d.M.", java.util.Locale.getDefault()).apply { timeZone = zone }
+                            val f = java.text.SimpleDateFormat(UsDates.DAY, java.util.Locale.getDefault()).apply { timeZone = zone }
                             FilterPill(f.format(java.util.Date(System.currentTimeMillis() + d * 86_400_000L)), day == d, raw = true) { day = d }
                         }
                         item(key = "sep") { Box(Modifier.width(2.dp).height(dpx(28)).background(DS.Overlay3)) }
@@ -278,7 +278,7 @@ fun SportTab(live: List<Item>, onPlay: (Item, List<Item>) -> Unit) {
                             color = Muted, fontSize = spx(15), modifier = Modifier.padding(horizontal = dpx(4))
                         )
                     }
-                    val dayFmt = java.text.SimpleDateFormat("EEEE, d. MMMM", java.util.Locale.getDefault()).apply { timeZone = zone }
+                    val dayFmt = java.text.SimpleDateFormat(UsDates.LONG, java.util.Locale.getDefault()).apply { timeZone = zone }
                     calendar.groupBy { dayFmt.format(java.util.Date(it.start * 1000)) }.forEach { (label, list) ->
                         item(key = "cal-$label") {
                             Column(verticalArrangement = Arrangement.spacedBy(dpx(12))) {

@@ -293,7 +293,7 @@ private fun ClockPill() {
     val h24 = when (General.timeFmt) { 1 -> true; 2 -> false; else -> General.sys24 }
     val fmt = java.text.SimpleDateFormat(if (h24) "HH:mm" else "h:mm a", java.util.Locale.getDefault())
     fmt.timeZone = General.zone()
-    val dfmt = java.text.SimpleDateFormat("EEE, d. MMM", java.util.Locale.getDefault())
+    val dfmt = java.text.SimpleDateFormat(UsDates.HEADER, java.util.Locale.getDefault())
     dfmt.timeZone = General.zone()
     Column(horizontalAlignment = Alignment.End) {
         Text(fmt.format(java.util.Date(now)), color = Color.White, fontSize = spx(20), fontWeight = FontWeight.SemiBold, maxLines = 1, raw = true)

@@ -59,13 +59,22 @@ object SportData {
     class League(val name: String, val path: String, val catName: String, val sport: String = "soccer", val kind: Int = KIND_TEAM,
                  val query: String = "", val leaders: Boolean = true)
 
-    /** The ten sports of the hub in display order (key, German label). */
+    /**
+     * MR TV 2 (2.0.6): the sports of the hub's side rail, A–Z, nothing grouped (NBA, college and women's basketball are
+     * separate, college football is not under the NFL). Labels are English and shown as they are.
+     */
     class Sport(val key: String, val label: String)
 
     val SPORTS = listOf(
-        Sport("soccer", "Fußball"), Sport("basketball", "Basketball"), Sport("nfl", "NFL"), Sport("nhl", "NHL"),
-        Sport("tennis", "Tennis"), Sport("f1", "Formel 1"), Sport("mlb", "MLB"), Sport("ufc", "UFC"),
-        Sport("cricket", "Cricket"), Sport("golf", "Golf")
+        Sport("cbb", "CBB"), Sport("cfb", "CFB"), Sport("f1", "F1"), Sport("golf", "Golf"),
+        Sport("mlb", "MLB"), Sport("mls", "MLS"), Sport("nba", "NBA"), Sport("nfl", "NFL"), Sport("nhl", "NHL"),
+        Sport("soccer", "Soccer"), Sport("tennis", "Tennis"), Sport("ufc", "UFC"), Sport("wcbb", "WCBB"), Sport("wnba", "WNBA")
+    )
+
+    /** Long names of the rail's short labels (Leagues tab headings, accessibility). */
+    val SPORT_LONG = mapOf(
+        "cbb" to "College Basketball", "cfb" to "College Football", "wcbb" to "Women's College Basketball",
+        "f1" to "Formula 1", "mls" to "MLS", "soccer" to "Soccer"
     )
 
     val LEAGUES = listOf(
@@ -77,29 +86,36 @@ object SportData {
         League("Ligue 1", "soccer/fra.1", "Fußball"),
         League("Champions League", "soccer/uefa.champions", "Fußball"),
         League("Europa League", "soccer/uefa.europa", "Fußball"),
-        League("NBA", "basketball/nba", "Basketball", "basketball"),
-        // Men's college basketball, shown under Basketball next to the NBA; groups=50 = all of Division I
-        League("College Basketball", "basketball/mens-college-basketball", "College-Basketball", "basketball", query = "&groups=50", leaders = false),
+        League("MLS", "soccer/usa.1", "Fußball", "mls"),
+        League("NBA", "basketball/nba", "Basketball", "nba"),
+        // Men's college basketball; groups=50 = all of Division I
+        League("College Basketball", "basketball/mens-college-basketball", "College-Basketball", "cbb", query = "&groups=50", leaders = false),
+        // Women's college basketball (2.0.6); groups=50 = all of Division I
+        League("Women's College Basketball", "basketball/womens-college-basketball", "College-Basketball", "wcbb", query = "&groups=50", leaders = false),
+        League("WNBA", "basketball/wnba", "Basketball", "wnba"),
         League("NFL", "football/nfl", "American Football", "nfl"),
-        League("College Football", "football/college-football", "American Football", "nfl"),
+        League("College Football", "football/college-football", "American Football", "cfb"),
         League("NHL", "hockey/nhl", "Eishockey", "nhl"),
         League("MLB", "baseball/mlb", "Baseball", "mlb"),
         League("ATP", "tennis/atp", "Tennis", "tennis", KIND_TENNIS),
         League("WTA", "tennis/wta", "Tennis", "tennis", KIND_TENNIS),
-        League("Formel 1", "racing/f1", "Motorsport", "f1", KIND_RACE),
+        League("Formula 1", "racing/f1", "Motorsport", "f1", KIND_RACE),
         League("UFC", "mma/ufc", "Kampfsport", "ufc", KIND_FIGHT),
-        League("PGA Tour", "golf/pga", "Golf", "golf", KIND_GOLF),
-        League("Cricket", "cricket", "Rugby & Cricket", "cricket", KIND_CRICKET)
+        League("PGA Tour", "golf/pga", "Golf", "golf", KIND_GOLF)
+        // 2.0.6: Cricket left out (US focus, not in the approved side rail); its parser (KIND_CRICKET) stays for upstream merges
     )
 
     /** Popular competitions for the overview (shown if active). */
-    val POPULAR = listOf("Premier League", "Champions League", "Bundesliga", "LaLiga", "NBA", "College Basketball", "NFL", "NHL", "MLB")
+    val POPULAR = listOf("NFL", "NBA", "College Football", "College Basketball", "MLB", "NHL", "Women's College Basketball", "WNBA", "MLS", "Premier League", "Champions League", "LaLiga", "Bundesliga")
 
     fun league(name: String): League? = LEAGUES.firstOrNull { it.name == name }
     fun leagueOf(g: Game): League? = league(g.league)
     fun sportOf(g: Game): String = leagueOf(g)?.sport ?: ""
     fun kindOf(g: Game): Int = leagueOf(g)?.kind ?: KIND_TEAM
-    fun sportLabel(key: String): String = SPORTS.firstOrNull { it.key == key }?.label ?: key
+    fun sportLabel(key: String): String = SPORT_LONG[key] ?: SPORTS.firstOrNull { it.key == key }?.label ?: key
+
+    /** Leagues of the Leagues tab: by sport A–Z, leagues A–Z inside a sport. */
+    fun leaguesAz(): List<Pair<Sport, List<League>>> = SPORTS.map { s -> s to LEAGUES.filter { it.sport == s.key }.sortedBy { it.name.lowercase() } }.filter { it.second.isNotEmpty() }
 
     /** League logos as delivered by the scoreboard (path → URL). No URL is built by hand. */
     val leagueLogos = java.util.concurrent.ConcurrentHashMap<String, String>()

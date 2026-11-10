@@ -27,18 +27,44 @@ def square(img,size,frac,bg=(0,0,0,0)):
     r=img.resize((max(1,round(img.width*s)),max(1,round(img.height*s))),Image.LANCZOS)
     c.alpha_composite(r,((size-r.width)//2,(size-r.height)//2))
     return c
+
+# MR TV 2 (2.0.6): red "2" badge top right (as approved in logo-2-compare.png): red circle, white ring, bold white 2
+import math
+RED=(0xE5,0x39,0x35,255)
+def make_badge(D):
+    over=4; S=D*over
+    img=Image.new('RGBA',(S,S),(0,0,0,0))
+    sh=Image.new('RGBA',(S,S),(0,0,0,0)); inset=int(S*0.03)
+    ImageDraw.Draw(sh).ellipse((inset,inset+int(S*0.04),S-inset,S-inset+int(S*0.04)),fill=(0,0,0,180))
+    img=Image.alpha_composite(img,sh.filter(ImageFilter.GaussianBlur(int(S*0.04))))
+    d=ImageDraw.Draw(img)
+    d.ellipse((0,0,S-1,S-1),fill=(255,255,255,255))
+    ring=max(2*over,int(S*0.055)); d.ellipse((ring,ring,S-1-ring,S-1-ring),fill=RED)
+    font=ImageFont.truetype(R+'font/outfit_bold.ttf',int(S*0.72))
+    l,t,r,b=d.textbbox((0,0),'2',font=font)
+    d.text(((S-(r-l))/2-l,(S-(b-t))/2-t-S*0.03),'2',font=font,fill=(255,255,255,255))
+    return img.resize((D,D),Image.LANCZOS)
+def badge_icon(icon,bfrac=118/512,safe=0.97):
+    """Whole badge inside the inscribed circle (safe = radius share), so a round mask never cuts the 2."""
+    out=icon.copy(); S=out.size[0]
+    bsz=int(round(S*bfrac)); b=make_badge(bsz); br=bsz/2
+    d=max(0.0,(S/2)*safe-br); ang=math.radians(42)
+    out.alpha_composite(b,(int(round(S/2+d*math.cos(ang)-br)),int(round(S/2-d*math.sin(ang)-br))))
+    return out
 # brand mark used in-app (sidebar, loading) 256px transparent
 square(cut,256,0.98).save(R+'drawable/ic_brand_mark.png')
 # adaptive foreground 432x432 (108dp @xxxhdpi), content inside 66dp safe circle -> ~0.60
 fg=square(cut,432,0.60)
+# badge inside the 66dp safe circle of the 108dp canvas, same size relative to the logo as on the launcher icon
+fg=badge_icon(fg,bfrac=(118/512)*0.60/0.86,safe=(66/108)*0.97)
 fg.save(R+'drawable/ic_logo_fg.png')
 BG=(0x0D,0x0E,0x10,255)
 dens={'mdpi':48,'hdpi':72,'xhdpi':96,'xxhdpi':144,'xxxhdpi':192}
 for d,s in dens.items():
-    sq=square(cut,s*4,0.86,BG)
+    sq=badge_icon(square(cut,s*4,0.86,BG))
     sq.resize((s,s),Image.LANCZOS).save(R+f'mipmap-{d}/ic_launcher.webp','WEBP',lossless=True)
     # round
-    rd=square(cut,s*4,0.80,BG)
+    rd=badge_icon(square(cut,s*4,0.80,BG))
     m=Image.new('L',(s*4,s*4),0); ImageDraw.Draw(m).ellipse((0,0,s*4-1,s*4-1),fill=255)
     rd.putalpha(m)
     rd.resize((s,s),Image.LANCZOS).save(R+f'mipmap-{d}/ic_launcher_round.webp','WEBP',lossless=True)
@@ -66,6 +92,9 @@ def banner(W,H):
     g[:,:,3]=np.asarray(m); c.alpha_composite(Image.fromarray(g,'RGBA'))
     # underline like site
     d=ImageDraw.Draw(c); d.line((x,y+th+int(10*k),x+tw,y+th+int(10*k)),fill=(0xC9,0xCE,0xD6,255),width=max(1,int(2*k)))
+    # small banner: badge scaled with the banner (pads/sizes from the 640x360 design)
+    bsz=int(H*0.20); pad=int(H*0.045)
+    c.alpha_composite(make_badge(bsz),(W-pad-bsz,pad))
     return c.convert('RGB')
 import os
 os.makedirs(R+'drawable-mdpi',exist_ok=True); os.makedirs(R+'drawable-xhdpi',exist_ok=True)

@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -124,11 +125,19 @@ fun MenuIcon(id: Int, color: Color, modifier: Modifier = Modifier) {
                 line(.5f, .5f, .5f, .28f)
                 line(.5f, .5f, .66f, .6f)
             }
-            10 -> { // Sport: Ball mit Nähten
+            10 -> { // MR TV 2 (2.0.6): Sport = American football (pointed oval, seam with laces), tilted like a pass
                 val c = Offset(.5f * s, .5f * s)
-                drawCircle(color, radius = .36f * s, center = c, style = sw)
-                drawArc(color, 200f, 140f, false, topLeft = Offset(.14f * s, .02f * s), size = Size(.72f * s, .5f * s), style = sw)
-                drawArc(color, 20f, 140f, false, topLeft = Offset(.14f * s, .48f * s), size = Size(.72f * s, .5f * s), style = sw)
+                rotate(-40f, c) {
+                    val p = Path().apply {
+                        moveTo(.08f * s, .5f * s)
+                        quadraticTo(.5f * s, .06f * s, .92f * s, .5f * s)
+                        quadraticTo(.5f * s, .94f * s, .08f * s, .5f * s)
+                        close()
+                    }
+                    drawPath(p, color, style = sw)
+                    drawLine(color, Offset(.34f * s, .5f * s), Offset(.66f * s, .5f * s), strokeWidth = w, cap = StrokeCap.Round)
+                    for (x in listOf(.4f, .5f, .6f)) drawLine(color, Offset(x * s, .44f * s), Offset(x * s, .56f * s), strokeWidth = w * 0.8f, cap = StrokeCap.Round)
+                }
             }
             else -> {
                 for (y in listOf(.26f, .5f, .74f)) line(.12f, y, .88f, y)

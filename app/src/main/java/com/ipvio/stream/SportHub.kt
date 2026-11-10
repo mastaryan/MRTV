@@ -34,6 +34,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -91,7 +93,7 @@ class HubCtx(val nav: HubNav, val live: List<Item>, private val onPlay: (Item, L
 }
 
 /** Tab and filters survive leaving the hub (e.g. after Watch Live and back from the player). */
-private object HubMemory {
+internal object HubMemory {   // internal: screenshot tests open a tab directly
     /** Pages that were open when a live stream started (restored when the hub comes back). */
     var keep: List<HubPage> = emptyList()
     var tab = 0
@@ -128,7 +130,7 @@ fun SportHub(live: List<Item>, onPlay: (Item, List<Item>) -> Unit) {
     val feed by produceState(SportFeed.State(emptyList(), 0, 0, false), leaguesKey, General.sportLive, retry) {
         if (!General.sportLive) { value = SportFeed.State(emptyList(), 0, 0, false); return@produceState }
         val ls = SportLeagues.enabled()
-        val m = HashMap<String, List<SportData.Game>>()
+        val m = java.util.concurrent.ConcurrentHashMap<String, List<SportData.Game>>()   // 2.0.6: safe if the leagues finish on several threads
         // Opening the hub again: the last loaded games appear at once (no "Loading games" wait), fresh ones replace them as they arrive
         val today = SportData.ymd(0, General.zone())
         for (l in ls) SportData.peek(l, today)?.let { m[l.path] = it }
@@ -160,7 +162,7 @@ fun SportHub(live: List<Item>, onPlay: (Item, List<Item>) -> Unit) {
         }
     }
 
-    val sportReq = remember { FocusRequester() }
+    val setSport: (String?) -> Unit = { sport = it; HubMemory.sport = it }
     Column(Modifier.fillMaxSize()) {
         LazyRow(
             contentPadding = PaddingValues(horizontal = DS.PageX, vertical = dpx(10)),
@@ -170,8 +172,7 @@ fun SportHub(live: List<Item>, onPlay: (Item, List<Item>) -> Unit) {
             itemsIndexed(HUB_TABS) { i, t ->
                 // The chosen tab is where the focus lands when coming from the sidebar (the channel tab has its own target)
                 val base = if (i == tab && tab != 6) Modifier.focusRequester(ContentFocus.req) else Modifier.trackFocus()
-                // Live tab: Down goes to the sport filter first (not to the competition row below it)
-                FilterPill(t, tab == i, if (tab == 1) base.focusProperties { down = sportReq } else base) {
+                FilterPill(t, tab == i, base) {
                     tab = i; HubMemory.tab = i
                 }
             }
@@ -180,11 +181,12 @@ fun SportHub(live: List<Item>, onPlay: (Item, List<Item>) -> Unit) {
             HubEmpty(AIcon.Live, "Live-Ergebnisse sind aus", "Ergebnisse, Tabellen und Spielpläne kommen von ESPN (inoffizielle Quelle). Schalte sie ein, um den Sports Hub zu nutzen.",
                 "Einschalten") { General.setSportLive(ctx, true) }
         } else when (tab) {
-            0 -> HubOverview(feed, hub) { retry++ }
-            1 -> HubLive(feed, hub, sport, sportReq) { sport = it; HubMemory.sport = it }
-            2 -> HubSchedule(hub, sport) { sport = it; HubMemory.sport = it }
+            // MR TV 2 (2.0.6): one side rail of sports (phone upright: chips) shared by Overview, Live, Schedule and Teams
+            0 -> SportRailFrame(SportRailLogic.entries(), sport, SportRailLogic.counts(current(feed.games)), setSport) { HubOverview(feed, hub, sport) { retry++ } }
+            1 -> HubLive(feed, hub, sport, setSport)
+            2 -> HubSchedule(hub, sport, setSport)
             3 -> HubLeagues(hub)
-            4 -> HubTeams(hub)
+            4 -> HubTeams(hub, sport, setSport)
             5 -> HubFavorites(feed, hub)
             else -> SportTab(live, onPlay)
         }
@@ -236,7 +238,7 @@ private class HubOverviewModel(
     val counts: Map<String, Int>
 )
 
-private fun buildOverview(raw: List<SportData.Game>, hub: HubCtx): HubOverviewModel {
+private fun buildOverview(raw: List<SportData.Game>, hub: HubCtx, sport: String? = null): HubOverviewModel {
     val games = current(raw)
     val hasCh = HashMap<String, Boolean>()
     fun ch(g: SportData.Game): Boolean = hasCh.getOrPut(g.key) { hub.chans(g).isNotEmpty() }
@@ -246,17 +248,19 @@ private fun buildOverview(raw: List<SportData.Game>, hub: HubCtx): HubOverviewMo
     upcoming.take(30).forEach { ch(it) }
     val finals = games.filter { it.state == 2 }.sortedByDescending { it.start }
     val top = featured(games) { ch(it) }
-    val popular = SportData.POPULAR.mapNotNull { SportData.league(it) }.filter { SportLeagues.on(it) }
+    val popular = SportData.POPULAR.mapNotNull { SportData.league(it) }.filter { SportLeagues.on(it) && (sport == null || it.sport == sport) }
+        .ifEmpty { if (sport == null) emptyList() else SportData.LEAGUES.filter { SportLeagues.on(it) && it.sport == sport } }
     val newsLeagues = (popular.filter { p -> games.any { it.league == p.name } } + games.mapNotNull { SportData.leagueOf(it) }).distinctBy { it.path }
     val counts = games.groupingBy { SportData.sportOf(it) }.eachCount()
     return HubOverviewModel(games, liveMine, upcoming, finals, top, hasCh.filterValues { it }.keys, popular, newsLeagues, counts)
 }
 
 @Composable
-private fun HubOverview(feed: SportFeed.State, hub: HubCtx, onRetry: () -> Unit) {
+private fun HubOverview(feed: SportFeed.State, hub: HubCtx, sport: String?, onRetry: () -> Unit) {
     val ctx = LocalContext.current
-    val model by produceState<HubOverviewModel?>(null, feed.games) {
-        value = withContext(Dispatchers.Default) { buildOverview(feed.games, hub) }
+    // 2.0.6: the side rail filters the whole overview (featured game, live, upcoming, results, leagues)
+    val model by produceState<HubOverviewModel?>(null, feed.games, sport) {
+        value = withContext(Dispatchers.Default) { buildOverview(SportRailLogic.filter(current(feed.games), sport), hub, sport) }
     }
     val m = model
     if (m == null) { HubLoading("Lade Spiele …"); return }
@@ -306,18 +310,7 @@ private fun HubOverview(feed: SportFeed.State, hub: HubCtx, onRetry: () -> Unit)
                 }
             }
         }
-        item(key = "sports") {
-            HubSectionTitle("Sportarten")
-            Spacer(Modifier.height(dpx(8)))
-            val counts = m.counts
-            LazyRow(horizontalArrangement = Arrangement.spacedBy(dpx(14)), contentPadding = PaddingValues(vertical = dpx(8))) {
-                items(SportData.SPORTS, key = { it.key }) { s ->
-                    val logo = SportData.LEAGUES.firstOrNull { it.sport == s.key }?.let { SportData.leagueLogos[it.path] }
-                    val n = counts[s.key] ?: 0
-                    LogoTile(Lang.tr(s.label) + (if (n > 0) " ($n)" else ""), logo, s.label, marked = SportHubFavs.sports.contains(s.key)) { hub.goTab(1, s.key) }
-                }
-            }
-        }
+        // 2.0.6: the "Sports" tile row is gone, the side rail does that job now
         if (newsLeagues.isNotEmpty()) item(key = "news") { HubNewsRow(newsLeagues) }
         if (!SportData.lastOk && games.isNotEmpty()) item(key = "stale") {
             Text("Hinweis: Die letzte Aktualisierung hat nicht geklappt. Angezeigt wird der letzte Stand.", color = Muted, fontSize = spx(14))
@@ -349,7 +342,7 @@ private fun FeaturedPanel(g: SportData.Game, hub: HubCtx) {
     }
 }
 
-private fun sportMatch(g: SportData.Game, sport: String?) = sport == null || SportData.sportOf(g) == sport
+private fun sportMatch(g: SportData.Game, sport: String?) = SportRailLogic.matches(g, sport)
 
 /** Games grouped by competition: header with logo, LIVE marker and count, then one row per game. */
 private fun LazyListScope.groupedGames(games: List<SportData.Game>, hub: HubCtx, timeFirst: Boolean) {
@@ -360,39 +353,29 @@ private fun LazyListScope.groupedGames(games: List<SportData.Game>, hub: HubCtx,
     }
 }
 
-/** Live: all running events, grouped by competition, with sport, competition and favorite filters. */
+/**
+ * Live: all running events of the rail's sport, grouped by competition (favorites first). 2.0.6: the old double pill
+ * row (sports + competitions) is replaced by the side rail; the rail counts the games live right now.
+ */
 @Composable
-private fun HubLive(feed: SportFeed.State, hub: HubCtx, sport: String?, sportReq: FocusRequester, onSport: (String?) -> Unit) {
-    val compReq = remember { FocusRequester() }
-    var comp by remember { mutableStateOf<String?>(null) }
-    var favOnly by remember { mutableStateOf(false) }
+private fun HubLive(feed: SportFeed.State, hub: HubCtx, sport: String?, onSport: (String?) -> Unit) {
     val games = current(feed.games)
     val liveG = games.filter { it.state == 1 }
-    val counts = liveG.groupingBy { SportData.sportOf(it) }.eachCount()
-    val inSport = liveG.filter { sportMatch(it, sport) }
-    val comps = inSport.map { it.groupName }.distinct().sortedBy { n -> inSport.firstOrNull { it.groupName == n }?.let { popularity(it) } ?: 99 }
-    val c = comp?.takeIf { it in comps }
-    val shown = inSport.filter { (c == null || it.groupName == c) && (!favOnly || SportHubFavs.isFavGame(it)) }
+    val shown = SportRailLogic.filter(liveG, sport)
         .sortedWith(compareBy({ if (SportHubFavs.isFavGame(it)) 0 else 1 }, { popularity(it) }, { it.groupName }, { it.start }))
-    Column(Modifier.fillMaxSize()) {
-        SportFilter(sport, counts, sportReq, compReq) { onSport(it); comp = null }
-        LazyRow(contentPadding = PaddingValues(horizontal = DS.PageX, vertical = dpx(4)), horizontalArrangement = Arrangement.spacedBy(dpx(10))) {
-            item(key = "all") { FilterPill("Alle Wettbewerbe", c == null, Modifier.trackFocus(compReq).focusProperties { up = sportReq }) { comp = null } }
-            item(key = "fav") { FilterPill("Nur Favoriten", favOnly, Modifier.trackFocus().focusProperties { up = sportReq }, aicon = if (favOnly) AIcon.Star else AIcon.StarOutline) { favOnly = !favOnly } }
-            items(comps, key = { it }) { n -> FilterPill(n, c == n, Modifier.trackFocus().focusProperties { up = sportReq }, raw = true) { comp = if (c == n) null else n } }
-        }
+    SportRailFrame(SportRailLogic.entries(), sport, SportRailLogic.counts(liveG), onSport) {
         LazyColumn(contentPadding = PaddingValues(horizontal = DS.PageX, vertical = dpx(8)), verticalArrangement = Arrangement.spacedBy(dpx(4))) {
             when {
-                feed.loading -> item(key = "load") { HubLoading("Lade Spiele …") }
+                feed.loading -> item(key = "load") { HubLoading("Loading games…") }
                 shown.isEmpty() -> {
                     item(key = "empty") {
-                        HubEmpty(AIcon.Live, if (liveG.isEmpty()) "Gerade läuft nichts" else "Keine Spiele für diese Auswahl.",
-                            if (liveG.isEmpty()) "Sobald ein Spiel deiner Ligen beginnt, erscheint es hier." else "Ändere die Filter oder schau in den Spielplan.",
-                            "Spielplan öffnen") { hub.goTab(2, sport) }
+                        HubEmpty(AIcon.Live, if (liveG.isEmpty()) "Nothing is live right now" else "No live games for " + SportRailLogic.label(sport),
+                            if (liveG.isEmpty()) "When a game in your leagues starts, it shows up here." else "Pick another sport on the left or check the schedule.",
+                            "Open schedule") { hub.goTab(2, sport) }
                     }
                     val next = games.filter { it.state == 0 && statusKind(it) == 0 && sportMatch(it, sport) }.sortedBy { it.start }.take(10)
                     if (next.isNotEmpty()) {
-                        item(key = "nt") { HubSectionTitle("Als Nächstes") }
+                        item(key = "nt") { HubSectionTitle("Up next", raw = true) }
                         items(next, key = { "n" + it.key }) { g -> MatchRow(g, hub.chans(g).isNotEmpty(), timeFirst = true) { hub.open(g) } }
                     }
                 }
@@ -402,10 +385,10 @@ private fun HubLive(feed: SportFeed.State, hub: HubCtx, sport: String?, sportReq
     }
 }
 
-/** Schedule: date bar (7 days back, 14 ahead), sport filter, games of the day grouped by competition. */
+/** Schedule (2.0.6): today plus the next six days (no past days), the rail's sport, games of the day grouped by competition. */
 @Composable
 private fun HubSchedule(hub: HubCtx, sport: String?, onSport: (String?) -> Unit) {
-    var day by remember { mutableIntStateOf(HubMemory.day) }
+    var day by remember { mutableIntStateOf(SportRailLogic.clampDay(HubMemory.day)) }
     var retry by remember { mutableIntStateOf(0) }
     val leaguesKey = SportLeagues.off.joinToString("|")
     val games by produceState<List<SportData.Game>?>(null, day, leaguesKey, retry) {
@@ -418,23 +401,31 @@ private fun HubSchedule(hub: HubCtx, sport: String?, onSport: (String?) -> Unit)
         value = r
     }
     val list = current(games.orEmpty())
-    val counts = list.groupingBy { SportData.sportOf(it) }.eachCount()
-    val shown = list.filter { sportMatch(it, sport) }.sortedWith(compareBy({ popularity(it) }, { it.groupName }, { it.start }))
-    Column(Modifier.fillMaxSize()) {
-        DateSelector(day, -7..14) { day = it; HubMemory.day = it }
-        Spacer(Modifier.height(dpx(6)))
-        SportFilter(sport, counts) { onSport(it) }
+    val shown = SportRailLogic.filter(list, sport).sortedWith(compareBy({ popularity(it) }, { it.groupName }, { it.start }))
+    SportRailFrame(SportRailLogic.entries(), sport, if (games == null) null else SportRailLogic.counts(list), onSport) {
+        DateStrip(day) { day = it; HubMemory.day = it }
+        Text(SportRailLogic.dayHeading(day, sport, General.zone()), color = Color.White, fontSize = spx(17), fontWeight = FontWeight.Bold, raw = true,
+            modifier = Modifier.padding(start = DS.PageX, top = dpx(6)))
         LazyColumn(contentPadding = PaddingValues(horizontal = DS.PageX, vertical = dpx(8)), verticalArrangement = Arrangement.spacedBy(dpx(4))) {
             when {
-                games == null -> item(key = "load") { HubLoading("Lade Spiele …") }
+                games == null -> item(key = "load") { HubLoading("Loading games…") }
                 list.isEmpty() && !SportData.lastOk -> item(key = "err") {
-                    HubEmpty(AIcon.Warning, "Daten konnten nicht geladen werden", "ESPN antwortet gerade nicht. Bitte versuche es erneut.", "Erneut versuchen") { retry++ }
+                    HubEmpty(AIcon.Warning, "Couldn't load the games", "ESPN isn't answering right now. Please try again.", "Try again") { retry++ }
                 }
                 shown.isEmpty() -> item(key = "empty") {
-                    HubEmpty(AIcon.Info, "Keine Spiele für diese Auswahl.", "An diesem Tag ist in deinen Ligen nichts angesetzt. Tennis, Formel 1, UFC, Golf und Cricket zeigt ESPN nur für die laufenden Turniere und Wochenenden.")
+                    HubEmpty(AIcon.Info, "No games for " + SportRailLogic.label(sport) + " on this day.", "Pick another day or sport. Tennis, F1, UFC and Golf only show while a tournament or race weekend is on.")
                 }
                 else -> groupedGames(shown, hub, true)
             }
         }
+    }
+}
+
+/** Date strip of the schedule: "Today", "Wed 11/11" … six days ahead. No arrows, no extra "Today" button. */
+@Composable
+private fun DateStrip(day: Int, onDay: (Int) -> Unit) {
+    val tz = General.zone()
+    LazyRow(Modifier.testTag("date-strip"), contentPadding = PaddingValues(horizontal = DS.PageX, vertical = dpx(6)), horizontalArrangement = Arrangement.spacedBy(dpx(8))) {
+        items(SportRailLogic.DAYS.toList(), key = { it }) { d -> FilterPill(SportRailLogic.dayLabel(d, tz), d == day, Modifier.trackFocus(), raw = true) { onDay(d) } }
     }
 }

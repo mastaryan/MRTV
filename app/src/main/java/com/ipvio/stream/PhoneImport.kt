@@ -316,8 +316,8 @@ class PhoneImport(private val onReceive: (PhoneInput) -> Unit) {
             // Exported lists from other services (parsed on the TV)
             "POST /listimport" -> {
                 val cb = onList
-                // The phone remote page (api set) was opened by scanning the QR code on the TV, so it needs no extra code
-                val c = if (api != null) 200 else codeOk(h.query["code"])
+                // 2.0.6: always needs the code (the phone remote page sends it now, like its /api/ calls)
+                val c = codeOk(h.query["code"])
                 if (cb == null) html(404, PhoneImportLogic.message(li, "bad"))
                 else if (c != 200) html(c, PhoneImportLogic.message(li, if (c == 403) "code" else "lock"))
                 else if (h.len <= 0 || h.len > 16L * 1024 * 1024) html(400, PhoneImportLogic.message(li, "bad"))
@@ -411,13 +411,29 @@ class PhoneImport(private val onReceive: (PhoneInput) -> Unit) {
         const val MAX_UPLOAD = 400L * 1024 * 1024
 
         /** Local IPv4 address of the device in the Wi-Fi/LAN (or null). */
+        /** Address of the TV in the home network for the QR code (Wi-Fi / Ethernet first, never a VPN tunnel). */
         fun localIp(): String? = runCatching {
-            NetworkInterface.getNetworkInterfaces().toList()
-                .filter { it.isUp && !it.isLoopback }
-                .flatMap { it.inetAddresses.toList() }
-                .firstOrNull { it is Inet4Address && it.isSiteLocalAddress }
-                ?.hostAddress
+            val c = NetworkInterface.getNetworkInterfaces().toList()
+                .filter { it.isUp && !it.isLoopback && !it.isVirtual && !it.isPointToPoint }
+                .flatMap { n -> n.inetAddresses.toList().filter { it is Inet4Address && it.isSiteLocalAddress }.mapNotNull { a -> a.hostAddress?.let { LocalIp.Cand(n.name, it) } } }
+            LocalIp.pick(c)
         }.getOrNull()
     }
+}
+
+/**
+ * MR TV 2 (2.0.6): which address goes into the phone-search QR code. Before, the first private IPv4 won, which on a
+ * TV with a VPN app was the tunnel (tun0 / ppp0) and the phone could not open the page.
+ */
+object LocalIp {
+    class Cand(val iface: String, val ip: String)
+    private val LAN = Regex("""^(wlan|eth|en|wl|wifi|ap)\d*""", RegexOption.IGNORE_CASE)
+    private val SKIP = Regex("""^(tun|ppp|tap|wg|ipsec|utun|vpn|l2tp|pptp|gre|ip6tnl|sit|dummy|lo)|vpn""", RegexOption.IGNORE_CASE)
+    private val MOBILE = Regex("""^(rmnet|ccmni|pdp|v4-rmnet|clat)""", RegexOption.IGNORE_CASE)
+
+    /** wlan* / eth* first, then other interfaces, mobile data last; tunnels and VPNs never. */
+    fun pick(c: List<Cand>): String? = c.filter { !SKIP.containsMatchIn(it.iface) && it.ip.count { ch -> ch == '.' } == 3 }
+        .sortedBy { if (LAN.containsMatchIn(it.iface)) 0 else if (MOBILE.containsMatchIn(it.iface)) 2 else 1 }
+        .firstOrNull()?.ip
 }
 

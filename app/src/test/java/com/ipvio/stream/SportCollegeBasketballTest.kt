@@ -17,12 +17,12 @@ class SportCollegeBasketballTest {
     @Test fun leagueNextToNba_underBasketball_popular_onByDefault() {
         val l = cbb
         assertEquals("basketball/mens-college-basketball", l.path)
-        assertEquals("basketball", l.sport)
+        assertEquals("cbb", l.sport)                         // 2.0.6: own entry "CBB" in the sports rail
         assertEquals("College-Basketball", l.catName)
         assertTrue(SportLogic.catIndex(l.catName) >= 0)
-        assertEquals(SportData.LEAGUES.indexOfFirst { it.name == "NBA" } + 1, SportData.LEAGUES.indexOf(l))
-        assertEquals(listOf("NBA", "College Basketball"), SportData.LEAGUES.filter { it.sport == "basketball" }.map { it.name })
-        assertEquals(SportData.POPULAR.indexOf("NBA") + 1, SportData.POPULAR.indexOf("College Basketball"))
+        assertEquals(listOf("College Basketball"), SportData.LEAGUES.filter { it.sport == "cbb" }.map { it.name })
+        assertEquals(listOf("Women's College Basketball"), SportData.LEAGUES.filter { it.sport == "wcbb" }.map { it.name })
+        assertTrue(SportData.POPULAR.indexOf("NBA") < SportData.POPULAR.indexOf("College Basketball"))
         assertTrue(SportLeagues.on(l))                       // not in the hidden list unless the user hides it
         assertFalse(l.leaders)                               // ESPN's college statistics answer is > 20 MB
         assertEquals("https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates=20261110&groups=50",
@@ -38,7 +38,7 @@ class SportCollegeBasketballTest {
         assertTrue(games.all { it.home.name.isNotBlank() && it.away.name.isNotBlank() && it.home.logo != null })
         val g = games.first { it.home.abbr == "FSU" && it.away.abbr == "FLA" }
         assertEquals("Florida State Seminoles", g.home.name)
-        assertEquals("basketball", SportData.sportOf(g))
+        assertEquals("cbb", SportData.sportOf(g))
         assertNotNull(SportData.leagueLogos[cbb.path])
         // "On your channels": a guide title naming both schools
         assertTrue(SportData.matches(g, "NCAA Basketball: Florida at Florida State"))
