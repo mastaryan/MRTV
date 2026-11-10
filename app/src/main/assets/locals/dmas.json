@@ -1,0 +1,4054 @@
+{
+ "version": 1,
+ "schema": "ipvio.locals.dmas/1",
+ "updated": "2026-11-09",
+ "sources": ["Nielsen 2025-26 Local TV market (DMA) ranks, as published by methodshop.com (Sept 2025)", "DMA codes: docs.radar.com/regions/dmas (cross-checked with a public code list)", "States per DMA: county-to-DMA list github.com/alex-patton/US-TVDMA-BY-COUNTY (DC added by hand to Washington, D.C.)", "Station call signs: hand-checked list from an earlier app version (src hand) and FCC LMS facility data 2026-11-03 (src fcc; network_affiliation and nielsen market as filed by stations)"],
+ "states": {
+  "AL": "Alabama",
+  "AK": "Alaska",
+  "AZ": "Arizona",
+  "AR": "Arkansas",
+  "CA": "California",
+  "CO": "Colorado",
+  "CT": "Connecticut",
+  "DE": "Delaware",
+  "DC": "District of Columbia",
+  "FL": "Florida",
+  "GA": "Georgia",
+  "HI": "Hawaii",
+  "ID": "Idaho",
+  "IL": "Illinois",
+  "IN": "Indiana",
+  "IA": "Iowa",
+  "KS": "Kansas",
+  "KY": "Kentucky",
+  "LA": "Louisiana",
+  "ME": "Maine",
+  "MD": "Maryland",
+  "MA": "Massachusetts",
+  "MI": "Michigan",
+  "MN": "Minnesota",
+  "MS": "Mississippi",
+  "MO": "Missouri",
+  "MT": "Montana",
+  "NE": "Nebraska",
+  "NV": "Nevada",
+  "NH": "New Hampshire",
+  "NJ": "New Jersey",
+  "NM": "New Mexico",
+  "NY": "New York",
+  "NC": "North Carolina",
+  "ND": "North Dakota",
+  "OH": "Ohio",
+  "OK": "Oklahoma",
+  "OR": "Oregon",
+  "PA": "Pennsylvania",
+  "RI": "Rhode Island",
+  "SC": "South Carolina",
+  "SD": "South Dakota",
+  "TN": "Tennessee",
+  "TX": "Texas",
+  "UT": "Utah",
+  "VT": "Vermont",
+  "VA": "Virginia",
+  "WA": "Washington",
+  "WV": "West Virginia",
+  "WI": "Wisconsin",
+  "WY": "Wyoming"
+ },
+ "markets": [
+  {
+   "code": 501,
+   "rank": 1,
+   "name": "New York",
+   "states": ["CT", "NJ", "NY", "PA"],
+   "home": "NY",
+   "cities": ["New York", "NYC", "New York City"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WABC", "net": "ABC", "src": "hand"},
+    {"call": "WNBC", "net": "NBC", "src": "hand"},
+    {"call": "WCBS", "net": "CBS", "src": "hand"},
+    {"call": "WNYW", "net": "FOX", "src": "hand"},
+    {"call": "WPIX", "net": "CW", "src": "hand"},
+    {"call": "WNET", "net": "PBS", "src": "hand"},
+    {"call": "WWOR", "net": "MNT", "src": "hand"},
+    {"call": "WNJU", "net": "TEL", "src": "hand"},
+    {"call": "WXTV", "net": "UNI", "src": "hand"},
+    {"call": "WEDW", "net": "PBS", "src": "fcc"},
+    {"call": "WLIW", "net": "PBS", "src": "fcc"},
+    {"call": "WLNY", "net": "IND", "src": "fcc"},
+    {"call": "WNJB", "net": "PBS", "src": "fcc"},
+    {"call": "WNJN", "net": "PBS", "src": "fcc"},
+    {"call": "WEPT", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WVVH", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 803,
+   "rank": 2,
+   "name": "Los Angeles",
+   "states": ["CA"],
+   "home": "CA",
+   "cities": ["Los Angeles", "LA"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KABC", "net": "ABC", "src": "hand"},
+    {"call": "KNBC", "net": "NBC", "src": "hand"},
+    {"call": "KCBS", "net": "CBS", "src": "hand"},
+    {"call": "KTTV", "net": "FOX", "src": "hand"},
+    {"call": "KTLA", "net": "CW", "src": "hand"},
+    {"call": "KCET", "net": "PBS", "src": "hand"},
+    {"call": "KCOP", "net": "MNT", "src": "hand"},
+    {"call": "KVEA", "net": "TEL", "src": "hand"},
+    {"call": "KMEX", "net": "UNI", "src": "hand"},
+    {"call": "KCAL", "net": "IND", "src": "fcc"},
+    {"call": "KDOC", "net": "IND", "src": "fcc"},
+    {"call": "KLCS", "net": "PBS", "src": "fcc"},
+    {"call": "KSCN", "net": "IND", "src": "fcc"},
+    {"call": "KVCR", "net": "PBS", "src": "fcc"},
+    {"call": "KWHY", "net": "IND", "src": "fcc"},
+    {"call": "KXLA", "net": "IND", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 602,
+   "rank": 3,
+   "name": "Chicago",
+   "states": ["IL", "IN"],
+   "home": "IL",
+   "cities": ["Chicago"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WLS", "net": "ABC", "src": "hand"},
+    {"call": "WMAQ", "net": "NBC", "src": "hand"},
+    {"call": "WBBM", "net": "CBS", "src": "hand"},
+    {"call": "WFLD", "net": "FOX", "src": "hand"},
+    {"call": "WGN", "net": "CW", "src": "hand"},
+    {"call": "WTTW", "net": "PBS", "src": "hand"},
+    {"call": "WPWR", "net": "MNT", "src": "hand"},
+    {"call": "WSNS", "net": "TEL", "src": "hand"},
+    {"call": "WGBO", "net": "UNI", "src": "hand"},
+    {"call": "WCIU", "net": "IND", "src": "fcc"},
+    {"call": "WJYS", "net": "IND", "src": "fcc"},
+    {"call": "WTVK", "net": "IND", "src": "fcc"},
+    {"call": "WYIN", "net": "PBS", "src": "fcc"},
+    {"call": "WEDE", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WMEU", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 623,
+   "rank": 4,
+   "name": "Dallas–Fort Worth",
+   "states": ["TX"],
+   "home": "TX",
+   "cities": ["Dallas", "Fort Worth", "DFW"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WFAA", "net": "ABC", "src": "hand"},
+    {"call": "KXAS", "net": "NBC", "src": "hand"},
+    {"call": "KTVT", "net": "CBS", "src": "hand"},
+    {"call": "KDFW", "net": "FOX", "src": "hand"},
+    {"call": "KDAF", "net": "CW", "src": "hand"},
+    {"call": "KERA", "net": "PBS", "src": "hand"},
+    {"call": "KDFI", "net": "MNT", "src": "hand"},
+    {"call": "KXTX", "net": "TEL", "src": "hand"},
+    {"call": "KUVN", "net": "UNI", "src": "hand"},
+    {"call": "KDTN", "net": "IND", "src": "fcc"},
+    {"call": "KFAA", "net": "IND", "src": "fcc"},
+    {"call": "KTXA", "net": "IND", "src": "fcc"},
+    {"call": "KTXD", "net": "IND", "src": "fcc"},
+    {"call": "KLEG", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 504,
+   "rank": 5,
+   "name": "Philadelphia",
+   "states": ["DE", "NJ", "PA"],
+   "home": "PA",
+   "cities": ["Philadelphia", "Philly"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WPVI", "net": "ABC", "src": "hand"},
+    {"call": "WCAU", "net": "NBC", "src": "hand"},
+    {"call": "KYW", "net": "CBS", "src": "hand"},
+    {"call": "WTXF", "net": "FOX", "src": "hand"},
+    {"call": "WPHL", "net": "CW", "src": "hand"},
+    {"call": "WHYY", "net": "PBS", "src": "hand"},
+    {"call": "WWSI", "net": "TEL", "src": "hand"},
+    {"call": "WUVP", "net": "UNI", "src": "hand"},
+    {"call": "WACP", "net": "IND", "src": "fcc"},
+    {"call": "WBPH", "net": "IND", "src": "fcc"},
+    {"call": "WDPB", "net": "PBS", "src": "fcc"},
+    {"call": "WDPN", "net": "IND", "src": "fcc"},
+    {"call": "WFMZ", "net": "IND", "src": "fcc"},
+    {"call": "WLVT", "net": "PBS", "src": "fcc"},
+    {"call": "WNJS", "net": "PBS", "src": "fcc"},
+    {"call": "WNJT", "net": "PBS", "src": "fcc"},
+    {"call": "WPSG", "net": "IND", "src": "fcc"},
+    {"call": "WLPH", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WPHA", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WPHY", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WTOO", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 618,
+   "rank": 6,
+   "name": "Houston",
+   "states": ["TX"],
+   "home": "TX",
+   "cities": [],
+   "ambiguousCities": ["Houston"],
+   "stations": [
+    {"call": "KTRK", "net": "ABC", "src": "hand"},
+    {"call": "KPRC", "net": "NBC", "src": "hand"},
+    {"call": "KHOU", "net": "CBS", "src": "hand"},
+    {"call": "KRIV", "net": "FOX", "src": "hand"},
+    {"call": "KIAH", "net": "CW", "src": "hand"},
+    {"call": "KUHT", "net": "PBS", "src": "hand"},
+    {"call": "KTXH", "net": "MNT", "src": "hand"},
+    {"call": "KTMD", "net": "TEL", "src": "hand"},
+    {"call": "KXLN", "net": "UNI", "src": "hand"},
+    {"call": "KLTJ", "net": "IND", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 524,
+   "rank": 7,
+   "name": "Atlanta",
+   "states": ["AL", "GA", "NC"],
+   "home": "GA",
+   "cities": ["Atlanta"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WSB", "net": "ABC", "src": "hand"},
+    {"call": "WXIA", "net": "NBC", "src": "hand"},
+    {"call": "WANF", "net": "CBS", "src": "hand", "verify": true, "note": "FCC lists IND"},
+    {"call": "WAGA", "net": "FOX", "src": "hand"},
+    {"call": "WUPA", "net": "CW", "src": "hand", "verify": true, "note": "FCC lists CBS"},
+    {"call": "WPBA", "net": "PBS", "src": "hand"},
+    {"call": "WATL", "net": "MNT", "src": "hand"},
+    {"call": "WKTB", "net": "TEL", "src": "hand"},
+    {"call": "WUVG", "net": "UNI", "src": "hand"},
+    {"call": "WABE", "net": "PBS", "src": "fcc"},
+    {"call": "WGTA", "net": "IND", "src": "fcc"},
+    {"call": "WGTV", "net": "PBS", "src": "fcc"},
+    {"call": "WPCH", "net": "CW", "src": "fcc"},
+    {"call": "WANN", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WDNN", "net": "TEL", "src": "fcc", "classA": true},
+    {"call": "WIRE", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 511,
+   "rank": 8,
+   "name": "Washington, D.C.",
+   "states": ["DC", "MD", "PA", "VA", "WV"],
+   "home": "DC",
+   "cities": ["Hagerstown", "DC", "Washington DC"],
+   "ambiguousCities": ["Washington"],
+   "stations": [
+    {"call": "WJLA", "net": "ABC", "src": "hand"},
+    {"call": "WRC", "net": "NBC", "src": "hand"},
+    {"call": "WUSA", "net": "CBS", "src": "hand"},
+    {"call": "WTTG", "net": "FOX", "src": "hand"},
+    {"call": "WDCW", "net": "CW", "src": "hand"},
+    {"call": "WETA", "net": "PBS", "src": "hand"},
+    {"call": "WDCA", "net": "MNT", "src": "hand"},
+    {"call": "WZDC", "net": "TEL", "src": "hand"},
+    {"call": "WFDC", "net": "UNI", "src": "hand"},
+    {"call": "WDVM", "net": "IND", "src": "fcc"},
+    {"call": "WFPT", "net": "PBS", "src": "fcc"},
+    {"call": "WHUT", "net": "PBS", "src": "fcc"},
+    {"call": "WVPY", "net": "PBS", "src": "fcc"},
+    {"call": "WWPB", "net": "PBS", "src": "fcc"},
+    {"call": "WDCO", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WIAV", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 807,
+   "rank": 9,
+   "name": "San Francisco–Oakland–San Jose",
+   "states": ["CA"],
+   "home": "CA",
+   "cities": ["San Francisco", "Oakland", "San Jose", "Bay Area", "SF"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KGO", "net": "ABC", "src": "hand"},
+    {"call": "KNTV", "net": "NBC", "src": "hand"},
+    {"call": "KPIX", "net": "CBS", "src": "hand"},
+    {"call": "KTVU", "net": "FOX", "src": "hand", "verify": true, "note": "FCC lists IND"},
+    {"call": "KBCW", "net": "CW", "src": "hand"},
+    {"call": "KQED", "net": "PBS", "src": "hand"},
+    {"call": "KRON", "net": "MNT", "src": "hand", "verify": true, "note": "FCC lists CW"},
+    {"call": "KSTS", "net": "TEL", "src": "hand"},
+    {"call": "KDTV", "net": "UNI", "src": "hand"},
+    {"call": "KEDB", "net": "IND", "src": "fcc"},
+    {"call": "KICU", "net": "IND", "src": "fcc"},
+    {"call": "KPJK", "net": "PBS", "src": "fcc"},
+    {"call": "KPYX", "net": "IND", "src": "fcc"},
+    {"call": "KQEH", "net": "PBS", "src": "fcc"},
+    {"call": "KQSL", "net": "IND", "src": "fcc"},
+    {"call": "KRCB", "net": "PBS", "src": "fcc"},
+    {"call": "KTNC", "net": "IND", "src": "fcc"},
+    {"call": "KTSF", "net": "IND", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 506,
+   "rank": 10,
+   "name": "Boston",
+   "states": ["MA", "NH", "VT"],
+   "home": "MA",
+   "cities": ["Boston", "Manchester"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WCVB", "net": "ABC", "src": "hand"},
+    {"call": "WBTS", "net": "NBC", "src": "hand"},
+    {"call": "WBZ", "net": "CBS", "src": "hand"},
+    {"call": "WFXT", "net": "FOX", "src": "hand"},
+    {"call": "WLVI", "net": "CW", "src": "hand"},
+    {"call": "WGBH", "net": "PBS", "src": "hand"},
+    {"call": "WSBK", "net": "MNT", "src": "hand", "verify": true, "note": "FCC lists IND"},
+    {"call": "WNEU", "net": "TEL", "src": "hand"},
+    {"call": "WUNI", "net": "UNI", "src": "hand"},
+    {"call": "WEKW", "net": "PBS", "src": "fcc"},
+    {"call": "WENH", "net": "PBS", "src": "fcc"},
+    {"call": "WGBX", "net": "PBS", "src": "fcc"},
+    {"call": "WHDH", "net": "IND", "src": "fcc"},
+    {"call": "WMUR", "net": "ABC", "src": "fcc"},
+    {"call": "WYDN", "net": "IND", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 539,
+   "rank": 11,
+   "name": "Tampa–St. Petersburg",
+   "states": ["FL"],
+   "home": "FL",
+   "cities": ["Tampa", "St Petersburg", "Sarasota", "Tampa Bay"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WFTS", "net": "ABC", "src": "hand"},
+    {"call": "WFLA", "net": "NBC", "src": "hand"},
+    {"call": "WTSP", "net": "CBS", "src": "hand"},
+    {"call": "WTVT", "net": "FOX", "src": "hand"},
+    {"call": "WTOG", "net": "CW", "src": "hand", "verify": true, "note": "FCC lists IND"},
+    {"call": "WEDU", "net": "PBS", "src": "hand"},
+    {"call": "WTTA", "net": "MNT", "src": "hand", "verify": true, "note": "FCC lists CW"},
+    {"call": "WRMD", "net": "TEL", "src": "hand"},
+    {"call": "WVEA", "net": "UNI", "src": "hand"},
+    {"call": "WEDQ", "net": "PBS", "src": "fcc"},
+    {"call": "WMOR", "net": "IND", "src": "fcc"},
+    {"call": "WWSB", "net": "ABC", "src": "fcc"},
+    {"call": "WXPX", "net": "IND", "src": "fcc"},
+    {"call": "WARP", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WSPF", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WZRA", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 753,
+   "rank": 12,
+   "name": "Phoenix",
+   "states": ["AZ"],
+   "home": "AZ",
+   "cities": ["Phoenix", "Prescott"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KNXV", "net": "ABC", "src": "hand"},
+    {"call": "KPNX", "net": "NBC", "src": "hand"},
+    {"call": "KPHO", "net": "CBS", "src": "hand"},
+    {"call": "KSAZ", "net": "FOX", "src": "hand"},
+    {"call": "KASW", "net": "CW", "src": "hand", "verify": true, "note": "FCC lists IND"},
+    {"call": "KAET", "net": "PBS", "src": "hand"},
+    {"call": "KUTP", "net": "MNT", "src": "hand"},
+    {"call": "KTAZ", "net": "TEL", "src": "hand"},
+    {"call": "KTVW", "net": "UNI", "src": "hand"},
+    {"call": "KAZF", "net": "IND", "src": "fcc"},
+    {"call": "KAZT", "net": "CW", "src": "fcc"},
+    {"call": "KDTP", "net": "IND", "src": "fcc"},
+    {"call": "KNAZ", "net": "NBC", "src": "fcc"},
+    {"call": "KTVK", "net": "IND", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 819,
+   "rank": 13,
+   "name": "Seattle–Tacoma",
+   "states": ["WA"],
+   "home": "WA",
+   "cities": ["Seattle", "Tacoma"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KOMO", "net": "ABC", "src": "hand"},
+    {"call": "KING", "net": "NBC", "src": "hand"},
+    {"call": "KIRO", "net": "CBS", "src": "hand"},
+    {"call": "KCPQ", "net": "FOX", "src": "hand"},
+    {"call": "KSTW", "net": "CW", "src": "hand", "verify": true, "note": "FCC lists IND"},
+    {"call": "KCTS", "net": "PBS", "src": "hand"},
+    {"call": "KZJO", "net": "MNT", "src": "hand"},
+    {"call": "KHCV", "net": "TEL", "src": "hand"},
+    {"call": "KUNS", "net": "UNI", "src": "hand", "verify": true, "note": "FCC lists CW"},
+    {"call": "KBCB", "net": "IND", "src": "fcc"},
+    {"call": "KBTC", "net": "PBS", "src": "fcc"},
+    {"call": "KCKA", "net": "PBS", "src": "fcc"},
+    {"call": "KONG", "net": "IND", "src": "fcc"},
+    {"call": "KVOS", "net": "UNI", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 505,
+   "rank": 14,
+   "name": "Detroit",
+   "states": ["MI"],
+   "home": "MI",
+   "cities": ["Detroit"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WXYZ", "net": "ABC", "src": "hand"},
+    {"call": "WDIV", "net": "NBC", "src": "hand"},
+    {"call": "WWJ", "net": "CBS", "src": "hand"},
+    {"call": "WJBK", "net": "FOX", "src": "hand"},
+    {"call": "WKBD", "net": "CW", "src": "hand"},
+    {"call": "WTVS", "net": "PBS", "src": "hand"},
+    {"call": "WMYD", "net": "MNT", "src": "hand", "verify": true, "note": "FCC lists IND"},
+    {"call": "WADL", "net": "IND", "src": "fcc"},
+    {"call": "WHPS", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 534,
+   "rank": 15,
+   "name": "Orlando–Daytona Beach–Melbourne",
+   "states": ["FL"],
+   "home": "FL",
+   "cities": ["Orlando", "Daytona Beach", "Melbourne"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WFTV", "net": "ABC", "src": "hand"},
+    {"call": "WESH", "net": "NBC", "src": "hand"},
+    {"call": "WKMG", "net": "CBS", "src": "hand"},
+    {"call": "WOFL", "net": "FOX", "src": "hand"},
+    {"call": "WRDQ", "net": "CW", "src": "hand", "verify": true, "note": "FCC lists IND/TEL"},
+    {"call": "WUCF", "net": "PBS", "src": "hand"},
+    {"call": "WRBW", "net": "MNT", "src": "hand", "verify": true, "note": "FCC lists FOX"},
+    {"call": "WTMO", "net": "TEL", "src": "hand"},
+    {"call": "WVEN", "net": "UNI", "src": "hand"},
+    {"call": "WACX", "net": "IND", "src": "fcc"},
+    {"call": "WDSC", "net": "PBS", "src": "fcc"},
+    {"call": "WKCF", "net": "CW", "src": "fcc"},
+    {"call": "WDYB", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WHDO", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WKME", "net": "TEL", "src": "fcc", "classA": true},
+    {"call": "WMVJ", "net": "TEL", "src": "fcc", "classA": true},
+    {"call": "WZXZ", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 613,
+   "rank": 16,
+   "name": "Minneapolis–St. Paul",
+   "states": ["MN", "WI"],
+   "home": "MN",
+   "cities": ["Minneapolis", "St Paul", "Twin Cities", "St Paul"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KSTP", "net": "ABC", "src": "hand"},
+    {"call": "KARE", "net": "NBC", "src": "hand"},
+    {"call": "WCCO", "net": "CBS", "src": "hand"},
+    {"call": "KMSP", "net": "FOX", "src": "hand"},
+    {"call": "WUCW", "net": "CW", "src": "hand"},
+    {"call": "KTCA", "net": "PBS", "src": "hand"},
+    {"call": "WFTC", "net": "MNT", "src": "hand"},
+    {"call": "KAWB", "net": "PBS", "src": "fcc"},
+    {"call": "KAWE", "net": "PBS", "src": "fcc"},
+    {"call": "KCCW", "net": "CBS", "src": "fcc"},
+    {"call": "KFTC", "net": "MNT", "src": "fcc"},
+    {"call": "KONC", "net": "IND", "src": "fcc"},
+    {"call": "KRWF", "net": "ABC", "src": "fcc"},
+    {"call": "KSAX", "net": "ABC", "src": "fcc"},
+    {"call": "KSTC", "net": "IND", "src": "fcc"},
+    {"call": "KTCI", "net": "PBS", "src": "fcc"},
+    {"call": "KWCM", "net": "PBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 751,
+   "rank": 17,
+   "name": "Denver",
+   "states": ["CO", "NE", "NV", "WY"],
+   "home": "CO",
+   "cities": ["Denver"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KMGH", "net": "ABC", "src": "hand"},
+    {"call": "KUSA", "net": "NBC", "src": "hand"},
+    {"call": "KCNC", "net": "CBS", "src": "hand"},
+    {"call": "KDVR", "net": "FOX", "src": "hand"},
+    {"call": "KWGN", "net": "CW", "src": "hand"},
+    {"call": "KRMA", "net": "PBS", "src": "hand"},
+    {"call": "KTVD", "net": "MNT", "src": "hand"},
+    {"call": "KDEN", "net": "TEL", "src": "hand"},
+    {"call": "KCEC", "net": "UNI", "src": "hand"},
+    {"call": "KBDI", "net": "PBS", "src": "fcc"},
+    {"call": "KCDO", "net": "IND", "src": "fcc"},
+    {"call": "KFCT", "net": "FOX", "src": "fcc"},
+    {"call": "KFNR", "net": "FOX", "src": "fcc"},
+    {"call": "KRMT", "net": "IND", "src": "fcc"},
+    {"call": "KRNE", "net": "PBS", "src": "fcc"},
+    {"call": "KTNE", "net": "PBS", "src": "fcc"},
+    {"call": "KWYP", "net": "PBS", "src": "fcc"},
+    {"call": "KSBS", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "KVAI", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 528,
+   "rank": 18,
+   "name": "Miami–Fort Lauderdale",
+   "states": ["FL"],
+   "home": "FL",
+   "cities": ["Miami", "Fort Lauderdale", "Ft Lauderdale", "South Florida"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WPLG", "net": "ABC", "src": "hand"},
+    {"call": "WTVJ", "net": "NBC", "src": "hand"},
+    {"call": "WFOR", "net": "CBS", "src": "hand"},
+    {"call": "WSVN", "net": "FOX", "src": "hand"},
+    {"call": "WSFL", "net": "CW", "src": "hand", "verify": true, "note": "FCC lists IND"},
+    {"call": "WPBT", "net": "PBS", "src": "hand"},
+    {"call": "WBFS", "net": "MNT", "src": "hand", "verify": true, "note": "FCC lists CW"},
+    {"call": "WSCV", "net": "TEL", "src": "hand"},
+    {"call": "WLTV", "net": "UNI", "src": "hand"},
+    {"call": "WLRN", "net": "PBS", "src": "fcc"},
+    {"call": "WCAY", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 510,
+   "rank": 19,
+   "name": "Cleveland–Akron",
+   "states": ["OH"],
+   "home": "OH",
+   "cities": ["Cleveland", "Akron", "Canton", "Akron"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WEWS", "net": "ABC", "src": "hand"},
+    {"call": "WKYC", "net": "NBC", "src": "hand"},
+    {"call": "WOIO", "net": "CBS", "src": "hand"},
+    {"call": "WJW", "net": "FOX", "src": "hand"},
+    {"call": "WUAB", "net": "CW", "src": "hand", "verify": true, "note": "FCC lists IND"},
+    {"call": "WVIZ", "net": "PBS", "src": "hand"},
+    {"call": "WBNX", "net": "CW", "src": "fcc"},
+    {"call": "WEAO", "net": "PBS", "src": "fcc"},
+    {"call": "WGGN", "net": "IND", "src": "fcc"},
+    {"call": "WMFD", "net": "IND", "src": "fcc"},
+    {"call": "WQHS", "net": "UNI", "src": "fcc"},
+    {"call": "WRLM", "net": "IND", "src": "fcc"},
+    {"call": "WOHZ", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 862,
+   "rank": 20,
+   "name": "Sacramento–Stockton–Modesto",
+   "states": ["CA"],
+   "home": "CA",
+   "cities": ["Sacramento", "Stockton", "Modesto"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KXTV", "net": "ABC", "src": "hand"},
+    {"call": "KCRA", "net": "NBC", "src": "hand"},
+    {"call": "KOVR", "net": "CBS", "src": "hand"},
+    {"call": "KTXL", "net": "FOX", "src": "hand"},
+    {"call": "KMAX", "net": "CW", "src": "hand", "verify": true, "note": "FCC lists IND"},
+    {"call": "KVIE", "net": "PBS", "src": "hand"},
+    {"call": "KQCA", "net": "MNT", "src": "hand", "verify": true, "note": "FCC lists CW"},
+    {"call": "KUVS", "net": "UNI", "src": "hand"},
+    {"call": "KEDS", "net": "IND", "src": "fcc"},
+    {"call": "KEZT", "net": "UNI", "src": "fcc", "classA": true},
+    {"call": "KKPM", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "KMUM", "net": "TEL", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 517,
+   "rank": 21,
+   "name": "Charlotte",
+   "states": ["NC", "SC"],
+   "home": "NC",
+   "cities": ["Charlotte"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WSOC", "net": "ABC", "src": "hand"},
+    {"call": "WCNC", "net": "NBC", "src": "hand"},
+    {"call": "WBTV", "net": "CBS", "src": "hand"},
+    {"call": "WJZY", "net": "FOX", "src": "hand"},
+    {"call": "WMYT", "net": "CW", "src": "hand"},
+    {"call": "WTVI", "net": "PBS", "src": "hand"},
+    {"call": "WCCB", "net": "IND", "src": "fcc"},
+    {"call": "WNSC", "net": "PBS", "src": "fcc"},
+    {"call": "WUNE", "net": "PBS", "src": "fcc"},
+    {"call": "WUNG", "net": "PBS", "src": "fcc"},
+    {"call": "WWJS", "net": "IND", "src": "fcc"},
+    {"call": "WGTB", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 560,
+   "rank": 22,
+   "name": "Raleigh–Durham",
+   "states": ["NC", "VA"],
+   "home": "NC",
+   "cities": ["Raleigh", "Durham", "Fayetteville"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WTVD", "net": "ABC", "src": "hand"},
+    {"call": "WRAL", "net": "NBC", "src": "hand"},
+    {"call": "WNCN", "net": "CBS", "src": "hand"},
+    {"call": "WRAZ", "net": "FOX", "src": "hand"},
+    {"call": "WLFL", "net": "CW", "src": "hand"},
+    {"call": "WUNC", "net": "PBS", "src": "hand"},
+    {"call": "WRDC", "net": "MNT", "src": "hand"},
+    {"call": "WRAY", "net": "IND", "src": "fcc"},
+    {"call": "WUNP", "net": "PBS", "src": "fcc"},
+    {"call": "WUVC", "net": "UNI", "src": "fcc"},
+    {"call": "WBFT", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WHFL", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WHIG", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WNGT", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WRTD", "net": "TEL", "src": "fcc", "classA": true},
+    {"call": "WUBX", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WYBE", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 820,
+   "rank": 23,
+   "name": "Portland, OR",
+   "states": ["OR", "WA"],
+   "home": "OR",
+   "cities": [],
+   "ambiguousCities": ["Portland"],
+   "stations": [
+    {"call": "KATU", "net": "ABC", "src": "hand"},
+    {"call": "KGW", "net": "NBC", "src": "hand"},
+    {"call": "KOIN", "net": "CBS", "src": "hand"},
+    {"call": "KPTV", "net": "FOX", "src": "hand"},
+    {"call": "KRCW", "net": "CW", "src": "hand", "verify": true, "note": "FCC lists CBS"},
+    {"call": "KOPB", "net": "PBS", "src": "hand"},
+    {"call": "KPDX", "net": "MNT", "src": "hand"},
+    {"call": "KTVR", "net": "PBS", "src": "fcc"},
+    {"call": "KUNP", "net": "IND", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 609,
+   "rank": 24,
+   "name": "St. Louis",
+   "states": ["IL", "MO"],
+   "home": "MO",
+   "cities": ["St Louis", "Saint Louis", "STL"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KDNL", "net": "ABC", "src": "hand"},
+    {"call": "KSDK", "net": "NBC", "src": "hand"},
+    {"call": "KMOV", "net": "CBS", "src": "hand"},
+    {"call": "KTVI", "net": "FOX", "src": "hand"},
+    {"call": "KPLR", "net": "CW", "src": "hand"},
+    {"call": "KETC", "net": "PBS", "src": "hand"},
+    {"call": "WPXS", "net": "IND", "src": "fcc"},
+    {"call": "KEFN", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 659,
+   "rank": 25,
+   "name": "Nashville",
+   "states": ["KY", "TN"],
+   "home": "TN",
+   "cities": ["Nashville"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WKRN", "net": "ABC", "src": "hand"},
+    {"call": "WSMV", "net": "NBC", "src": "hand"},
+    {"call": "WTVF", "net": "CBS", "src": "hand"},
+    {"call": "WZTV", "net": "FOX", "src": "hand"},
+    {"call": "WNPX", "net": "CW", "src": "hand"},
+    {"call": "WNPT", "net": "PBS", "src": "hand"},
+    {"call": "WUXP", "net": "MNT", "src": "hand"},
+    {"call": "WCTE", "net": "PBS", "src": "fcc"},
+    {"call": "WNAB", "net": "IND", "src": "fcc"},
+    {"call": "WJDE", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WPBM", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 527,
+   "rank": 26,
+   "name": "Indianapolis",
+   "states": ["IN"],
+   "home": "IN",
+   "cities": ["Indianapolis"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WRTV", "net": "ABC", "src": "hand"},
+    {"call": "WTHR", "net": "NBC", "src": "hand"},
+    {"call": "WISH", "net": "CBS", "src": "hand", "verify": true, "note": "FCC lists CW"},
+    {"call": "WXIN", "net": "FOX", "src": "hand"},
+    {"call": "WTTV", "net": "CW", "src": "hand", "verify": true, "note": "FCC lists CBS"},
+    {"call": "WFYI", "net": "PBS", "src": "hand"},
+    {"call": "WNDY", "net": "MNT", "src": "hand"},
+    {"call": "WDTI", "net": "IND", "src": "fcc"},
+    {"call": "WHMB", "net": "UNI", "src": "fcc"},
+    {"call": "WTIU", "net": "PBS", "src": "fcc"},
+    {"call": "WTTK", "net": "CBS", "src": "fcc"},
+    {"call": "WBXI", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WDNI", "net": "TEL", "src": "fcc", "classA": true},
+    {"call": "WIIH", "net": "CW", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 508,
+   "rank": 27,
+   "name": "Pittsburgh",
+   "states": ["MD", "PA", "WV"],
+   "home": "PA",
+   "cities": ["Pittsburgh"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WTAE", "net": "ABC", "src": "hand"},
+    {"call": "WPXI", "net": "NBC", "src": "hand"},
+    {"call": "KDKA", "net": "CBS", "src": "hand"},
+    {"call": "WPGH", "net": "FOX", "src": "hand"},
+    {"call": "WPKD", "net": "CW", "src": "hand", "verify": true, "note": "FCC lists IND"},
+    {"call": "WQED", "net": "PBS", "src": "hand"},
+    {"call": "WPNT", "net": "MNT", "src": "hand", "verify": true, "note": "FCC lists CW"},
+    {"call": "WGPT", "net": "PBS", "src": "fcc"},
+    {"call": "WNPB", "net": "PBS", "src": "fcc"},
+    {"call": "WPCB", "net": "IND", "src": "fcc"},
+    {"call": "WBYD", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WOSC", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WPTG", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WWAT", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 770,
+   "rank": 28,
+   "name": "Salt Lake City",
+   "states": ["ID", "NV", "UT", "WY"],
+   "home": "UT",
+   "cities": ["Salt Lake City"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KTVX", "net": "ABC", "src": "hand"},
+    {"call": "KSL", "net": "NBC", "src": "hand"},
+    {"call": "KUTV", "net": "CBS", "src": "hand"},
+    {"call": "KSTU", "net": "FOX", "src": "hand"},
+    {"call": "KUCW", "net": "CW", "src": "hand"},
+    {"call": "KUED", "net": "PBS", "src": "hand"},
+    {"call": "KJZZ", "net": "MNT", "src": "hand", "verify": true, "note": "FCC lists IND"},
+    {"call": "KBYU", "net": "PBS", "src": "fcc"},
+    {"call": "KCBU", "net": "IND", "src": "fcc"},
+    {"call": "KENV", "net": "IND", "src": "fcc"},
+    {"call": "KMYU", "net": "MNT", "src": "fcc"},
+    {"call": "KPNZ", "net": "IND", "src": "fcc"},
+    {"call": "KTMW", "net": "TEL", "src": "fcc"},
+    {"call": "KUEN", "net": "PBS", "src": "fcc"},
+    {"call": "KUES", "net": "PBS", "src": "fcc"},
+    {"call": "KUEW", "net": "PBS", "src": "fcc"},
+    {"call": "KUTH", "net": "UNI", "src": "fcc"},
+    {"call": "KEJT", "net": "TEL", "src": "fcc", "classA": true},
+    {"call": "KSVN", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "KULX", "net": "TEL", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 512,
+   "rank": 29,
+   "name": "Baltimore",
+   "states": ["MD"],
+   "home": "MD",
+   "cities": ["Baltimore"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WMAR", "net": "ABC", "src": "hand"},
+    {"call": "WBAL", "net": "NBC", "src": "hand"},
+    {"call": "WJZ", "net": "CBS", "src": "hand"},
+    {"call": "WBFF", "net": "FOX", "src": "hand"},
+    {"call": "WNUV", "net": "CW", "src": "hand"},
+    {"call": "WMPB", "net": "PBS", "src": "hand"},
+    {"call": "WUTB", "net": "MNT", "src": "hand"},
+    {"call": "WMPT", "net": "PBS", "src": "fcc"},
+    {"call": "WMJF", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 825,
+   "rank": 30,
+   "name": "San Diego",
+   "states": ["CA"],
+   "home": "CA",
+   "cities": ["San Diego"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KGTV", "net": "ABC", "src": "hand"},
+    {"call": "KNSD", "net": "NBC", "src": "hand"},
+    {"call": "KFMB", "net": "CBS", "src": "hand"},
+    {"call": "KSWB", "net": "FOX", "src": "hand"},
+    {"call": "KFMB", "net": "CW", "src": "hand"},
+    {"call": "KPBS", "net": "PBS", "src": "hand"},
+    {"call": "KUAN", "net": "TEL", "src": "hand"},
+    {"call": "KBNT", "net": "UNI", "src": "hand"},
+    {"call": "KUSI", "net": "IND", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 641,
+   "rank": 31,
+   "name": "San Antonio",
+   "states": ["TX"],
+   "home": "TX",
+   "cities": ["San Antonio"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KSAT", "net": "ABC", "src": "hand"},
+    {"call": "WOAI", "net": "NBC", "src": "hand"},
+    {"call": "KENS", "net": "CBS", "src": "hand"},
+    {"call": "KABB", "net": "FOX", "src": "hand"},
+    {"call": "KCWX", "net": "CW", "src": "hand", "verify": true, "note": "FCC lists IND"},
+    {"call": "KLRN", "net": "PBS", "src": "hand"},
+    {"call": "KMYS", "net": "MNT", "src": "hand"},
+    {"call": "KVDA", "net": "TEL", "src": "hand"},
+    {"call": "KWEX", "net": "UNI", "src": "hand"},
+    {"call": "KVAW", "net": "IND", "src": "fcc"},
+    {"call": "KCOR", "net": "UNI", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 616,
+   "rank": 32,
+   "name": "Kansas City",
+   "states": ["KS", "MO"],
+   "home": "MO",
+   "cities": ["Kansas City"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KMBC", "net": "ABC", "src": "hand"},
+    {"call": "KSHB", "net": "NBC", "src": "hand"},
+    {"call": "KCTV", "net": "CBS", "src": "hand"},
+    {"call": "WDAF", "net": "FOX", "src": "hand"},
+    {"call": "KCWE", "net": "CW", "src": "hand"},
+    {"call": "KCPT", "net": "PBS", "src": "hand"},
+    {"call": "KSMO", "net": "MNT", "src": "hand"},
+    {"call": "KMCI", "net": "IND", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 533,
+   "rank": 33,
+   "name": "Hartford–New Haven",
+   "states": ["CT"],
+   "home": "CT",
+   "cities": ["Hartford", "New Haven"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WTNH", "net": "ABC", "src": "hand"},
+    {"call": "WVIT", "net": "NBC", "src": "hand"},
+    {"call": "WFSB", "net": "CBS", "src": "hand"},
+    {"call": "WTIC", "net": "FOX", "src": "hand"},
+    {"call": "WCCT", "net": "CW", "src": "hand"},
+    {"call": "WEDH", "net": "PBS", "src": "hand"},
+    {"call": "WCTX", "net": "MNT", "src": "hand"},
+    {"call": "WEDN", "net": "PBS", "src": "fcc"},
+    {"call": "WEDY", "net": "PBS", "src": "fcc"},
+    {"call": "WUVN", "net": "UNI", "src": "fcc"},
+    {"call": "WRDM", "net": "TEL", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 635,
+   "rank": 34,
+   "name": "Austin",
+   "states": ["TX"],
+   "home": "TX",
+   "cities": [],
+   "ambiguousCities": ["Austin"],
+   "stations": [
+    {"call": "KVUE", "net": "ABC", "src": "hand"},
+    {"call": "KXAN", "net": "NBC", "src": "hand"},
+    {"call": "KEYE", "net": "CBS", "src": "hand"},
+    {"call": "KTBC", "net": "FOX", "src": "hand"},
+    {"call": "KNVA", "net": "CW", "src": "hand"},
+    {"call": "KLRU", "net": "PBS", "src": "hand"},
+    {"call": "KBVO", "net": "MNT", "src": "hand"},
+    {"call": "KAKW", "net": "UNI", "src": "hand"},
+    {"call": "KHPF", "net": "MNT", "src": "fcc", "classA": true},
+    {"call": "KHPL", "net": "MNT", "src": "fcc", "classA": true},
+    {"call": "KHPM", "net": "MNT", "src": "fcc", "classA": true},
+    {"call": "KHPX", "net": "MNT", "src": "fcc", "classA": true},
+    {"call": "KHPZ", "net": "MNT", "src": "fcc", "classA": true},
+    {"call": "KXLK", "net": "UNI", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 535,
+   "rank": 35,
+   "name": "Columbus, OH",
+   "states": ["OH"],
+   "home": "OH",
+   "cities": [],
+   "ambiguousCities": ["Columbus"],
+   "stations": [
+    {"call": "WSYX", "net": "ABC", "src": "hand"},
+    {"call": "WCMH", "net": "NBC", "src": "hand"},
+    {"call": "WBNS", "net": "CBS", "src": "hand"},
+    {"call": "WTTE", "net": "FOX", "src": "hand"},
+    {"call": "WWHO", "net": "CW", "src": "hand"},
+    {"call": "WOSU", "net": "PBS", "src": "hand"},
+    {"call": "WOUB", "net": "PBS", "src": "fcc"},
+    {"call": "WOUC", "net": "PBS", "src": "fcc"},
+    {"call": "WCBZ", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WGCT", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WOCB", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WXCB", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 567,
+   "rank": 36,
+   "name": "Greenville–Spartanburg–Asheville–Anderson",
+   "states": ["GA", "NC", "SC"],
+   "home": "SC",
+   "cities": ["Spartanburg", "Asheville"],
+   "ambiguousCities": ["Greenville", "Anderson"],
+   "stations": [
+    {"call": "WLOS", "net": "ABC", "src": "hand"},
+    {"call": "WYFF", "net": "NBC", "src": "hand"},
+    {"call": "WSPA", "net": "CBS", "src": "hand"},
+    {"call": "WHNS", "net": "FOX", "src": "hand"},
+    {"call": "WMYA", "net": "CW", "src": "hand"},
+    {"call": "WNTV", "net": "PBS", "src": "hand"},
+    {"call": "WGGS", "net": "IND", "src": "fcc"},
+    {"call": "WNEH", "net": "PBS", "src": "fcc"},
+    {"call": "WRET", "net": "PBS", "src": "fcc"},
+    {"call": "WUNF", "net": "PBS", "src": "fcc"},
+    {"call": "WUNW", "net": "PBS", "src": "fcc"},
+    {"call": "WYCW", "net": "CW", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 515,
+   "rank": 37,
+   "name": "Cincinnati",
+   "states": ["IN", "KY", "OH"],
+   "home": "OH",
+   "cities": ["Cincinnati"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WCPO", "net": "ABC", "src": "hand"},
+    {"call": "WLWT", "net": "NBC", "src": "hand"},
+    {"call": "WKRC", "net": "CBS", "src": "hand"},
+    {"call": "WXIX", "net": "FOX", "src": "hand"},
+    {"call": "WSTR", "net": "CW", "src": "hand", "verify": true, "note": "FCC lists MNT"},
+    {"call": "WCET", "net": "PBS", "src": "hand"},
+    {"call": "WCVN", "net": "PBS", "src": "fcc"},
+    {"call": "WKON", "net": "PBS", "src": "fcc"},
+    {"call": "WPTO", "net": "PBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 617,
+   "rank": 38,
+   "name": "Milwaukee",
+   "states": ["WI"],
+   "home": "WI",
+   "cities": ["Milwaukee"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WISN", "net": "ABC", "src": "hand"},
+    {"call": "WTMJ", "net": "NBC", "src": "hand"},
+    {"call": "WDJT", "net": "CBS", "src": "hand"},
+    {"call": "WITI", "net": "FOX", "src": "hand"},
+    {"call": "WVTV", "net": "CW", "src": "hand"},
+    {"call": "WMVS", "net": "PBS", "src": "hand"},
+    {"call": "WCGV", "net": "MNT", "src": "hand"},
+    {"call": "WIWN", "net": "IND", "src": "fcc"},
+    {"call": "WMLW", "net": "IND", "src": "fcc"},
+    {"call": "WMVT", "net": "PBS", "src": "fcc"},
+    {"call": "WVCY", "net": "IND", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 548,
+   "rank": 39,
+   "name": "West Palm Beach–Fort Pierce",
+   "states": ["FL"],
+   "home": "FL",
+   "cities": ["West Palm Beach", "Fort Pierce", "Palm Beach"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WPBF", "net": "ABC", "src": "hand"},
+    {"call": "WPTV", "net": "NBC", "src": "hand"},
+    {"call": "WPEC", "net": "CBS", "src": "hand"},
+    {"call": "WFLX", "net": "FOX", "src": "hand"},
+    {"call": "WTVX", "net": "CW", "src": "hand"},
+    {"call": "WPBT", "net": "PBS", "src": "hand"},
+    {"call": "WHDT", "net": "IND", "src": "fcc"},
+    {"call": "WXEL", "net": "PBS", "src": "fcc"},
+    {"call": "WTCN", "net": "MNT", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 839,
+   "rank": 40,
+   "name": "Las Vegas",
+   "states": ["NV"],
+   "home": "NV",
+   "cities": ["Las Vegas"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KTNV", "net": "ABC", "src": "hand"},
+    {"call": "KSNV", "net": "NBC", "src": "hand"},
+    {"call": "KLAS", "net": "CBS", "src": "hand"},
+    {"call": "KVVU", "net": "FOX", "src": "hand"},
+    {"call": "KVCW", "net": "CW", "src": "hand"},
+    {"call": "KLVX", "net": "PBS", "src": "hand"},
+    {"call": "KVMY", "net": "MNT", "src": "hand"},
+    {"call": "KBLR", "net": "TEL", "src": "hand"},
+    {"call": "KINC", "net": "UNI", "src": "hand"}
+   ]
+  },
+  {
+   "code": 561,
+   "rank": 41,
+   "name": "Jacksonville",
+   "states": ["FL", "GA"],
+   "home": "FL",
+   "cities": [],
+   "ambiguousCities": ["Jacksonville"],
+   "stations": [
+    {"call": "WJXX", "net": "ABC", "src": "hand"},
+    {"call": "WTLV", "net": "NBC", "src": "hand"},
+    {"call": "WJAX", "net": "CBS", "src": "hand"},
+    {"call": "WFOX", "net": "FOX", "src": "hand"},
+    {"call": "WCWJ", "net": "CW", "src": "hand"},
+    {"call": "WJCT", "net": "PBS", "src": "hand"},
+    {"call": "WJXT", "net": "IND", "src": "fcc"},
+    {"call": "WXGA", "net": "PBS", "src": "fcc"},
+    {"call": "WBXJ", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WJGV", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 566,
+   "rank": 42,
+   "name": "Harrisburg–Lancaster–Lebanon–York",
+   "states": ["PA"],
+   "home": "PA",
+   "cities": ["Lancaster"],
+   "ambiguousCities": ["Harrisburg", "Lebanon", "York"],
+   "stations": [
+    {"call": "WHTM", "net": "ABC", "src": "hand"},
+    {"call": "WGAL", "net": "NBC", "src": "hand"},
+    {"call": "WHP", "net": "CBS", "src": "hand"},
+    {"call": "WPMT", "net": "FOX", "src": "hand"},
+    {"call": "WITF", "net": "PBS", "src": "hand"},
+    {"call": "WLYH", "net": "IND", "src": "fcc"},
+    {"call": "WXBU", "net": "UNI", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 563,
+   "rank": 43,
+   "name": "Grand Rapids–Kalamazoo–Battle Creek",
+   "states": ["MI"],
+   "home": "MI",
+   "cities": ["Grand Rapids", "Kalamazoo", "Battle Creek"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WZZM", "net": "ABC", "src": "hand"},
+    {"call": "WOOD", "net": "NBC", "src": "hand"},
+    {"call": "WWMT", "net": "CBS", "src": "hand"},
+    {"call": "WXMI", "net": "FOX", "src": "hand"},
+    {"call": "WWMT", "net": "CW", "src": "hand"},
+    {"call": "WGVU", "net": "PBS", "src": "hand"},
+    {"call": "WGVK", "net": "PBS", "src": "fcc"},
+    {"call": "WLLA", "net": "IND", "src": "fcc"},
+    {"call": "WOTV", "net": "ABC", "src": "fcc"},
+    {"call": "WTLJ", "net": "IND", "src": "fcc"},
+    {"call": "WMKG", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WOBC", "net": "MNT", "src": "fcc", "classA": true},
+    {"call": "WOGC", "net": "NBC", "src": "fcc", "classA": true},
+    {"call": "WOHO", "net": "MNT", "src": "fcc", "classA": true},
+    {"call": "WOKZ", "net": "MNT", "src": "fcc", "classA": true},
+    {"call": "WOLP", "net": "MNT", "src": "fcc", "classA": true},
+    {"call": "WOMS", "net": "MNT", "src": "fcc", "classA": true},
+    {"call": "WXSP", "net": "MNT", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 544,
+   "rank": 44,
+   "name": "Norfolk–Portsmouth–Newport News",
+   "states": ["NC", "VA"],
+   "home": "VA",
+   "cities": ["Norfolk", "Portsmouth", "Newport News"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WVEC", "net": "ABC", "src": "hand"},
+    {"call": "WAVY", "net": "NBC", "src": "hand"},
+    {"call": "WTKR", "net": "CBS", "src": "hand"},
+    {"call": "WVBT", "net": "FOX", "src": "hand"},
+    {"call": "WGNT", "net": "CW", "src": "hand"},
+    {"call": "WHRO", "net": "PBS", "src": "hand"},
+    {"call": "WSKY", "net": "IND", "src": "fcc"},
+    {"call": "WTVZ", "net": "MNT", "src": "fcc"},
+    {"call": "WUND", "net": "PBS", "src": "fcc"},
+    {"call": "WITD", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WJGN", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WKTD", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WNLO", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WPMC", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 630,
+   "rank": 45,
+   "name": "Birmingham",
+   "states": ["AL"],
+   "home": "AL",
+   "cities": ["Birmingham", "Anniston", "Tuscaloosa"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WBMA", "net": "ABC", "src": "hand"},
+    {"call": "WVTM", "net": "NBC", "src": "hand"},
+    {"call": "WIAT", "net": "CBS", "src": "hand"},
+    {"call": "WBRC", "net": "FOX", "src": "hand"},
+    {"call": "WTTO", "net": "CW", "src": "hand"},
+    {"call": "WBIQ", "net": "PBS", "src": "hand"},
+    {"call": "WABM", "net": "MNT", "src": "hand"},
+    {"call": "WCIQ", "net": "PBS", "src": "fcc"},
+    {"call": "WDBB", "net": "CW", "src": "fcc"},
+    {"call": "WEAC", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WJMY", "net": "TEL", "src": "fcc", "classA": true},
+    {"call": "WRDY", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WTBM", "net": "TEL", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 518,
+   "rank": 46,
+   "name": "Greensboro–High Point–Winston–Salem",
+   "states": ["NC", "VA"],
+   "home": "NC",
+   "cities": ["Greensboro", "High Point", "Winston"],
+   "ambiguousCities": ["Salem"],
+   "stations": [
+    {"call": "WXLV", "net": "ABC", "src": "hand"},
+    {"call": "WXII", "net": "NBC", "src": "hand"},
+    {"call": "WFMY", "net": "CBS", "src": "hand"},
+    {"call": "WGHP", "net": "FOX", "src": "hand"},
+    {"call": "WCWG", "net": "CW", "src": "hand"},
+    {"call": "WUNL", "net": "PBS", "src": "hand"},
+    {"call": "WMYV", "net": "MNT", "src": "hand"},
+    {"call": "WLXI", "net": "IND", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 650,
+   "rank": 47,
+   "name": "Oklahoma City",
+   "states": ["OK"],
+   "home": "OK",
+   "cities": ["Oklahoma City"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KOCO", "net": "ABC", "src": "hand"},
+    {"call": "KFOR", "net": "NBC", "src": "hand"},
+    {"call": "KWTV", "net": "CBS", "src": "hand"},
+    {"call": "KOKH", "net": "FOX", "src": "hand"},
+    {"call": "KOCB", "net": "CW", "src": "hand", "verify": true, "note": "FCC lists IND"},
+    {"call": "KETA", "net": "PBS", "src": "hand"},
+    {"call": "KAUT", "net": "MNT", "src": "hand", "verify": true, "note": "FCC lists CW"},
+    {"call": "KOCM", "net": "IND", "src": "fcc"},
+    {"call": "KSBI", "net": "MNT", "src": "fcc"},
+    {"call": "KTUZ", "net": "TEL", "src": "fcc"},
+    {"call": "KUOK", "net": "UNI", "src": "fcc"},
+    {"call": "KWET", "net": "PBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 790,
+   "rank": 48,
+   "name": "Albuquerque–Santa Fe",
+   "states": ["AZ", "CO", "NM"],
+   "home": "NM",
+   "cities": ["Albuquerque", "Santa Fe"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KOAT", "net": "ABC", "src": "hand"},
+    {"call": "KOB", "net": "NBC", "src": "hand"},
+    {"call": "KRQE", "net": "CBS", "src": "hand"},
+    {"call": "KASA", "net": "FOX", "src": "hand", "verify": true, "note": "FCC lists TEL"},
+    {"call": "KWBQ", "net": "CW", "src": "hand"},
+    {"call": "KNME", "net": "PBS", "src": "hand"},
+    {"call": "KLUZ", "net": "UNI", "src": "hand"},
+    {"call": "KASY", "net": "MNT", "src": "fcc"},
+    {"call": "KBIM", "net": "CBS", "src": "fcc"},
+    {"call": "KCHF", "net": "IND", "src": "fcc"},
+    {"call": "KENW", "net": "PBS", "src": "fcc"},
+    {"call": "KNMD", "net": "PBS", "src": "fcc"},
+    {"call": "KOBF", "net": "NBC", "src": "fcc"},
+    {"call": "KOBR", "net": "NBC", "src": "fcc"},
+    {"call": "KREZ", "net": "CBS", "src": "fcc"},
+    {"call": "KRMU", "net": "PBS", "src": "fcc"},
+    {"call": "KRPV", "net": "IND", "src": "fcc"},
+    {"call": "KRWB", "net": "CW", "src": "fcc"},
+    {"call": "KTEL", "net": "NBC", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 529,
+   "rank": 49,
+   "name": "Louisville",
+   "states": ["IN", "KY"],
+   "home": "KY",
+   "cities": ["Louisville", "Louisville KY"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WHAS", "net": "ABC", "src": "hand"},
+    {"call": "WAVE", "net": "NBC", "src": "hand"},
+    {"call": "WLKY", "net": "CBS", "src": "hand"},
+    {"call": "WDRB", "net": "FOX", "src": "hand"},
+    {"call": "WBKI", "net": "CW", "src": "hand"},
+    {"call": "WKPC", "net": "PBS", "src": "hand"},
+    {"call": "WMYO", "net": "MNT", "src": "hand"},
+    {"call": "WBNA", "net": "IND", "src": "fcc"},
+    {"call": "WKMJ", "net": "PBS", "src": "fcc"},
+    {"call": "WKZT", "net": "PBS", "src": "fcc"},
+    {"call": "WJYL", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WRLW", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 622,
+   "rank": 50,
+   "name": "New Orleans",
+   "states": ["LA", "MS"],
+   "home": "LA",
+   "cities": ["New Orleans"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WGNO", "net": "ABC", "src": "hand"},
+    {"call": "WDSU", "net": "NBC", "src": "hand"},
+    {"call": "WWL", "net": "CBS", "src": "hand"},
+    {"call": "WVUE", "net": "FOX", "src": "hand"},
+    {"call": "WNOL", "net": "CW", "src": "hand"},
+    {"call": "WYES", "net": "PBS", "src": "hand"},
+    {"call": "KGLA", "net": "TEL", "src": "fcc"},
+    {"call": "WUPL", "net": "MNT", "src": "fcc"},
+    {"call": "KFOL", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "KNOV", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WBXN", "net": "MNT", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 640,
+   "rank": 51,
+   "name": "Memphis",
+   "states": ["AR", "MO", "MS", "TN"],
+   "home": "TN",
+   "cities": ["Memphis"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WATN", "net": "ABC", "src": "hand"},
+    {"call": "WMC", "net": "NBC", "src": "hand"},
+    {"call": "WREG", "net": "CBS", "src": "hand"},
+    {"call": "WHBQ", "net": "FOX", "src": "hand"},
+    {"call": "WLMT", "net": "CW", "src": "hand"},
+    {"call": "WKNO", "net": "PBS", "src": "hand"},
+    {"call": "WMAV", "net": "PBS", "src": "fcc"},
+    {"call": "WBII", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 521,
+   "rank": 52,
+   "name": "Providence–New Bedford",
+   "states": ["MA", "RI"],
+   "home": "RI",
+   "cities": ["Providence", "New Bedford"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WLNE", "net": "ABC", "src": "hand"},
+    {"call": "WJAR", "net": "NBC", "src": "hand"},
+    {"call": "WPRI", "net": "CBS", "src": "hand"},
+    {"call": "WNAC", "net": "FOX", "src": "hand"},
+    {"call": "WSBE", "net": "PBS", "src": "hand"},
+    {"call": "WPVD", "net": "PBS", "src": "fcc"},
+    {"call": "WRIW", "net": "TEL", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 571,
+   "rank": 53,
+   "name": "Fort Myers–Naples",
+   "states": ["FL"],
+   "home": "FL",
+   "cities": ["Fort Myers", "Naples", "Ft Myers"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WZVN", "net": "ABC", "src": "hand"},
+    {"call": "WBBH", "net": "NBC", "src": "hand"},
+    {"call": "WINK", "net": "CBS", "src": "hand"},
+    {"call": "WFTX", "net": "FOX", "src": "hand"},
+    {"call": "WXCW", "net": "CW", "src": "hand"},
+    {"call": "WGCU", "net": "PBS", "src": "hand"},
+    {"call": "WHDN", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WWDT", "net": "TEL", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 866,
+   "rank": 54,
+   "name": "Fresno–Visalia",
+   "states": ["CA"],
+   "home": "CA",
+   "cities": ["Fresno", "Visalia"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KFSN", "net": "ABC", "src": "hand"},
+    {"call": "KSEE", "net": "NBC", "src": "hand"},
+    {"call": "KGPE", "net": "CBS", "src": "hand"},
+    {"call": "KMPH", "net": "FOX", "src": "hand"},
+    {"call": "KFRE", "net": "CW", "src": "hand"},
+    {"call": "KVPT", "net": "PBS", "src": "hand"},
+    {"call": "KAIL", "net": "IND", "src": "fcc"},
+    {"call": "KEDZ", "net": "IND", "src": "fcc"},
+    {"call": "KFTV", "net": "UNI", "src": "fcc"},
+    {"call": "KNSO", "net": "TEL", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 514,
+   "rank": 55,
+   "name": "Buffalo",
+   "states": ["NY", "PA"],
+   "home": "NY",
+   "cities": ["Buffalo"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WKBW", "net": "ABC", "src": "hand"},
+    {"call": "WGRZ", "net": "NBC", "src": "hand"},
+    {"call": "WIVB", "net": "CBS", "src": "hand"},
+    {"call": "WUTV", "net": "FOX", "src": "hand"},
+    {"call": "WNLO", "net": "CW", "src": "hand"},
+    {"call": "WNED", "net": "PBS", "src": "hand"},
+    {"call": "WNYB", "net": "IND", "src": "fcc"},
+    {"call": "WNYO", "net": "IND", "src": "fcc"},
+    {"call": "WBNF", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 556,
+   "rank": 56,
+   "name": "Richmond–Petersburg",
+   "states": ["VA"],
+   "home": "VA",
+   "cities": ["Richmond", "Petersburg"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WRIC", "net": "ABC", "src": "hand"},
+    {"call": "WWBT", "net": "NBC", "src": "hand"},
+    {"call": "WTVR", "net": "CBS", "src": "hand"},
+    {"call": "WRLH", "net": "FOX", "src": "hand"},
+    {"call": "WCVE", "net": "PBS", "src": "hand"},
+    {"call": "WCVW", "net": "PBS", "src": "fcc"},
+    {"call": "WUPV", "net": "CW", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 686,
+   "rank": 57,
+   "name": "Mobile–Pensacola",
+   "states": ["AL", "FL", "MS"],
+   "home": "AL",
+   "cities": ["Mobile", "Pensacola", "Fort Walton Beach"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WEAR", "net": "ABC", "src": "hand"},
+    {"call": "WPMI", "net": "NBC", "src": "hand"},
+    {"call": "WKRG", "net": "CBS", "src": "hand"},
+    {"call": "WALA", "net": "FOX", "src": "hand"},
+    {"call": "WSRE", "net": "PBS", "src": "hand"},
+    {"call": "WAWD", "net": "IND", "src": "fcc"},
+    {"call": "WDPM", "net": "IND", "src": "fcc"},
+    {"call": "WEIQ", "net": "PBS", "src": "fcc"},
+    {"call": "WFBD", "net": "IND", "src": "fcc"},
+    {"call": "WFGX", "net": "MNT", "src": "fcc"},
+    {"call": "WFNA", "net": "CW", "src": "fcc"},
+    {"call": "WJTC", "net": "IND", "src": "fcc"},
+    {"call": "WPAN", "net": "IND", "src": "fcc"},
+    {"call": "WBQP", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WDES", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 693,
+   "rank": 58,
+   "name": "Little Rock–Pine Bluff",
+   "states": ["AR"],
+   "home": "AR",
+   "cities": ["Little Rock", "Pine Bluff"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KATV", "net": "ABC", "src": "hand"},
+    {"call": "KARK", "net": "NBC", "src": "hand"},
+    {"call": "KTHV", "net": "CBS", "src": "hand"},
+    {"call": "KLRT", "net": "FOX", "src": "hand"},
+    {"call": "KASN", "net": "CW", "src": "hand"},
+    {"call": "KETS", "net": "PBS", "src": "hand"},
+    {"call": "KARZ", "net": "MNT", "src": "fcc"},
+    {"call": "KEMV", "net": "PBS", "src": "fcc"},
+    {"call": "KETG", "net": "PBS", "src": "fcc"},
+    {"call": "KKAP", "net": "IND", "src": "fcc"},
+    {"call": "KVTH", "net": "IND", "src": "fcc"},
+    {"call": "KVTN", "net": "IND", "src": "fcc"},
+    {"call": "KKYK", "net": "TEL", "src": "fcc", "classA": true},
+    {"call": "KLRA", "net": "UNI", "src": "fcc", "classA": true},
+    {"call": "KRAH", "net": "TEL", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 577,
+   "rank": 59,
+   "name": "Wilkes Barre–Scranton–Hazleton",
+   "states": ["PA"],
+   "home": "PA",
+   "cities": ["Wilkes Barre", "Scranton", "Hazleton"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WBRE", "net": "NBC", "src": "fcc"},
+    {"call": "WNEP", "net": "ABC", "src": "fcc"},
+    {"call": "WOLF", "net": "FOX", "src": "fcc"},
+    {"call": "WQMY", "net": "MNT", "src": "fcc"},
+    {"call": "WSWB", "net": "CW", "src": "fcc"},
+    {"call": "WVIA", "net": "PBS", "src": "fcc"},
+    {"call": "WYOU", "net": "CBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 557,
+   "rank": 60,
+   "name": "Knoxville",
+   "states": ["KY", "TN"],
+   "home": "TN",
+   "cities": ["Knoxville"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WATE", "net": "ABC", "src": "hand"},
+    {"call": "WBIR", "net": "NBC", "src": "hand"},
+    {"call": "WVLT", "net": "CBS", "src": "hand"},
+    {"call": "WTNZ", "net": "FOX", "src": "hand"},
+    {"call": "WBXX", "net": "CW", "src": "hand"},
+    {"call": "WKOP", "net": "PBS", "src": "hand"},
+    {"call": "WAGV", "net": "IND", "src": "fcc"},
+    {"call": "WETP", "net": "PBS", "src": "fcc"},
+    {"call": "WKNX", "net": "IND", "src": "fcc"},
+    {"call": "WVLR", "net": "IND", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 671,
+   "rank": 61,
+   "name": "Tulsa",
+   "states": ["KS", "OK"],
+   "home": "OK",
+   "cities": ["Tulsa"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KTUL", "net": "ABC", "src": "hand"},
+    {"call": "KJRH", "net": "NBC", "src": "hand"},
+    {"call": "KOTV", "net": "CBS", "src": "hand"},
+    {"call": "KOKI", "net": "FOX", "src": "hand"},
+    {"call": "KQCW", "net": "CW", "src": "hand"},
+    {"call": "KOED", "net": "PBS", "src": "hand"},
+    {"call": "KMYT", "net": "MNT", "src": "hand"},
+    {"call": "KGEB", "net": "IND", "src": "fcc"},
+    {"call": "KOET", "net": "PBS", "src": "fcc"},
+    {"call": "KRSU", "net": "PBS", "src": "fcc"},
+    {"call": "KUTU", "net": "UNI", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 532,
+   "rank": 62,
+   "name": "Albany–Schenectady–Troy",
+   "states": ["MA", "NY", "VT"],
+   "home": "NY",
+   "cities": ["Schenectady"],
+   "ambiguousCities": ["Albany", "Troy"],
+   "stations": [
+    {"call": "WTEN", "net": "ABC", "src": "hand"},
+    {"call": "WNYT", "net": "NBC", "src": "hand"},
+    {"call": "WRGB", "net": "CBS", "src": "hand"},
+    {"call": "WXXA", "net": "FOX", "src": "hand"},
+    {"call": "WCWN", "net": "CW", "src": "hand"},
+    {"call": "WMHT", "net": "PBS", "src": "hand"},
+    {"call": "WNYA", "net": "MNT", "src": "fcc"},
+    {"call": "WFNY", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 541,
+   "rank": 63,
+   "name": "Lexington",
+   "states": ["KY"],
+   "home": "KY",
+   "cities": ["Lexington", "Lexington KY"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WTVQ", "net": "ABC", "src": "hand"},
+    {"call": "WLEX", "net": "NBC", "src": "hand"},
+    {"call": "WKYT", "net": "CBS", "src": "hand"},
+    {"call": "WDKY", "net": "FOX", "src": "hand"},
+    {"call": "WKLE", "net": "PBS", "src": "hand"},
+    {"call": "WKHA", "net": "PBS", "src": "fcc"},
+    {"call": "WKMR", "net": "PBS", "src": "fcc"},
+    {"call": "WKSO", "net": "PBS", "src": "fcc"},
+    {"call": "WLJC", "net": "IND", "src": "fcc"},
+    {"call": "WYMT", "net": "CBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 542,
+   "rank": 64,
+   "name": "Dayton",
+   "states": ["IN", "OH"],
+   "home": "OH",
+   "cities": [],
+   "ambiguousCities": ["Dayton"],
+   "stations": [
+    {"call": "WKEF", "net": "ABC", "src": "hand"},
+    {"call": "WDTN", "net": "NBC", "src": "hand"},
+    {"call": "WHIO", "net": "CBS", "src": "hand"},
+    {"call": "WRGT", "net": "FOX", "src": "hand"},
+    {"call": "WPTD", "net": "PBS", "src": "hand"},
+    {"call": "WBDT", "net": "CW", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 789,
+   "rank": 65,
+   "name": "Tucson",
+   "states": ["AZ"],
+   "home": "AZ",
+   "cities": ["Tucson", "Sierra Vista"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KGUN", "net": "ABC", "src": "hand"},
+    {"call": "KVOA", "net": "NBC", "src": "hand"},
+    {"call": "KOLD", "net": "CBS", "src": "hand"},
+    {"call": "KMSB", "net": "FOX", "src": "hand"},
+    {"call": "KUAT", "net": "PBS", "src": "hand"},
+    {"call": "KHRR", "net": "TEL", "src": "fcc"},
+    {"call": "KTTU", "net": "CW", "src": "fcc"},
+    {"call": "KUAS", "net": "PBS", "src": "fcc"},
+    {"call": "KUVE", "net": "UNI", "src": "fcc"},
+    {"call": "KWBA", "net": "IND", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 881,
+   "rank": 66,
+   "name": "Spokane",
+   "states": ["ID", "MT", "OR", "WA"],
+   "home": "WA",
+   "cities": ["Spokane"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KXLY", "net": "ABC", "src": "hand"},
+    {"call": "KHQ", "net": "NBC", "src": "hand"},
+    {"call": "KREM", "net": "CBS", "src": "hand"},
+    {"call": "KAYU", "net": "FOX", "src": "hand", "verify": true, "note": "FCC lists IND"},
+    {"call": "KSKN", "net": "CW", "src": "hand"},
+    {"call": "KSPS", "net": "PBS", "src": "hand"},
+    {"call": "KCDT", "net": "PBS", "src": "fcc"},
+    {"call": "KQUP", "net": "IND", "src": "fcc"},
+    {"call": "KSWX", "net": "IND", "src": "fcc"},
+    {"call": "KUID", "net": "PBS", "src": "fcc"},
+    {"call": "KWSU", "net": "PBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 679,
+   "rank": 67,
+   "name": "Des Moines–Ames",
+   "states": ["IA", "MO"],
+   "home": "IA",
+   "cities": ["Des Moines", "Ames"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WOI", "net": "ABC", "src": "hand"},
+    {"call": "WHO", "net": "NBC", "src": "hand"},
+    {"call": "KCCI", "net": "CBS", "src": "hand"},
+    {"call": "KDSM", "net": "FOX", "src": "hand"},
+    {"call": "KDIN", "net": "PBS", "src": "hand"},
+    {"call": "KCWI", "net": "CW", "src": "fcc"},
+    {"call": "KDMI", "net": "IND", "src": "fcc"},
+    {"call": "KTIN", "net": "PBS", "src": "fcc"},
+    {"call": "WBXF", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 658,
+   "rank": 68,
+   "name": "Green Bay–Appleton",
+   "states": ["MI", "WI"],
+   "home": "WI",
+   "cities": ["Green Bay", "Appleton"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WACY", "net": "NBC", "src": "fcc"},
+    {"call": "WBAY", "net": "ABC", "src": "fcc"},
+    {"call": "WCWF", "net": "CW", "src": "fcc"},
+    {"call": "WFRV", "net": "CBS", "src": "fcc"},
+    {"call": "WGBA", "net": "NBC", "src": "fcc"},
+    {"call": "WLUK", "net": "FOX", "src": "fcc"},
+    {"call": "WLWK", "net": "NBC", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 744,
+   "rank": 69,
+   "name": "Honolulu",
+   "states": ["HI"],
+   "home": "HI",
+   "cities": ["Honolulu"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KITV", "net": "ABC", "src": "hand"},
+    {"call": "KHNL", "net": "NBC", "src": "hand"},
+    {"call": "KGMB", "net": "CBS", "src": "hand"},
+    {"call": "KHON", "net": "FOX", "src": "hand"},
+    {"call": "KHON", "net": "CW", "src": "hand"},
+    {"call": "KHET", "net": "PBS", "src": "hand"},
+    {"call": "KAII", "net": "FOX", "src": "fcc", "verify": true, "note": "FCC lists FOX/CW"},
+    {"call": "KALO", "net": "IND", "src": "fcc"},
+    {"call": "KBFD", "net": "IND", "src": "fcc"},
+    {"call": "KFVE", "net": "IND", "src": "fcc"},
+    {"call": "KGMD", "net": "MNT", "src": "fcc"},
+    {"call": "KGMV", "net": "MNT", "src": "fcc"},
+    {"call": "KHII", "net": "MNT", "src": "fcc"},
+    {"call": "KHVO", "net": "ABC", "src": "fcc"},
+    {"call": "KIKU", "net": "IND", "src": "fcc"},
+    {"call": "KKAI", "net": "IND", "src": "fcc"},
+    {"call": "KMAU", "net": "ABC", "src": "fcc"},
+    {"call": "KMEB", "net": "PBS", "src": "fcc"},
+    {"call": "KOGG", "net": "NBC", "src": "fcc"},
+    {"call": "KSIX", "net": "NBC", "src": "fcc"},
+    {"call": "KUPU", "net": "IND", "src": "fcc"},
+    {"call": "KWBN", "net": "IND", "src": "fcc"},
+    {"call": "KWHE", "net": "IND", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 573,
+   "rank": 70,
+   "name": "Roanoke–Lynchburg",
+   "states": ["VA", "WV"],
+   "home": "VA",
+   "cities": ["Roanoke", "Lynchburg"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WBRA", "net": "PBS", "src": "fcc"},
+    {"call": "WDBJ", "net": "CBS", "src": "fcc"},
+    {"call": "WFXR", "net": "FOX", "src": "fcc"},
+    {"call": "WSET", "net": "ABC", "src": "fcc"},
+    {"call": "WSLS", "net": "NBC", "src": "fcc"},
+    {"call": "WWCW", "net": "CW", "src": "fcc"},
+    {"call": "WZBJ", "net": "MNT", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 678,
+   "rank": 71,
+   "name": "Wichita–Hutchinson Plus",
+   "states": ["KS", "NE"],
+   "home": "KS",
+   "cities": ["Wichita", "Hutchinson"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KAAS", "net": "FOX", "src": "fcc"},
+    {"call": "KAKE", "net": "ABC", "src": "fcc"},
+    {"call": "KBSD", "net": "CBS", "src": "fcc"},
+    {"call": "KBSH", "net": "CBS", "src": "fcc"},
+    {"call": "KBSL", "net": "CBS", "src": "fcc"},
+    {"call": "KDCK", "net": "PBS", "src": "fcc"},
+    {"call": "KDCU", "net": "UNI", "src": "fcc"},
+    {"call": "KLBY", "net": "ABC", "src": "fcc"},
+    {"call": "KOCW", "net": "FOX", "src": "fcc"},
+    {"call": "KOOD", "net": "PBS", "src": "fcc"},
+    {"call": "KPTS", "net": "PBS", "src": "fcc"},
+    {"call": "KSAS", "net": "FOX", "src": "fcc"},
+    {"call": "KSCW", "net": "CW", "src": "fcc"},
+    {"call": "KSNC", "net": "NBC", "src": "fcc"},
+    {"call": "KSNG", "net": "NBC", "src": "fcc"},
+    {"call": "KSNK", "net": "NBC", "src": "fcc"},
+    {"call": "KSNW", "net": "NBC", "src": "fcc"},
+    {"call": "KSWK", "net": "PBS", "src": "fcc"},
+    {"call": "KUPK", "net": "ABC", "src": "fcc"},
+    {"call": "KWCH", "net": "CBS", "src": "fcc"},
+    {"call": "KWKS", "net": "PBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 513,
+   "rank": 72,
+   "name": "Flint–Saginaw–Bay City",
+   "states": ["MI"],
+   "home": "MI",
+   "cities": ["Flint", "Saginaw", "Bay City"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WAQP", "net": "IND", "src": "fcc"},
+    {"call": "WBSF", "net": "CW", "src": "fcc"},
+    {"call": "WCMU", "net": "PBS", "src": "fcc"},
+    {"call": "WDCQ", "net": "PBS", "src": "fcc"},
+    {"call": "WEYI", "net": "NBC", "src": "fcc"},
+    {"call": "WJRT", "net": "ABC", "src": "fcc"},
+    {"call": "WNEM", "net": "CBS", "src": "fcc", "verify": true, "note": "FCC lists CBS/MNT"},
+    {"call": "WSMH", "net": "FOX", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 652,
+   "rank": 73,
+   "name": "Omaha",
+   "states": ["IA", "MO", "NE"],
+   "home": "NE",
+   "cities": ["Omaha"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KETV", "net": "ABC", "src": "hand"},
+    {"call": "WOWT", "net": "NBC", "src": "hand"},
+    {"call": "KMTV", "net": "CBS", "src": "hand"},
+    {"call": "KPTM", "net": "FOX", "src": "hand"},
+    {"call": "KXVO", "net": "CW", "src": "hand"},
+    {"call": "KYNE", "net": "PBS", "src": "hand"},
+    {"call": "KBIN", "net": "PBS", "src": "fcc"},
+    {"call": "KHIN", "net": "PBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 619,
+   "rank": 74,
+   "name": "Springfield, MO",
+   "states": ["AR", "MO"],
+   "home": "MO",
+   "cities": [],
+   "ambiguousCities": ["Springfield"],
+   "stations": [
+    {"call": "KOLR", "net": "CBS", "src": "fcc"},
+    {"call": "KOZK", "net": "PBS", "src": "fcc"},
+    {"call": "KOZL", "net": "MNT", "src": "fcc"},
+    {"call": "KRBK", "net": "FOX", "src": "fcc"},
+    {"call": "KYTV", "net": "NBC", "src": "fcc", "verify": true, "note": "FCC lists NBC/ABC/CW"},
+    {"call": "KBNS", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 691,
+   "rank": 75,
+   "name": "Huntsville–Decatur",
+   "states": ["AL", "TN"],
+   "home": "AL",
+   "cities": ["Huntsville"],
+   "ambiguousCities": ["Decatur", "Florence"],
+   "stations": [
+    {"call": "WAAY", "net": "ABC", "src": "fcc"},
+    {"call": "WAFF", "net": "NBC", "src": "fcc"},
+    {"call": "WFIQ", "net": "PBS", "src": "fcc"},
+    {"call": "WHDF", "net": "CW", "src": "fcc"},
+    {"call": "WHIQ", "net": "PBS", "src": "fcc"},
+    {"call": "WHNT", "net": "CBS", "src": "fcc"},
+    {"call": "WZDX", "net": "FOX", "src": "fcc"},
+    {"call": "WTZT", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 546,
+   "rank": 76,
+   "name": "Columbia, SC",
+   "states": ["SC"],
+   "home": "SC",
+   "cities": [],
+   "ambiguousCities": ["Columbia"],
+   "stations": [
+    {"call": "WACH", "net": "FOX", "src": "fcc"},
+    {"call": "WIS", "net": "NBC", "src": "fcc"},
+    {"call": "WKTC", "net": "MNT", "src": "fcc"},
+    {"call": "WLTX", "net": "CBS", "src": "fcc"},
+    {"call": "WOLO", "net": "ABC", "src": "fcc"},
+    {"call": "WRJA", "net": "PBS", "src": "fcc"},
+    {"call": "WRLK", "net": "PBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 669,
+   "rank": 77,
+   "name": "Madison",
+   "states": ["WI"],
+   "home": "WI",
+   "cities": ["Madison"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WHA", "net": "PBS", "src": "fcc"},
+    {"call": "WISC", "net": "CBS", "src": "fcc"},
+    {"call": "WKOW", "net": "ABC", "src": "fcc"},
+    {"call": "WMSN", "net": "FOX", "src": "fcc"},
+    {"call": "WMTV", "net": "NBC", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 500,
+   "rank": 78,
+   "name": "Portland–Auburn",
+   "states": ["ME", "NH"],
+   "home": "ME",
+   "cities": [],
+   "ambiguousCities": ["Portland", "Auburn"],
+   "stations": [
+    {"call": "WCBB", "net": "PBS", "src": "fcc"},
+    {"call": "WCSH", "net": "NBC", "src": "fcc"},
+    {"call": "WGME", "net": "CBS", "src": "fcc"},
+    {"call": "WMEA", "net": "PBS", "src": "fcc"},
+    {"call": "WMTW", "net": "ABC", "src": "fcc"},
+    {"call": "WPFO", "net": "FOX", "src": "fcc"},
+    {"call": "WPXT", "net": "CW", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 538,
+   "rank": 79,
+   "name": "Rochester, NY",
+   "states": ["NY"],
+   "home": "NY",
+   "cities": [],
+   "ambiguousCities": ["Rochester"],
+   "stations": [
+    {"call": "WHAM", "net": "ABC", "src": "fcc"},
+    {"call": "WHEC", "net": "NBC", "src": "fcc"},
+    {"call": "WROC", "net": "CBS", "src": "fcc"},
+    {"call": "WUHF", "net": "FOX", "src": "fcc"},
+    {"call": "WXXI", "net": "PBS", "src": "fcc"},
+    {"call": "WBGT", "net": "MNT", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 636,
+   "rank": 80,
+   "name": "Harlingen–Weslaco–Brownsville–McAllen",
+   "states": ["TX"],
+   "home": "TX",
+   "cities": ["Harlingen", "Weslaco", "Brownsville", "McAllen"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KFXV", "net": "FOX", "src": "fcc"},
+    {"call": "KGBT", "net": "IND", "src": "fcc"},
+    {"call": "KNVO", "net": "UNI", "src": "fcc"},
+    {"call": "KRGV", "net": "ABC", "src": "fcc"},
+    {"call": "KTLM", "net": "TEL", "src": "fcc"},
+    {"call": "KVEO", "net": "NBC", "src": "fcc", "verify": true, "note": "FCC lists NBC/CBS"},
+    {"call": "KMBH", "net": "CW", "src": "fcc", "classA": true},
+    {"call": "KXFX", "net": "FOX", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 547,
+   "rank": 81,
+   "name": "Toledo",
+   "states": ["MI", "OH"],
+   "home": "OH",
+   "cities": ["Toledo"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WGTE", "net": "PBS", "src": "fcc"},
+    {"call": "WLMB", "net": "IND", "src": "fcc"},
+    {"call": "WNWO", "net": "NBC", "src": "fcc"},
+    {"call": "WTOL", "net": "CBS", "src": "fcc"},
+    {"call": "WTVG", "net": "ABC", "src": "fcc"},
+    {"call": "WUPW", "net": "FOX", "src": "fcc"},
+    {"call": "WMNT", "net": "MNT", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 564,
+   "rank": 82,
+   "name": "Charleston–Huntington",
+   "states": ["KY", "OH", "WV"],
+   "home": "WV",
+   "cities": ["Huntington"],
+   "ambiguousCities": ["Charleston"],
+   "stations": [
+    {"call": "WCHS", "net": "ABC", "src": "hand"},
+    {"call": "WSAZ", "net": "NBC", "src": "hand"},
+    {"call": "WOWK", "net": "CBS", "src": "hand"},
+    {"call": "WVAH", "net": "FOX", "src": "hand"},
+    {"call": "WPBY", "net": "PBS", "src": "hand"},
+    {"call": "WKAS", "net": "PBS", "src": "fcc"},
+    {"call": "WKPI", "net": "PBS", "src": "fcc"},
+    {"call": "WQCW", "net": "CW", "src": "fcc"},
+    {"call": "WTSF", "net": "IND", "src": "fcc"},
+    {"call": "WVPB", "net": "PBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 625,
+   "rank": 83,
+   "name": "Waco–Temple–Bryan",
+   "states": ["TX"],
+   "home": "TX",
+   "cities": ["Waco", "Bryan"],
+   "ambiguousCities": ["Temple"],
+   "stations": [
+    {"call": "KAMU", "net": "PBS", "src": "fcc"},
+    {"call": "KBTX", "net": "CBS", "src": "fcc"},
+    {"call": "KCEN", "net": "NBC", "src": "fcc"},
+    {"call": "KNCT", "net": "CW", "src": "fcc"},
+    {"call": "KWKT", "net": "FOX", "src": "fcc"},
+    {"call": "KWTX", "net": "CBS", "src": "fcc", "verify": true, "note": "FCC lists CBS/TEL"},
+    {"call": "KXXV", "net": "ABC", "src": "fcc"},
+    {"call": "KYLE", "net": "MNT", "src": "fcc"},
+    {"call": "KRHD", "net": "ABC", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 507,
+   "rank": 84,
+   "name": "Savannah",
+   "states": ["GA", "SC"],
+   "home": "GA",
+   "cities": ["Savannah"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WJCL", "net": "ABC", "src": "fcc"},
+    {"call": "WJWJ", "net": "PBS", "src": "fcc"},
+    {"call": "WSAV", "net": "NBC", "src": "fcc"},
+    {"call": "WSCG", "net": "IND", "src": "fcc"},
+    {"call": "WTGS", "net": "FOX", "src": "fcc"},
+    {"call": "WTOC", "net": "CBS", "src": "fcc"},
+    {"call": "WVAN", "net": "PBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 519,
+   "rank": 85,
+   "name": "Charleston, SC",
+   "states": ["SC"],
+   "home": "SC",
+   "cities": [],
+   "ambiguousCities": ["Charleston"],
+   "stations": [
+    {"call": "WCBD", "net": "NBC", "src": "fcc"},
+    {"call": "WCIV", "net": "ABC", "src": "fcc"},
+    {"call": "WCSC", "net": "CBS", "src": "fcc"},
+    {"call": "WITV", "net": "PBS", "src": "fcc"},
+    {"call": "WTAT", "net": "FOX", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 575,
+   "rank": 86,
+   "name": "Chattanooga",
+   "states": ["GA", "NC", "TN"],
+   "home": "TN",
+   "cities": ["Chattanooga"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WDEF", "net": "CBS", "src": "fcc"},
+    {"call": "WFLI", "net": "CW", "src": "fcc"},
+    {"call": "WNGH", "net": "PBS", "src": "fcc"},
+    {"call": "WRCB", "net": "NBC", "src": "fcc"},
+    {"call": "WTCI", "net": "PBS", "src": "fcc"},
+    {"call": "WTVC", "net": "ABC", "src": "fcc"},
+    {"call": "WPDP", "net": "FOX", "src": "fcc", "classA": true},
+    {"call": "WTVL", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 752,
+   "rank": 87,
+   "name": "Colorado Springs–Pueblo",
+   "states": ["CO"],
+   "home": "CO",
+   "cities": ["Colorado Springs", "Pueblo"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KKTV", "net": "CBS", "src": "fcc"},
+    {"call": "KOAA", "net": "NBC", "src": "fcc"},
+    {"call": "KRDO", "net": "ABC", "src": "fcc"},
+    {"call": "KTSC", "net": "PBS", "src": "fcc"},
+    {"call": "KVSN", "net": "UNI", "src": "fcc"},
+    {"call": "KXRM", "net": "FOX", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 555,
+   "rank": 88,
+   "name": "Syracuse",
+   "states": ["NY"],
+   "home": "NY",
+   "cities": ["Syracuse"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WCNY", "net": "PBS", "src": "fcc"},
+    {"call": "WKOF", "net": "CBS", "src": "fcc"},
+    {"call": "WNYI", "net": "IND", "src": "fcc"},
+    {"call": "WSTM", "net": "NBC", "src": "fcc"},
+    {"call": "WSYR", "net": "ABC", "src": "fcc"},
+    {"call": "WSYT", "net": "FOX", "src": "fcc"},
+    {"call": "WTVH", "net": "CBS", "src": "fcc"},
+    {"call": "WNYS", "net": "MNT", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 765,
+   "rank": 89,
+   "name": "El Paso",
+   "states": ["NM", "TX"],
+   "home": "TX",
+   "cities": ["El Paso", "Las Cruces"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KCOS", "net": "PBS", "src": "fcc"},
+    {"call": "KDBC", "net": "CBS", "src": "fcc"},
+    {"call": "KFOX", "net": "FOX", "src": "fcc"},
+    {"call": "KINT", "net": "UNI", "src": "fcc"},
+    {"call": "KRWG", "net": "PBS", "src": "fcc"},
+    {"call": "KTDO", "net": "TEL", "src": "fcc"},
+    {"call": "KTSM", "net": "NBC", "src": "fcc"},
+    {"call": "KVIA", "net": "ABC", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 632,
+   "rank": 90,
+   "name": "Paducah–Cape Girardeau–Harrisburg",
+   "states": ["IL", "KY", "MO", "TN"],
+   "home": "KY",
+   "cities": ["Paducah", "Cape Girardeau"],
+   "ambiguousCities": ["Harrisburg"],
+   "stations": [
+    {"call": "WSIL", "net": "ABC", "src": "hand"},
+    {"call": "WPSD", "net": "NBC", "src": "hand"},
+    {"call": "KFVS", "net": "CBS", "src": "hand"},
+    {"call": "KBSI", "net": "FOX", "src": "hand"},
+    {"call": "KFVS", "net": "CW", "src": "hand"},
+    {"call": "WKMU", "net": "PBS", "src": "hand"},
+    {"call": "WDKA", "net": "MNT", "src": "hand"},
+    {"call": "KPOB", "net": "ABC", "src": "fcc"},
+    {"call": "WKPD", "net": "PBS", "src": "fcc"},
+    {"call": "WSIU", "net": "PBS", "src": "fcc"},
+    {"call": "WTCT", "net": "IND", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 612,
+   "rank": 91,
+   "name": "Shreveport–Texarkana",
+   "states": ["AR", "LA", "OK", "TX"],
+   "home": "LA",
+   "cities": ["Shreveport", "Texarkana"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KLTS", "net": "PBS", "src": "fcc"},
+    {"call": "KMSS", "net": "FOX", "src": "fcc"},
+    {"call": "KPXJ", "net": "CW", "src": "fcc"},
+    {"call": "KSHV", "net": "MNT", "src": "fcc"},
+    {"call": "KSLA", "net": "CBS", "src": "fcc"},
+    {"call": "KTAL", "net": "NBC", "src": "fcc"},
+    {"call": "KTBS", "net": "ABC", "src": "fcc"},
+    {"call": "KADO", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "KTSH", "net": "TEL", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 648,
+   "rank": 92,
+   "name": "Champaign–Urbana & Springfield–Decatur",
+   "states": ["IL"],
+   "home": "IL",
+   "cities": ["Champaign", "Urbana"],
+   "ambiguousCities": ["Springfield", "Decatur"],
+   "stations": [
+    {"call": "WICD", "net": "ABC", "src": "hand"},
+    {"call": "WAND", "net": "NBC", "src": "hand"},
+    {"call": "WCIA", "net": "CBS", "src": "hand"},
+    {"call": "WRSP", "net": "FOX", "src": "hand"},
+    {"call": "WILL", "net": "PBS", "src": "hand"},
+    {"call": "WCIX", "net": "MNT", "src": "hand", "verify": true, "note": "FCC lists CBS"},
+    {"call": "WBUI", "net": "CW", "src": "fcc"},
+    {"call": "WCCU", "net": "FOX", "src": "fcc"},
+    {"call": "WICS", "net": "ABC", "src": "fcc"},
+    {"call": "WSEC", "net": "PBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 523,
+   "rank": 93,
+   "name": "Burlington–Plattsburgh",
+   "states": ["NH", "NY", "VT"],
+   "home": "VT",
+   "cities": ["Plattsburgh"],
+   "ambiguousCities": ["Burlington"],
+   "stations": [
+    {"call": "WCAX", "net": "CBS", "src": "fcc"},
+    {"call": "WCFE", "net": "PBS", "src": "fcc"},
+    {"call": "WETK", "net": "PBS", "src": "fcc"},
+    {"call": "WFFF", "net": "FOX", "src": "fcc"},
+    {"call": "WLED", "net": "PBS", "src": "fcc"},
+    {"call": "WNNE", "net": "CW", "src": "fcc"},
+    {"call": "WPTZ", "net": "NBC", "src": "fcc"},
+    {"call": "WVER", "net": "PBS", "src": "fcc"},
+    {"call": "WVNY", "net": "ABC", "src": "fcc"},
+    {"call": "WVTB", "net": "PBS", "src": "fcc"},
+    {"call": "WYCI", "net": "MNT", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 637,
+   "rank": 94,
+   "name": "Cedar Rapids–Waterloo–Iowa City & Dubuque",
+   "states": ["IA"],
+   "home": "IA",
+   "cities": ["Cedar Rapids", "Waterloo", "Iowa City", "Dubuque"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KCRG", "net": "ABC", "src": "fcc"},
+    {"call": "KGAN", "net": "CBS", "src": "fcc", "verify": true, "note": "FCC lists CBS/FOX"},
+    {"call": "KIIN", "net": "PBS", "src": "fcc"},
+    {"call": "KRIN", "net": "PBS", "src": "fcc"},
+    {"call": "KWKB", "net": "IND", "src": "fcc"},
+    {"call": "KWWL", "net": "NBC", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 716,
+   "rank": 95,
+   "name": "Baton Rouge",
+   "states": ["LA", "MS"],
+   "home": "LA",
+   "cities": ["Baton Rouge"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WAFB", "net": "CBS", "src": "fcc"},
+    {"call": "WBRZ", "net": "ABC", "src": "fcc"},
+    {"call": "WGMB", "net": "FOX", "src": "fcc"},
+    {"call": "WLPB", "net": "PBS", "src": "fcc"},
+    {"call": "WVLA", "net": "NBC", "src": "fcc"},
+    {"call": "KBTR", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "KJUN", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "KWBJ", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "KZUP", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WBRL", "net": "CW", "src": "fcc", "classA": true},
+    {"call": "WBXH", "net": "MNT", "src": "fcc", "classA": true},
+    {"call": "WLFT", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 670,
+   "rank": 96,
+   "name": "Fort Smith–Fayetteville–Springdale–Rogers",
+   "states": ["AR", "OK"],
+   "home": "AR",
+   "cities": ["Fort Smith", "Fayetteville", "Springdale", "Rogers", "Ft Smith"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KAFT", "net": "PBS", "src": "fcc"},
+    {"call": "KFSM", "net": "CBS", "src": "fcc"},
+    {"call": "KFTA", "net": "FOX", "src": "fcc"},
+    {"call": "KHBS", "net": "ABC", "src": "fcc", "verify": true, "note": "FCC lists ABC/CW"},
+    {"call": "KHOG", "net": "ABC", "src": "fcc", "verify": true, "note": "FCC lists ABC/CW"},
+    {"call": "KNWA", "net": "NBC", "src": "fcc"},
+    {"call": "KWOG", "net": "IND", "src": "fcc"},
+    {"call": "KXNW", "net": "MNT", "src": "fcc"},
+    {"call": "KEGW", "net": "TEL", "src": "fcc", "classA": true},
+    {"call": "KSJF", "net": "TEL", "src": "fcc", "classA": true},
+    {"call": "KWNL", "net": "UNI", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 570,
+   "rank": 97,
+   "name": "Myrtle Beach–Florence",
+   "states": ["NC", "SC"],
+   "home": "SC",
+   "cities": ["Myrtle Beach"],
+   "ambiguousCities": ["Florence"],
+   "stations": [
+    {"call": "WBTW", "net": "CBS", "src": "fcc"},
+    {"call": "WFXB", "net": "FOX", "src": "fcc"},
+    {"call": "WHMC", "net": "PBS", "src": "fcc"},
+    {"call": "WJPM", "net": "PBS", "src": "fcc"},
+    {"call": "WMBF", "net": "NBC", "src": "fcc"},
+    {"call": "WPDE", "net": "ABC", "src": "fcc"},
+    {"call": "WUNU", "net": "PBS", "src": "fcc"},
+    {"call": "WGSC", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WGSI", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WTNG", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 757,
+   "rank": 98,
+   "name": "Boise",
+   "states": ["ID", "OR"],
+   "home": "ID",
+   "cities": ["Boise"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KAID", "net": "PBS", "src": "fcc"},
+    {"call": "KBOI", "net": "CBS", "src": "fcc"},
+    {"call": "KIVI", "net": "ABC", "src": "fcc"},
+    {"call": "KKJB", "net": "TEL", "src": "fcc"},
+    {"call": "KNIN", "net": "FOX", "src": "fcc"},
+    {"call": "KTVB", "net": "NBC", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 718,
+   "rank": 99,
+   "name": "Jackson, MS",
+   "states": ["MS"],
+   "home": "MS",
+   "cities": [],
+   "ambiguousCities": ["Jackson"],
+   "stations": [
+    {"call": "WAPT", "net": "ABC", "src": "fcc"},
+    {"call": "WDBD", "net": "FOX", "src": "fcc"},
+    {"call": "WJTV", "net": "CBS", "src": "fcc"},
+    {"call": "WLBT", "net": "NBC", "src": "fcc"},
+    {"call": "WLOO", "net": "MNT", "src": "fcc"},
+    {"call": "WMAU", "net": "PBS", "src": "fcc"},
+    {"call": "WMPN", "net": "PBS", "src": "fcc"},
+    {"call": "WWJX", "net": "IND", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 588,
+   "rank": 100,
+   "name": "South Bend–Elkhart",
+   "states": ["IN", "MI"],
+   "home": "IN",
+   "cities": ["South Bend", "Elkhart"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WHME", "net": "UNI", "src": "fcc"},
+    {"call": "WNDU", "net": "NBC", "src": "fcc"},
+    {"call": "WNIT", "net": "PBS", "src": "fcc"},
+    {"call": "WSBT", "net": "CBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 531,
+   "rank": 101,
+   "name": "Tri–Cities",
+   "states": ["KY", "TN", "VA"],
+   "home": "TN",
+   "cities": ["Cities"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WCYB", "net": "NBC", "src": "fcc"},
+    {"call": "WEMT", "net": "FOX", "src": "fcc"},
+    {"call": "WJHL", "net": "CBS", "src": "fcc", "verify": true, "note": "FCC lists CBS/ABC"},
+    {"call": "WJKB", "net": "IND", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 545,
+   "rank": 102,
+   "name": "Greenville–New Bern–Washington",
+   "states": ["NC"],
+   "home": "NC",
+   "cities": ["New Bern"],
+   "ambiguousCities": ["Greenville", "Washington"],
+   "stations": [
+    {"call": "WCTI", "net": "ABC", "src": "fcc"},
+    {"call": "WITN", "net": "NBC", "src": "fcc"},
+    {"call": "WNCT", "net": "CBS", "src": "fcc"},
+    {"call": "WUNK", "net": "PBS", "src": "fcc"},
+    {"call": "WUNM", "net": "PBS", "src": "fcc"},
+    {"call": "WYDO", "net": "FOX", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 811,
+   "rank": 103,
+   "name": "Reno",
+   "states": ["CA", "NV"],
+   "home": "NV",
+   "cities": ["Reno"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KNPB", "net": "PBS", "src": "fcc"},
+    {"call": "KNSN", "net": "IND", "src": "fcc"},
+    {"call": "KOLO", "net": "ABC", "src": "fcc"},
+    {"call": "KREN", "net": "UNI", "src": "fcc"},
+    {"call": "KRNV", "net": "NBC", "src": "fcc"},
+    {"call": "KRXI", "net": "FOX", "src": "fcc"},
+    {"call": "KTVN", "net": "CBS", "src": "fcc"},
+    {"call": "KWNV", "net": "TEL", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 682,
+   "rank": 104,
+   "name": "Davenport–Rock Island–Moline",
+   "states": ["IA", "IL"],
+   "home": "IA",
+   "cities": ["Davenport", "Rock Island", "Moline"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KGCW", "net": "CW", "src": "fcc"},
+    {"call": "KLJB", "net": "FOX", "src": "fcc"},
+    {"call": "KQIN", "net": "PBS", "src": "fcc"},
+    {"call": "KWQC", "net": "NBC", "src": "fcc"},
+    {"call": "WHBF", "net": "CBS", "src": "fcc"},
+    {"call": "WQAD", "net": "ABC", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 530,
+   "rank": 105,
+   "name": "Tallahassee–Thomasville",
+   "states": ["FL", "GA"],
+   "home": "FL",
+   "cities": ["Tallahassee", "Thomasville"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WTXL", "net": "ABC", "src": "hand"},
+    {"call": "WTWC", "net": "NBC", "src": "hand"},
+    {"call": "WCTV", "net": "CBS", "src": "hand"},
+    {"call": "WTLF", "net": "FOX", "src": "hand", "verify": true, "note": "FCC lists CW"},
+    {"call": "WFSU", "net": "PBS", "src": "hand"},
+    {"call": "WFSG", "net": "PBS", "src": "fcc"},
+    {"call": "WBFL", "net": "NBC", "src": "fcc", "classA": true},
+    {"call": "WBVJ", "net": "NBC", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 709,
+   "rank": 106,
+   "name": "Tyler–Longview",
+   "states": ["TX"],
+   "home": "TX",
+   "cities": ["Longview", "Lufkin", "Nacogdoches"],
+   "ambiguousCities": ["Tyler"],
+   "stations": [
+    {"call": "KETK", "net": "NBC", "src": "fcc"},
+    {"call": "KFXK", "net": "FOX", "src": "fcc"},
+    {"call": "KLTV", "net": "ABC", "src": "fcc"},
+    {"call": "KTRE", "net": "ABC", "src": "fcc"},
+    {"call": "KYTX", "net": "CBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 722,
+   "rank": 107,
+   "name": "Lincoln & Hastings–Kearney",
+   "states": ["KS", "NE"],
+   "home": "NE",
+   "cities": [],
+   "ambiguousCities": ["Lincoln", "Hastings", "Kearney"],
+   "stations": [
+    {"call": "KFXL", "net": "FOX", "src": "fcc"},
+    {"call": "KGIN", "net": "CBS", "src": "fcc"},
+    {"call": "KHGI", "net": "ABC", "src": "fcc"},
+    {"call": "KHNE", "net": "PBS", "src": "fcc"},
+    {"call": "KLKN", "net": "ABC", "src": "fcc"},
+    {"call": "KLNE", "net": "PBS", "src": "fcc"},
+    {"call": "KMNE", "net": "PBS", "src": "fcc"},
+    {"call": "KOLN", "net": "CBS", "src": "fcc"},
+    {"call": "KSNB", "net": "NBC", "src": "fcc"},
+    {"call": "KUON", "net": "PBS", "src": "fcc"},
+    {"call": "KWNB", "net": "ABC", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 520,
+   "rank": 108,
+   "name": "Augusta–Aiken",
+   "states": ["GA", "SC"],
+   "home": "GA",
+   "cities": [],
+   "ambiguousCities": ["Augusta", "Aiken"],
+   "stations": [
+    {"call": "WCES", "net": "PBS", "src": "fcc"},
+    {"call": "WEBA", "net": "PBS", "src": "fcc"},
+    {"call": "WFXG", "net": "FOX", "src": "fcc"},
+    {"call": "WJBF", "net": "ABC", "src": "fcc"},
+    {"call": "WRDW", "net": "CBS", "src": "fcc", "verify": true, "note": "FCC lists CBS/MNT"},
+    {"call": "WAGT", "net": "NBC", "src": "fcc", "classA": true},
+    {"call": "WBPI", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 649,
+   "rank": 109,
+   "name": "Evansville",
+   "states": ["IL", "IN", "KY"],
+   "home": "IN",
+   "cities": ["Evansville"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WEHT", "net": "ABC", "src": "hand"},
+    {"call": "WFIE", "net": "NBC", "src": "hand"},
+    {"call": "WEVV", "net": "CBS", "src": "hand"},
+    {"call": "WEVV", "net": "FOX", "src": "hand"},
+    {"call": "WNIN", "net": "PBS", "src": "hand"},
+    {"call": "WKMA", "net": "PBS", "src": "fcc"},
+    {"call": "WKOH", "net": "PBS", "src": "fcc"},
+    {"call": "WTVW", "net": "CW", "src": "fcc"},
+    {"call": "WJTS", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "WYYW", "net": "TEL", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 509,
+   "rank": 110,
+   "name": "Fort Wayne",
+   "states": ["IN", "OH"],
+   "home": "IN",
+   "cities": ["Fort Wayne", "Ft Wayne"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WANE", "net": "CBS", "src": "fcc"},
+    {"call": "WFFT", "net": "FOX", "src": "fcc"},
+    {"call": "WFWA", "net": "PBS", "src": "fcc"},
+    {"call": "WINM", "net": "IND", "src": "fcc"},
+    {"call": "WISE", "net": "CW", "src": "fcc"},
+    {"call": "WPTA", "net": "ABC", "src": "fcc", "verify": true, "note": "FCC lists ABC/NBC"}
+   ]
+  },
+  {
+   "code": 725,
+   "rank": 111,
+   "name": "Sioux Falls",
+   "states": ["IA", "MN", "NE", "SD"],
+   "home": "SD",
+   "cities": ["Sioux Falls", "Mitchell"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KCSD", "net": "PBS", "src": "fcc"},
+    {"call": "KDLO", "net": "CBS", "src": "fcc"},
+    {"call": "KDLT", "net": "NBC", "src": "fcc", "verify": true, "note": "FCC lists NBC/FOX"},
+    {"call": "KDLV", "net": "NBC", "src": "fcc", "verify": true, "note": "FCC lists NBC/ABC/FOX"},
+    {"call": "KDSD", "net": "PBS", "src": "fcc"},
+    {"call": "KELO", "net": "CBS", "src": "fcc"},
+    {"call": "KESD", "net": "PBS", "src": "fcc"},
+    {"call": "KPLO", "net": "CBS", "src": "fcc"},
+    {"call": "KPRY", "net": "NBC", "src": "fcc", "verify": true, "note": "FCC lists NBC/ABC/FOX"},
+    {"call": "KQSD", "net": "PBS", "src": "fcc"},
+    {"call": "KSFL", "net": "IND", "src": "fcc"},
+    {"call": "KSFY", "net": "ABC", "src": "fcc"},
+    {"call": "KSMN", "net": "PBS", "src": "fcc"},
+    {"call": "KTSD", "net": "PBS", "src": "fcc"},
+    {"call": "KTTM", "net": "IND", "src": "fcc"},
+    {"call": "KTTW", "net": "IND", "src": "fcc"},
+    {"call": "KUSD", "net": "PBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 574,
+   "rank": 112,
+   "name": "Johnstown–Altoona–State College",
+   "states": ["PA"],
+   "home": "PA",
+   "cities": ["Johnstown", "Altoona", "State College"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WATM", "net": "ABC", "src": "fcc"},
+    {"call": "WJAC", "net": "NBC", "src": "fcc"},
+    {"call": "WKBS", "net": "IND", "src": "fcc"},
+    {"call": "WPSU", "net": "PBS", "src": "fcc"},
+    {"call": "WTAJ", "net": "CBS", "src": "fcc"},
+    {"call": "WWCP", "net": "FOX", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 724,
+   "rank": 113,
+   "name": "Fargo–Valley City",
+   "states": ["MN", "ND"],
+   "home": "ND",
+   "cities": ["Fargo", "Valley City"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KBRR", "net": "FOX", "src": "fcc"},
+    {"call": "KCGE", "net": "PBS", "src": "fcc"},
+    {"call": "KFME", "net": "PBS", "src": "fcc"},
+    {"call": "KGFE", "net": "PBS", "src": "fcc"},
+    {"call": "KJRR", "net": "FOX", "src": "fcc"},
+    {"call": "KMDE", "net": "PBS", "src": "fcc"},
+    {"call": "KNGF", "net": "IND", "src": "fcc"},
+    {"call": "KNRR", "net": "FOX", "src": "fcc"},
+    {"call": "KRDK", "net": "IND", "src": "fcc"},
+    {"call": "KVLY", "net": "NBC", "src": "fcc"},
+    {"call": "KVRR", "net": "FOX", "src": "fcc"},
+    {"call": "WDAY", "net": "ABC", "src": "fcc"},
+    {"call": "WDAZ", "net": "ABC", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 810,
+   "rank": 114,
+   "name": "Yakima–Pasco–Richland–Kennewick",
+   "states": ["OR", "WA"],
+   "home": "WA",
+   "cities": ["Yakima", "Pasco", "Kennewick"],
+   "ambiguousCities": ["Richland"],
+   "stations": [
+    {"call": "KAPP", "net": "ABC", "src": "fcc"},
+    {"call": "KEPR", "net": "CBS", "src": "fcc"},
+    {"call": "KFFX", "net": "IND", "src": "fcc"},
+    {"call": "KIMA", "net": "CBS", "src": "fcc"},
+    {"call": "KLEW", "net": "CBS", "src": "fcc"},
+    {"call": "KNDO", "net": "NBC", "src": "fcc"},
+    {"call": "KNDU", "net": "NBC", "src": "fcc"},
+    {"call": "KTNW", "net": "PBS", "src": "fcc"},
+    {"call": "KVEW", "net": "ABC", "src": "fcc"},
+    {"call": "KYVE", "net": "PBS", "src": "fcc"},
+    {"call": "KORX", "net": "UNI", "src": "fcc", "classA": true},
+    {"call": "KUNW", "net": "UNI", "src": "fcc", "classA": true},
+    {"call": "KVVK", "net": "UNI", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 543,
+   "rank": 115,
+   "name": "Springfield–Holyoke",
+   "states": ["MA"],
+   "home": "MA",
+   "cities": ["Holyoke"],
+   "ambiguousCities": ["Springfield"],
+   "stations": [
+    {"call": "WGBY", "net": "PBS", "src": "fcc"},
+    {"call": "WGGB", "net": "ABC", "src": "fcc", "verify": true, "note": "FCC lists ABC/FOX"},
+    {"call": "WWLP", "net": "NBC", "src": "fcc"},
+    {"call": "WFXQ", "net": "NBC", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 540,
+   "rank": 116,
+   "name": "Traverse City–Cadillac",
+   "states": ["MI"],
+   "home": "MI",
+   "cities": ["Traverse City", "Cadillac"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WCMV", "net": "PBS", "src": "fcc"},
+    {"call": "WCMW", "net": "PBS", "src": "fcc"},
+    {"call": "WFQX", "net": "FOX", "src": "fcc"},
+    {"call": "WGTQ", "net": "ABC", "src": "fcc"},
+    {"call": "WGTU", "net": "ABC", "src": "fcc"},
+    {"call": "WPBN", "net": "NBC", "src": "fcc"},
+    {"call": "WTOM", "net": "NBC", "src": "fcc"},
+    {"call": "WWTV", "net": "CBS", "src": "fcc"},
+    {"call": "WWUP", "net": "CBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 551,
+   "rank": 117,
+   "name": "Lansing",
+   "states": ["MI"],
+   "home": "MI",
+   "cities": ["Lansing"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WILX", "net": "NBC", "src": "fcc"},
+    {"call": "WKAR", "net": "PBS", "src": "fcc"},
+    {"call": "WLAJ", "net": "ABC", "src": "fcc", "verify": true, "note": "FCC lists ABC/CW"},
+    {"call": "WLNS", "net": "CBS", "src": "fcc"},
+    {"call": "WSYM", "net": "FOX", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 536,
+   "rank": 118,
+   "name": "Youngstown",
+   "states": ["OH", "PA"],
+   "home": "OH",
+   "cities": ["Youngstown"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WFMJ", "net": "NBC", "src": "fcc"},
+    {"call": "WKBN", "net": "CBS", "src": "fcc"},
+    {"call": "WNEO", "net": "PBS", "src": "fcc"},
+    {"call": "WYTV", "net": "ABC", "src": "fcc", "verify": true, "note": "FCC lists ABC/MNT"}
+   ]
+  },
+  {
+   "code": 503,
+   "rank": 119,
+   "name": "Macon",
+   "states": ["GA"],
+   "home": "GA",
+   "cities": ["Macon"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WGXA", "net": "FOX", "src": "fcc", "verify": true, "note": "FCC lists FOX/ABC"},
+    {"call": "WMAZ", "net": "CBS", "src": "fcc"},
+    {"call": "WMGT", "net": "NBC", "src": "fcc"},
+    {"call": "WMUM", "net": "PBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 801,
+   "rank": 120,
+   "name": "Eugene",
+   "states": ["OR"],
+   "home": "OR",
+   "cities": ["Eugene"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KCBY", "net": "CBS", "src": "fcc"},
+    {"call": "KEPB", "net": "PBS", "src": "fcc"},
+    {"call": "KEZI", "net": "ABC", "src": "fcc"},
+    {"call": "KLSR", "net": "FOX", "src": "fcc", "verify": true, "note": "FCC lists FOX/MNT"},
+    {"call": "KMCB", "net": "NBC", "src": "fcc"},
+    {"call": "KMTR", "net": "NBC", "src": "fcc"},
+    {"call": "KOAC", "net": "PBS", "src": "fcc"},
+    {"call": "KPIC", "net": "CBS", "src": "fcc"},
+    {"call": "KTCW", "net": "NBC", "src": "fcc"},
+    {"call": "KVAL", "net": "CBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 698,
+   "rank": 121,
+   "name": "Montgomery–Selma",
+   "states": ["AL"],
+   "home": "AL",
+   "cities": ["Montgomery", "Selma"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WAIQ", "net": "PBS", "src": "fcc"},
+    {"call": "WAKA", "net": "CBS", "src": "fcc"},
+    {"call": "WBIH", "net": "IND", "src": "fcc"},
+    {"call": "WBMM", "net": "CW", "src": "fcc"},
+    {"call": "WCOV", "net": "FOX", "src": "fcc"},
+    {"call": "WDIQ", "net": "PBS", "src": "fcc"},
+    {"call": "WIIQ", "net": "PBS", "src": "fcc"},
+    {"call": "WNCF", "net": "ABC", "src": "fcc"},
+    {"call": "WSFA", "net": "NBC", "src": "fcc"},
+    {"call": "WBXM", "net": "TEL", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 675,
+   "rank": 122,
+   "name": "Peoria–Bloomington",
+   "states": ["IL"],
+   "home": "IL",
+   "cities": ["Peoria"],
+   "ambiguousCities": ["Bloomington"],
+   "stations": [
+    {"call": "WHOI", "net": "ABC", "src": "hand", "verify": true, "note": "FCC lists MNT"},
+    {"call": "WEEK", "net": "NBC", "src": "hand"},
+    {"call": "WMBD", "net": "CBS", "src": "hand"},
+    {"call": "WYZZ", "net": "FOX", "src": "hand"},
+    {"call": "WTVP", "net": "PBS", "src": "hand"}
+   ]
+  },
+  {
+   "code": 855,
+   "rank": 123,
+   "name": "Santa Barbara–Santa Maria–San Luis Obispo",
+   "states": ["CA"],
+   "home": "CA",
+   "cities": ["Santa Barbara", "Santa Maria", "San Luis Obispo"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KCOY", "net": "TEL", "src": "fcc"},
+    {"call": "KEYT", "net": "ABC", "src": "fcc"},
+    {"call": "KPMR", "net": "UNI", "src": "fcc"},
+    {"call": "KSBY", "net": "NBC", "src": "fcc"},
+    {"call": "KKFX", "net": "FOX", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 642,
+   "rank": 124,
+   "name": "Lafayette, LA",
+   "states": ["LA"],
+   "home": "LA",
+   "cities": [],
+   "ambiguousCities": ["Lafayette"],
+   "stations": [
+    {"call": "KADN", "net": "FOX", "src": "fcc"},
+    {"call": "KATC", "net": "ABC", "src": "fcc"},
+    {"call": "KLFY", "net": "CBS", "src": "fcc"},
+    {"call": "KLPB", "net": "PBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 800,
+   "rank": 125,
+   "name": "Bakersfield",
+   "states": ["CA"],
+   "home": "CA",
+   "cities": ["Bakersfield"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KBAK", "net": "CBS", "src": "fcc"},
+    {"call": "KERO", "net": "ABC", "src": "fcc"},
+    {"call": "KGET", "net": "NBC", "src": "fcc"},
+    {"call": "KABE", "net": "UNI", "src": "fcc", "classA": true},
+    {"call": "KBFX", "net": "FOX", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 550,
+   "rank": 126,
+   "name": "Wilmington",
+   "states": ["NC"],
+   "home": "NC",
+   "cities": [],
+   "ambiguousCities": ["Wilmington"],
+   "stations": [
+    {"call": "WECT", "net": "NBC", "src": "fcc"},
+    {"call": "WSFX", "net": "FOX", "src": "fcc"},
+    {"call": "WUNJ", "net": "PBS", "src": "fcc"},
+    {"call": "WWAY", "net": "ABC", "src": "fcc", "verify": true, "note": "FCC lists ABC/CBS/CW"}
+   ]
+  },
+  {
+   "code": 522,
+   "rank": 127,
+   "name": "Columbus–Opelika",
+   "states": ["AL", "GA"],
+   "home": "GA",
+   "cities": ["Opelika"],
+   "ambiguousCities": ["Columbus"],
+   "stations": [
+    {"call": "WJSP", "net": "PBS", "src": "fcc"},
+    {"call": "WLTZ", "net": "NBC", "src": "fcc"},
+    {"call": "WRBL", "net": "CBS", "src": "fcc"},
+    {"call": "WTVM", "net": "ABC", "src": "fcc"},
+    {"call": "WXTX", "net": "FOX", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 828,
+   "rank": 128,
+   "name": "Monterey–Salinas",
+   "states": ["CA"],
+   "home": "CA",
+   "cities": ["Monterey", "Salinas"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KCBA", "net": "CW", "src": "fcc"},
+    {"call": "KION", "net": "CBS", "src": "fcc"},
+    {"call": "KQET", "net": "PBS", "src": "fcc"},
+    {"call": "KSBW", "net": "NBC", "src": "fcc", "verify": true, "note": "FCC lists NBC/ABC"},
+    {"call": "KSMS", "net": "UNI", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 702,
+   "rank": 129,
+   "name": "La Crosse–Eau Claire",
+   "states": ["MN", "WI"],
+   "home": "WI",
+   "cities": ["La Crosse", "Eau Claire"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WEAU", "net": "NBC", "src": "fcc"},
+    {"call": "WEUX", "net": "FOX", "src": "fcc"},
+    {"call": "WHLA", "net": "PBS", "src": "fcc"},
+    {"call": "WHWC", "net": "PBS", "src": "fcc"},
+    {"call": "WKBT", "net": "CBS", "src": "fcc"},
+    {"call": "WLAX", "net": "FOX", "src": "fcc"},
+    {"call": "WQOW", "net": "ABC", "src": "fcc"},
+    {"call": "WXOW", "net": "ABC", "src": "fcc"},
+    {"call": "KQEG", "net": "CBS", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 600,
+   "rank": 130,
+   "name": "Corpus Christi",
+   "states": ["TX"],
+   "home": "TX",
+   "cities": ["Corpus Christi"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KEDT", "net": "PBS", "src": "fcc"},
+    {"call": "KIII", "net": "ABC", "src": "fcc"},
+    {"call": "KORO", "net": "UNI", "src": "fcc"},
+    {"call": "KRIS", "net": "NBC", "src": "fcc"},
+    {"call": "KSCC", "net": "FOX", "src": "fcc"},
+    {"call": "KZTV", "net": "CBS", "src": "fcc", "verify": true, "note": "FCC lists CBS/TEL"}
+   ]
+  },
+  {
+   "code": 576,
+   "rank": 131,
+   "name": "Salisbury",
+   "states": ["DE", "MD"],
+   "home": "MD",
+   "cities": [],
+   "ambiguousCities": ["Salisbury"],
+   "stations": [
+    {"call": "WBOC", "net": "CBS", "src": "fcc", "verify": true, "note": "FCC lists CBS/FOX"},
+    {"call": "WCPB", "net": "PBS", "src": "fcc"},
+    {"call": "WMDT", "net": "ABC", "src": "fcc", "verify": true, "note": "FCC lists ABC/CW"}
+   ]
+  },
+  {
+   "code": 634,
+   "rank": 132,
+   "name": "Amarillo",
+   "states": ["KS", "NM", "OK", "TX"],
+   "home": "TX",
+   "cities": ["Amarillo"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KAMR", "net": "NBC", "src": "fcc"},
+    {"call": "KCIT", "net": "FOX", "src": "fcc"},
+    {"call": "KEYU", "net": "TEL", "src": "fcc"},
+    {"call": "KFDA", "net": "CBS", "src": "fcc"},
+    {"call": "KPCB", "net": "IND", "src": "fcc"},
+    {"call": "KVIH", "net": "ABC", "src": "fcc"},
+    {"call": "KVII", "net": "ABC", "src": "fcc"},
+    {"call": "KZBZ", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 705,
+   "rank": 133,
+   "name": "Wausau–Rhinelander",
+   "states": ["WI"],
+   "home": "WI",
+   "cities": ["Wausau", "Rhinelander"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WAOW", "net": "ABC", "src": "fcc"},
+    {"call": "WHRM", "net": "PBS", "src": "fcc"},
+    {"call": "WJFW", "net": "NBC", "src": "fcc"},
+    {"call": "WLEF", "net": "PBS", "src": "fcc"},
+    {"call": "WMOW", "net": "ABC", "src": "fcc"},
+    {"call": "WSAW", "net": "CBS", "src": "fcc"},
+    {"call": "WYOW", "net": "CW", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 673,
+   "rank": 134,
+   "name": "Columbus–Tupelo–West Point–Houston",
+   "states": ["AL", "MS"],
+   "home": "MS",
+   "cities": ["Tupelo"],
+   "ambiguousCities": ["Columbus", "West Point", "Houston"],
+   "stations": [
+    {"call": "WCBI", "net": "CBS", "src": "fcc", "verify": true, "note": "FCC lists CBS/FOX/MNT"},
+    {"call": "WEPH", "net": "IND", "src": "fcc"},
+    {"call": "WMAB", "net": "PBS", "src": "fcc"},
+    {"call": "WMAE", "net": "PBS", "src": "fcc"},
+    {"call": "WTVA", "net": "NBC", "src": "fcc", "verify": true, "note": "FCC lists NBC/ABC"},
+    {"call": "WHBH", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 604,
+   "rank": 135,
+   "name": "Columbia–Jefferson City",
+   "states": ["MO"],
+   "home": "MO",
+   "cities": ["Jefferson City"],
+   "ambiguousCities": ["Columbia"],
+   "stations": [
+    {"call": "KMIZ", "net": "ABC", "src": "fcc"},
+    {"call": "KMOS", "net": "PBS", "src": "fcc"},
+    {"call": "KOMU", "net": "NBC", "src": "fcc"},
+    {"call": "KRCG", "net": "CBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 868,
+   "rank": 136,
+   "name": "Chico–Redding",
+   "states": ["CA"],
+   "home": "CA",
+   "cities": ["Chico", "Redding"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KCVU", "net": "FOX", "src": "fcc"},
+    {"call": "KHSL", "net": "CBS", "src": "fcc"},
+    {"call": "KIXE", "net": "PBS", "src": "fcc"},
+    {"call": "KNVN", "net": "NBC", "src": "fcc"},
+    {"call": "KRCR", "net": "ABC", "src": "fcc"},
+    {"call": "KRDT", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 610,
+   "rank": 137,
+   "name": "Rockford",
+   "states": ["IL"],
+   "home": "IL",
+   "cities": ["Rockford"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WTVO", "net": "ABC", "src": "hand"},
+    {"call": "WREX", "net": "NBC", "src": "hand"},
+    {"call": "WIFR", "net": "CBS", "src": "hand"},
+    {"call": "WQRF", "net": "FOX", "src": "hand"},
+    {"call": "WSLN", "net": "CW", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 676,
+   "rank": 138,
+   "name": "Duluth–Superior",
+   "states": ["MI", "MN", "WI"],
+   "home": "MN",
+   "cities": ["Duluth"],
+   "ambiguousCities": ["Superior"],
+   "stations": [
+    {"call": "KBJR", "net": "NBC", "src": "fcc", "verify": true, "note": "FCC lists NBC/CBS"},
+    {"call": "KCWV", "net": "IND", "src": "fcc"},
+    {"call": "KDLH", "net": "CW", "src": "fcc"},
+    {"call": "KQDS", "net": "FOX", "src": "fcc"},
+    {"call": "KRII", "net": "NBC", "src": "fcc", "verify": true, "note": "FCC lists NBC/CBS"},
+    {"call": "WDIO", "net": "ABC", "src": "fcc"},
+    {"call": "WDSE", "net": "PBS", "src": "fcc"},
+    {"call": "WIRT", "net": "ABC", "src": "fcc"},
+    {"call": "WRPT", "net": "PBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 813,
+   "rank": 139,
+   "name": "Medford–Klamath Falls",
+   "states": ["CA", "OR"],
+   "home": "OR",
+   "cities": ["Medford", "Klamath Falls"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KDKF", "net": "ABC", "src": "fcc"},
+    {"call": "KDRV", "net": "ABC", "src": "fcc"},
+    {"call": "KFTS", "net": "PBS", "src": "fcc"},
+    {"call": "KMVU", "net": "FOX", "src": "fcc", "verify": true, "note": "FCC lists FOX/TEL"},
+    {"call": "KOBI", "net": "NBC", "src": "fcc"},
+    {"call": "KOTI", "net": "NBC", "src": "fcc"},
+    {"call": "KSYS", "net": "PBS", "src": "fcc"},
+    {"call": "KTVL", "net": "CBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 651,
+   "rank": 140,
+   "name": "Lubbock",
+   "states": ["TX"],
+   "home": "TX",
+   "cities": ["Lubbock"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KAMC", "net": "ABC", "src": "fcc"},
+    {"call": "KCBD", "net": "NBC", "src": "fcc"},
+    {"call": "KJTV", "net": "FOX", "src": "fcc"},
+    {"call": "KLBK", "net": "CBS", "src": "fcc"},
+    {"call": "KLCW", "net": "CW", "src": "fcc"},
+    {"call": "KPTB", "net": "IND", "src": "fcc"},
+    {"call": "KPTF", "net": "IND", "src": "fcc"},
+    {"call": "KTTZ", "net": "PBS", "src": "fcc"},
+    {"call": "KXTQ", "net": "TEL", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 605,
+   "rank": 141,
+   "name": "Topeka",
+   "states": ["KS"],
+   "home": "KS",
+   "cities": ["Topeka"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KSNT", "net": "NBC", "src": "fcc", "verify": true, "note": "FCC lists NBC/FOX"},
+    {"call": "KSQA", "net": "IND", "src": "fcc"},
+    {"call": "KTKA", "net": "ABC", "src": "fcc"},
+    {"call": "KTWU", "net": "PBS", "src": "fcc"},
+    {"call": "WIBW", "net": "CBS", "src": "fcc"},
+    {"call": "KTMJ", "net": "FOX", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 628,
+   "rank": 142,
+   "name": "Monroe–El Dorado",
+   "states": ["AR", "LA"],
+   "home": "LA",
+   "cities": ["El Dorado"],
+   "ambiguousCities": ["Monroe"],
+   "stations": [
+    {"call": "KARD", "net": "FOX", "src": "fcc"},
+    {"call": "KETZ", "net": "PBS", "src": "fcc"},
+    {"call": "KLTM", "net": "PBS", "src": "fcc"},
+    {"call": "KMCT", "net": "IND", "src": "fcc"},
+    {"call": "KNOE", "net": "CBS", "src": "fcc"},
+    {"call": "KLMB", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 692,
+   "rank": 143,
+   "name": "Beaumont–Port Arthur",
+   "states": ["TX"],
+   "home": "TX",
+   "cities": ["Beaumont", "Port Arthur"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KBMT", "net": "ABC", "src": "fcc"},
+    {"call": "KFDM", "net": "CBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 633,
+   "rank": 144,
+   "name": "Odessa–Midland",
+   "states": ["TX"],
+   "home": "TX",
+   "cities": ["Odessa", "Midland"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KCWO", "net": "CW", "src": "fcc"},
+    {"call": "KMID", "net": "ABC", "src": "fcc"},
+    {"call": "KMLM", "net": "IND", "src": "fcc"},
+    {"call": "KOSA", "net": "CBS", "src": "fcc"},
+    {"call": "KPBT", "net": "PBS", "src": "fcc"},
+    {"call": "KPEJ", "net": "FOX", "src": "fcc"},
+    {"call": "KUPB", "net": "UNI", "src": "fcc"},
+    {"call": "KWES", "net": "NBC", "src": "fcc"},
+    {"call": "KWWT", "net": "MNT", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 804,
+   "rank": 145,
+   "name": "Palm Springs",
+   "states": ["CA"],
+   "home": "CA",
+   "cities": ["Palm Springs"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KESQ", "net": "ABC", "src": "fcc"},
+    {"call": "KMIR", "net": "NBC", "src": "fcc"},
+    {"call": "KDFX", "net": "FOX", "src": "fcc", "classA": true},
+    {"call": "KPSP", "net": "CBS", "src": "fcc", "classA": true},
+    {"call": "KRET", "net": "IND", "src": "fcc", "classA": true},
+    {"call": "KVER", "net": "UNI", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 743,
+   "rank": 146,
+   "name": "Anchorage",
+   "states": ["AK"],
+   "home": "AK",
+   "cities": ["Anchorage"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KYUR", "net": "ABC", "src": "hand"},
+    {"call": "KTUU", "net": "NBC", "src": "hand"},
+    {"call": "KTVA", "net": "CBS", "src": "hand"},
+    {"call": "KTBY", "net": "FOX", "src": "hand"},
+    {"call": "KAKM", "net": "PBS", "src": "hand"},
+    {"call": "KAUU", "net": "MNT", "src": "fcc", "verify": true, "note": "FCC lists MNT/CBS"},
+    {"call": "KDMD", "net": "IND", "src": "fcc"},
+    {"call": "KCFT", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 687,
+   "rank": 147,
+   "name": "Minot–Bismarck–Dickinson",
+   "states": ["MT", "ND", "SD"],
+   "home": "ND",
+   "cities": ["Minot", "Bismarck", "Dickinson", "Williston"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KBME", "net": "PBS", "src": "fcc"},
+    {"call": "KBMY", "net": "ABC", "src": "fcc"},
+    {"call": "KDSE", "net": "PBS", "src": "fcc"},
+    {"call": "KFYR", "net": "NBC", "src": "fcc"},
+    {"call": "KMCY", "net": "ABC", "src": "fcc"},
+    {"call": "KMOT", "net": "NBC", "src": "fcc"},
+    {"call": "KNDB", "net": "IND", "src": "fcc"},
+    {"call": "KNDM", "net": "IND", "src": "fcc"},
+    {"call": "KQCD", "net": "NBC", "src": "fcc"},
+    {"call": "KSRE", "net": "PBS", "src": "fcc"},
+    {"call": "KUMV", "net": "NBC", "src": "fcc"},
+    {"call": "KWSE", "net": "PBS", "src": "fcc"},
+    {"call": "KXMA", "net": "CW", "src": "fcc"},
+    {"call": "KXMB", "net": "CW", "src": "fcc"},
+    {"call": "KXMC", "net": "CW", "src": "fcc"},
+    {"call": "KXMD", "net": "CW", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 656,
+   "rank": 148,
+   "name": "Panama City",
+   "states": ["FL"],
+   "home": "FL",
+   "cities": ["Panama City"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WBIF", "net": "IND", "src": "fcc"},
+    {"call": "WJHG", "net": "NBC", "src": "fcc"},
+    {"call": "WMBB", "net": "ABC", "src": "fcc"},
+    {"call": "WPCT", "net": "IND", "src": "fcc"},
+    {"call": "WPGX", "net": "FOX", "src": "fcc"},
+    {"call": "WPFN", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 624,
+   "rank": 149,
+   "name": "Sioux City",
+   "states": ["IA", "NE", "SD"],
+   "home": "IA",
+   "cities": ["Sioux City"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KCAU", "net": "ABC", "src": "fcc"},
+    {"call": "KPTH", "net": "FOX", "src": "fcc"},
+    {"call": "KSIN", "net": "PBS", "src": "fcc"},
+    {"call": "KTIV", "net": "NBC", "src": "fcc", "verify": true, "note": "FCC lists NBC/CW"},
+    {"call": "KXNE", "net": "PBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 627,
+   "rank": 150,
+   "name": "Wichita Falls–Lawton",
+   "states": ["OK", "TX"],
+   "home": "TX",
+   "cities": ["Wichita Falls", "Lawton"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KAUZ", "net": "CBS", "src": "fcc"},
+    {"call": "KFDX", "net": "NBC", "src": "fcc"},
+    {"call": "KJTL", "net": "FOX", "src": "fcc"},
+    {"call": "KSWO", "net": "ABC", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 603,
+   "rank": 151,
+   "name": "Joplin–Pittsburg",
+   "states": ["KS", "MO", "OK"],
+   "home": "MO",
+   "cities": ["Joplin", "Pittsburg"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KFJX", "net": "FOX", "src": "fcc", "verify": true, "note": "FCC lists FOX/CW"},
+    {"call": "KOAM", "net": "CBS", "src": "fcc", "verify": true, "note": "FCC lists CBS/FOX"},
+    {"call": "KODE", "net": "ABC", "src": "fcc"},
+    {"call": "KOZJ", "net": "PBS", "src": "fcc"},
+    {"call": "KSNF", "net": "NBC", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 525,
+   "rank": 152,
+   "name": "Albany, GA",
+   "states": ["GA"],
+   "home": "GA",
+   "cities": [],
+   "ambiguousCities": ["Albany"],
+   "stations": [
+    {"call": "WABW", "net": "PBS", "src": "fcc"},
+    {"call": "WACS", "net": "PBS", "src": "fcc"},
+    {"call": "WALB", "net": "NBC", "src": "fcc"},
+    {"call": "WFXL", "net": "FOX", "src": "fcc"},
+    {"call": "WSST", "net": "IND", "src": "fcc"},
+    {"call": "WSWG", "net": "CBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 611,
+   "rank": 153,
+   "name": "Rochester–Mason City–Austin",
+   "states": ["IA", "MN"],
+   "home": "MN",
+   "cities": ["Mason City"],
+   "ambiguousCities": ["Rochester", "Austin"],
+   "stations": [
+    {"call": "KAAL", "net": "ABC", "src": "fcc"},
+    {"call": "KIMT", "net": "CBS", "src": "fcc"},
+    {"call": "KSMQ", "net": "PBS", "src": "fcc"},
+    {"call": "KTTC", "net": "NBC", "src": "fcc", "verify": true, "note": "FCC lists NBC/CW"},
+    {"call": "KXLT", "net": "FOX", "src": "fcc"},
+    {"call": "KYIN", "net": "PBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 516,
+   "rank": 154,
+   "name": "Erie",
+   "states": ["PA"],
+   "home": "PA",
+   "cities": ["Erie"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WFXP", "net": "FOX", "src": "fcc"},
+    {"call": "WICU", "net": "NBC", "src": "fcc"},
+    {"call": "WJET", "net": "ABC", "src": "fcc"},
+    {"call": "WQLN", "net": "PBS", "src": "fcc"},
+    {"call": "WSEE", "net": "CBS", "src": "fcc", "verify": true, "note": "FCC lists CBS/CW"}
+   ]
+  },
+  {
+   "code": 758,
+   "rank": 155,
+   "name": "Idaho Falls–Pocatello",
+   "states": ["ID", "WY"],
+   "home": "ID",
+   "cities": ["Idaho Falls", "Pocatello"],
+   "ambiguousCities": ["Jackson"],
+   "stations": [
+    {"call": "KIFI", "net": "ABC", "src": "fcc"},
+    {"call": "KISU", "net": "PBS", "src": "fcc"},
+    {"call": "KPVI", "net": "NBC", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 537,
+   "rank": 156,
+   "name": "Bangor",
+   "states": ["ME"],
+   "home": "ME",
+   "cities": ["Bangor"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WABI", "net": "CBS", "src": "fcc", "verify": true, "note": "FCC lists CBS/CW"},
+    {"call": "WLBZ", "net": "NBC", "src": "fcc"},
+    {"call": "WMEB", "net": "PBS", "src": "fcc"},
+    {"call": "WMED", "net": "PBS", "src": "fcc"},
+    {"call": "WVII", "net": "ABC", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 592,
+   "rank": 157,
+   "name": "Gainesville",
+   "states": ["FL"],
+   "home": "FL",
+   "cities": ["Gainesville"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WCJB", "net": "ABC", "src": "fcc"},
+    {"call": "WGFL", "net": "CBS", "src": "fcc"},
+    {"call": "WOGX", "net": "FOX", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 746,
+   "rank": 158,
+   "name": "Biloxi–Gulfport",
+   "states": ["MS"],
+   "home": "MS",
+   "cities": ["Biloxi", "Gulfport"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WLOX", "net": "ABC", "src": "fcc"},
+    {"call": "WMAH", "net": "PBS", "src": "fcc"},
+    {"call": "WXXV", "net": "FOX", "src": "fcc", "verify": true, "note": "FCC lists FOX/NBC/CW/MNT"}
+   ]
+  },
+  {
+   "code": 581,
+   "rank": 159,
+   "name": "Terre Haute",
+   "states": ["IL", "IN"],
+   "home": "IN",
+   "cities": ["Terre Haute"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WAWV", "net": "ABC", "src": "fcc"},
+    {"call": "WTHI", "net": "CBS", "src": "fcc"},
+    {"call": "WTWO", "net": "NBC", "src": "fcc"},
+    {"call": "WVUT", "net": "PBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 657,
+   "rank": 160,
+   "name": "Sherman–Ada",
+   "states": ["OK", "TX"],
+   "home": "TX",
+   "cities": [],
+   "ambiguousCities": ["Sherman"],
+   "stations": [
+    {"call": "KTEN", "net": "NBC", "src": "fcc", "verify": true, "note": "FCC lists NBC/ABC/CW"},
+    {"call": "KXII", "net": "CBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 762,
+   "rank": 161,
+   "name": "Missoula",
+   "states": ["MT"],
+   "home": "MT",
+   "cities": ["Missoula"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KCFW", "net": "NBC", "src": "fcc"},
+    {"call": "KECI", "net": "NBC", "src": "fcc"},
+    {"call": "KPAX", "net": "CBS", "src": "fcc"},
+    {"call": "KTMF", "net": "ABC", "src": "fcc"},
+    {"call": "KUFM", "net": "PBS", "src": "fcc"},
+    {"call": "KAJJ", "net": "CBS", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 502,
+   "rank": 162,
+   "name": "Binghamton",
+   "states": ["NY"],
+   "home": "NY",
+   "cities": ["Binghamton"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WBNG", "net": "CBS", "src": "fcc", "verify": true, "note": "FCC lists CBS/CW"},
+    {"call": "WICZ", "net": "FOX", "src": "fcc", "verify": true, "note": "FCC lists FOX/MNT"},
+    {"call": "WIVT", "net": "ABC", "src": "fcc"},
+    {"call": "WSKG", "net": "PBS", "src": "fcc"},
+    {"call": "WBGH", "net": "NBC", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 554,
+   "rank": 163,
+   "name": "Wheeling–Steubenville",
+   "states": ["OH", "WV"],
+   "home": "WV",
+   "cities": ["Wheeling", "Steubenville"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WTOV", "net": "NBC", "src": "fcc", "verify": true, "note": "FCC lists NBC/FOX"},
+    {"call": "WTRF", "net": "CBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 771,
+   "rank": 164,
+   "name": "Yuma–El Centro",
+   "states": ["AZ", "CA"],
+   "home": "AZ",
+   "cities": ["Yuma", "El Centro"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KAJB", "net": "IND", "src": "fcc"},
+    {"call": "KAZS", "net": "IND", "src": "fcc"},
+    {"call": "KECY", "net": "FOX", "src": "fcc", "verify": true, "note": "FCC lists FOX/ABC/CW/TEL"},
+    {"call": "KVYE", "net": "UNI", "src": "fcc"},
+    {"call": "KYMA", "net": "CBS", "src": "fcc", "verify": true, "note": "FCC lists CBS/NBC"}
+   ]
+  },
+  {
+   "code": 756,
+   "rank": 165,
+   "name": "Billings",
+   "states": ["MT", "WY"],
+   "home": "MT",
+   "cities": ["Billings"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KHMT", "net": "FOX", "src": "fcc"},
+    {"call": "KSVI", "net": "ABC", "src": "fcc"},
+    {"call": "KTVQ", "net": "CBS", "src": "fcc"},
+    {"call": "KULR", "net": "NBC", "src": "fcc"},
+    {"call": "KYUS", "net": "NBC", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 662,
+   "rank": 166,
+   "name": "Abilene–Sweetwater",
+   "states": ["TX"],
+   "home": "TX",
+   "cities": ["Abilene", "Sweetwater"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KRBC", "net": "NBC", "src": "fcc"},
+    {"call": "KTAB", "net": "CBS", "src": "fcc"},
+    {"call": "KTXS", "net": "ABC", "src": "fcc"},
+    {"call": "KXVA", "net": "FOX", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 559,
+   "rank": 167,
+   "name": "Bluefield–Beckley–Oak Hill",
+   "states": ["VA", "WV"],
+   "home": "WV",
+   "cities": ["Bluefield", "Beckley", "Oak Hill"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WLFB", "net": "IND", "src": "fcc"},
+    {"call": "WOAY", "net": "ABC", "src": "fcc"},
+    {"call": "WSWP", "net": "PBS", "src": "fcc"},
+    {"call": "WVNS", "net": "CBS", "src": "fcc"},
+    {"call": "WVVA", "net": "NBC", "src": "fcc", "verify": true, "note": "FCC lists NBC/CW"}
+   ]
+  },
+  {
+   "code": 710,
+   "rank": 168,
+   "name": "Hattiesburg–Laurel",
+   "states": ["MS"],
+   "home": "MS",
+   "cities": ["Hattiesburg", "Laurel"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WDAM", "net": "NBC", "src": "fcc", "verify": true, "note": "FCC lists NBC/ABC"},
+    {"call": "WHLT", "net": "CBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 764,
+   "rank": 169,
+   "name": "Rapid City",
+   "states": ["MT", "NE", "SD", "WY"],
+   "home": "SD",
+   "cities": ["Rapid City"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KBHE", "net": "PBS", "src": "fcc"},
+    {"call": "KCLO", "net": "CBS", "src": "fcc"},
+    {"call": "KNBN", "net": "NBC", "src": "fcc"},
+    {"call": "KOTA", "net": "ABC", "src": "fcc", "verify": true, "note": "FCC lists ABC/FOX"},
+    {"call": "KPSD", "net": "PBS", "src": "fcc"},
+    {"call": "KSGW", "net": "ABC", "src": "fcc", "verify": true, "note": "FCC lists ABC/FOX"},
+    {"call": "KZSD", "net": "PBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 606,
+   "rank": 170,
+   "name": "Dothan",
+   "states": ["AL", "GA"],
+   "home": "AL",
+   "cities": ["Dothan"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WDFX", "net": "FOX", "src": "fcc"},
+    {"call": "WDHN", "net": "ABC", "src": "fcc"},
+    {"call": "WGIQ", "net": "PBS", "src": "fcc"},
+    {"call": "WTVY", "net": "CBS", "src": "fcc", "verify": true, "note": "FCC lists CBS/NBC/CW"}
+   ]
+  },
+  {
+   "code": 526,
+   "rank": 171,
+   "name": "Utica",
+   "states": ["NY"],
+   "home": "NY",
+   "cities": ["Utica"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WFXV", "net": "FOX", "src": "fcc"},
+    {"call": "WKTV", "net": "NBC", "src": "fcc", "verify": true, "note": "FCC lists NBC/CBS"},
+    {"call": "WUTR", "net": "ABC", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 598,
+   "rank": 172,
+   "name": "Clarksburg–Weston",
+   "states": ["WV"],
+   "home": "WV",
+   "cities": ["Clarksburg", "Weston"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WBOY", "net": "NBC", "src": "fcc", "verify": true, "note": "FCC lists NBC/ABC"},
+    {"call": "WDTV", "net": "CBS", "src": "fcc"},
+    {"call": "WVFX", "net": "FOX", "src": "fcc", "verify": true, "note": "FCC lists FOX/CW"}
+   ]
+  },
+  {
+   "code": 569,
+   "rank": 173,
+   "name": "Harrisonburg",
+   "states": ["VA", "WV"],
+   "home": "VA",
+   "cities": ["Harrisonburg"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WHSV", "net": "ABC", "src": "fcc"},
+    {"call": "WVPT", "net": "PBS", "src": "fcc"},
+    {"call": "WSVF", "net": "FOX", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 639,
+   "rank": 174,
+   "name": "Jackson, TN",
+   "states": ["TN"],
+   "home": "TN",
+   "cities": [],
+   "ambiguousCities": ["Jackson"],
+   "stations": [
+    {"call": "WBBJ", "net": "ABC", "src": "fcc", "verify": true, "note": "FCC lists ABC/CBS"},
+    {"call": "WJKT", "net": "FOX", "src": "fcc"},
+    {"call": "WLJT", "net": "PBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 717,
+   "rank": 175,
+   "name": "Quincy–Hannibal–Keokuk",
+   "states": ["IA", "IL", "MO"],
+   "home": "IL",
+   "cities": ["Quincy", "Hannibal", "Keokuk"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KHQA", "net": "ABC", "src": "hand", "verify": true, "note": "FCC lists CBS"},
+    {"call": "WGEM", "net": "NBC", "src": "hand"},
+    {"call": "KHQA", "net": "CBS", "src": "hand"},
+    {"call": "WGEM", "net": "FOX", "src": "hand"},
+    {"call": "WQPT", "net": "PBS", "src": "hand"},
+    {"call": "WMEC", "net": "PBS", "src": "fcc"},
+    {"call": "WQEC", "net": "PBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 584,
+   "rank": 176,
+   "name": "Charlottesville",
+   "states": ["VA"],
+   "home": "VA",
+   "cities": ["Charlottesville"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WCAV", "net": "CBS", "src": "fcc", "verify": true, "note": "FCC lists CBS/FOX"},
+    {"call": "WHTJ", "net": "PBS", "src": "fcc"},
+    {"call": "WVIR", "net": "NBC", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 643,
+   "rank": 177,
+   "name": "Lake Charles",
+   "states": ["LA"],
+   "home": "LA",
+   "cities": ["Lake Charles"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KLTL", "net": "PBS", "src": "fcc"},
+    {"call": "KPLC", "net": "NBC", "src": "fcc"},
+    {"call": "KVHP", "net": "FOX", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 565,
+   "rank": 178,
+   "name": "Elmira",
+   "states": ["NY", "PA"],
+   "home": "NY",
+   "cities": ["Elmira", "Corning"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WENY", "net": "ABC", "src": "fcc", "verify": true, "note": "FCC lists ABC/CBS"},
+    {"call": "WETM", "net": "NBC", "src": "fcc"},
+    {"call": "WSKA", "net": "PBS", "src": "fcc"},
+    {"call": "WYDC", "net": "FOX", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 549,
+   "rank": 179,
+   "name": "Watertown",
+   "states": ["NY"],
+   "home": "NY",
+   "cities": ["Watertown"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WNPI", "net": "PBS", "src": "fcc"},
+    {"call": "WPBS", "net": "PBS", "src": "fcc"},
+    {"call": "WWNY", "net": "CBS", "src": "fcc"},
+    {"call": "WWTI", "net": "ABC", "src": "fcc"},
+    {"call": "WNYF", "net": "FOX", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 736,
+   "rank": 180,
+   "name": "Bowling Green",
+   "states": ["KY"],
+   "home": "KY",
+   "cities": ["Bowling Green"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WBKO", "net": "ABC", "src": "hand"},
+    {"call": "WNKY", "net": "NBC", "src": "hand"},
+    {"call": "WNKY", "net": "CBS", "src": "hand"},
+    {"call": "WBKO", "net": "FOX", "src": "hand"},
+    {"call": "WKGB", "net": "PBS", "src": "hand"},
+    {"call": "WKYU", "net": "PBS", "src": "fcc"},
+    {"call": "WBGS", "net": "TEL", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 553,
+   "rank": 181,
+   "name": "Marquette",
+   "states": ["MI", "WI"],
+   "home": "MI",
+   "cities": ["Marquette"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WBKP", "net": "CW", "src": "fcc"},
+    {"call": "WBUP", "net": "ABC", "src": "fcc"},
+    {"call": "WLUC", "net": "NBC", "src": "fcc", "verify": true, "note": "FCC lists NBC/FOX"},
+    {"call": "WZMQ", "net": "CBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 734,
+   "rank": 182,
+   "name": "Jonesboro",
+   "states": ["AR"],
+   "home": "AR",
+   "cities": ["Jonesboro"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KAIT", "net": "ABC", "src": "fcc", "verify": true, "note": "FCC lists ABC/NBC/CW"},
+    {"call": "KTEJ", "net": "PBS", "src": "fcc"},
+    {"call": "KVTJ", "net": "IND", "src": "fcc"},
+    {"call": "KJNB", "net": "FOX", "src": "fcc", "verify": true, "note": "FCC lists FOX/CBS", "classA": true}
+   ]
+  },
+  {
+   "code": 644,
+   "rank": 183,
+   "name": "Alexandria",
+   "states": ["LA"],
+   "home": "LA",
+   "cities": [],
+   "ambiguousCities": ["Alexandria"],
+   "stations": [
+    {"call": "KLPA", "net": "PBS", "src": "fcc"},
+    {"call": "WNTZ", "net": "FOX", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 749,
+   "rank": 184,
+   "name": "Laredo",
+   "states": ["TX"],
+   "home": "TX",
+   "cities": [],
+   "ambiguousCities": ["Laredo"],
+   "stations": [
+    {"call": "KGNS", "net": "NBC", "src": "fcc"},
+    {"call": "KLDO", "net": "UNI", "src": "fcc"},
+    {"call": "KXNU", "net": "TEL", "src": "fcc", "classA": true},
+    {"call": "KXOF", "net": "FOX", "src": "fcc", "classA": true},
+    {"call": "KYLX", "net": "CBS", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 754,
+   "rank": 185,
+   "name": "Butte–Bozeman",
+   "states": ["MT"],
+   "home": "MT",
+   "cities": ["Butte", "Bozeman"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KBZK", "net": "CBS", "src": "fcc"},
+    {"call": "KTVM", "net": "NBC", "src": "fcc"},
+    {"call": "KUSM", "net": "PBS", "src": "fcc"},
+    {"call": "KWYB", "net": "ABC", "src": "fcc"},
+    {"call": "KXLF", "net": "CBS", "src": "fcc"},
+    {"call": "KDBZ", "net": "NBC", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 821,
+   "rank": 186,
+   "name": "Bend",
+   "states": ["OR"],
+   "home": "OR",
+   "cities": [],
+   "ambiguousCities": ["Bend"],
+   "stations": [
+    {"call": "KOAB", "net": "PBS", "src": "fcc"},
+    {"call": "KOHD", "net": "ABC", "src": "fcc"},
+    {"call": "KTVZ", "net": "NBC", "src": "fcc", "verify": true, "note": "FCC lists NBC/FOX/CW"},
+    {"call": "KFXO", "net": "NBC", "src": "fcc", "verify": true, "note": "FCC lists NBC/FOX/CW", "classA": true},
+    {"call": "KQRE", "net": "TEL", "src": "fcc", "verify": true, "note": "FCC lists TEL/FOX/CW", "classA": true}
+   ]
+  },
+  {
+   "code": 773,
+   "rank": 187,
+   "name": "Grand Junction–Montrose",
+   "states": ["CO"],
+   "home": "CO",
+   "cities": ["Grand Junction", "Montrose"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KFQX", "net": "FOX", "src": "fcc"},
+    {"call": "KKCO", "net": "NBC", "src": "fcc"},
+    {"call": "KREX", "net": "CBS", "src": "fcc"},
+    {"call": "KREY", "net": "CBS", "src": "fcc"},
+    {"call": "KRMJ", "net": "PBS", "src": "fcc"},
+    {"call": "KGJT", "net": "MNT", "src": "fcc", "classA": true},
+    {"call": "KJCT", "net": "ABC", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 760,
+   "rank": 188,
+   "name": "Twin Falls",
+   "states": ["ID"],
+   "home": "ID",
+   "cities": ["Twin Falls"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KIPT", "net": "PBS", "src": "fcc"},
+    {"call": "KMVT", "net": "CBS", "src": "fcc", "verify": true, "note": "FCC lists CBS/FOX/CW"},
+    {"call": "KXTF", "net": "IND", "src": "fcc"},
+    {"call": "KSVT", "net": "FOX", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 582,
+   "rank": 189,
+   "name": "Lafayette, IN",
+   "states": ["IN"],
+   "home": "IN",
+   "cities": [],
+   "ambiguousCities": ["Lafayette"],
+   "stations": [
+    {"call": "WLFI", "net": "CBS", "src": "fcc"},
+    {"call": "WPBI", "net": "FOX", "src": "fcc", "verify": true, "note": "FCC lists FOX/NBC", "classA": true},
+    {"call": "WPBY", "net": "ABC", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 558,
+   "rank": 190,
+   "name": "Lima",
+   "states": ["OH"],
+   "home": "OH",
+   "cities": [],
+   "ambiguousCities": ["Lima"],
+   "stations": [
+    {"call": "WBGU", "net": "PBS", "src": "fcc"},
+    {"call": "WLIO", "net": "NBC", "src": "fcc", "verify": true, "note": "FCC lists NBC/FOX"},
+    {"call": "WLMA", "net": "IND", "src": "fcc"},
+    {"call": "WAMS", "net": "ABC", "src": "fcc", "classA": true},
+    {"call": "WOHL", "net": "ABC", "src": "fcc", "verify": true, "note": "FCC lists ABC/CBS", "classA": true},
+    {"call": "WPNM", "net": "ABC", "src": "fcc", "classA": true},
+    {"call": "WTLW", "net": "IND", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 755,
+   "rank": 191,
+   "name": "Great Falls",
+   "states": ["MT"],
+   "home": "MT",
+   "cities": ["Great Falls"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KFBB", "net": "ABC", "src": "fcc"},
+    {"call": "KRTV", "net": "CBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 711,
+   "rank": 192,
+   "name": "Meridian",
+   "states": ["AL", "MS"],
+   "home": "MS",
+   "cities": [],
+   "ambiguousCities": ["Meridian"],
+   "stations": [
+    {"call": "WGBC", "net": "FOX", "src": "fcc", "verify": true, "note": "FCC lists FOX/NBC"},
+    {"call": "WMAW", "net": "PBS", "src": "fcc"},
+    {"call": "WMDN", "net": "CBS", "src": "fcc"},
+    {"call": "WTOK", "net": "ABC", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 759,
+   "rank": 193,
+   "name": "Cheyenne–Scottsbluff",
+   "states": ["NE", "WY"],
+   "home": "WY",
+   "cities": ["Cheyenne", "Scottsbluff"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KGWN", "net": "CBS", "src": "fcc", "verify": true, "note": "FCC lists CBS/NBC/CW"},
+    {"call": "KLWY", "net": "FOX", "src": "fcc"},
+    {"call": "KNEP", "net": "NBC", "src": "fcc"},
+    {"call": "KSTF", "net": "CBS", "src": "fcc", "verify": true, "note": "FCC lists CBS/NBC/CW"},
+    {"call": "KKTQ", "net": "ABC", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 597,
+   "rank": 194,
+   "name": "Parkersburg",
+   "states": ["OH", "WV"],
+   "home": "WV",
+   "cities": ["Parkersburg"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WTAP", "net": "NBC", "src": "fcc"},
+    {"call": "WOVA", "net": "FOX", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 647,
+   "rank": 195,
+   "name": "Greenwood–Greenville",
+   "states": ["AR", "MS"],
+   "home": "MS",
+   "cities": ["Greenwood"],
+   "ambiguousCities": ["Greenville"],
+   "stations": [
+    {"call": "WABG", "net": "ABC", "src": "fcc", "verify": true, "note": "FCC lists ABC/FOX"},
+    {"call": "WFXW", "net": "IND", "src": "fcc"},
+    {"call": "WMAO", "net": "PBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 802,
+   "rank": 196,
+   "name": "Eureka",
+   "states": ["CA"],
+   "home": "CA",
+   "cities": [],
+   "ambiguousCities": ["Eureka"],
+   "stations": [
+    {"call": "KAEF", "net": "ABC", "src": "fcc"},
+    {"call": "KBVU", "net": "FOX", "src": "fcc"},
+    {"call": "KEET", "net": "PBS", "src": "fcc"},
+    {"call": "KIEM", "net": "NBC", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 661,
+   "rank": 197,
+   "name": "San Angelo",
+   "states": ["TX"],
+   "home": "TX",
+   "cities": ["San Angelo"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KIDY", "net": "FOX", "src": "fcc"},
+    {"call": "KLST", "net": "CBS", "src": "fcc"},
+    {"call": "KSAN", "net": "NBC", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 767,
+   "rank": 198,
+   "name": "Casper–Riverton",
+   "states": ["WY"],
+   "home": "WY",
+   "cities": ["Casper", "Riverton"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KCWC", "net": "PBS", "src": "fcc"},
+    {"call": "KCWY", "net": "NBC", "src": "fcc", "verify": true, "note": "FCC lists NBC/CW"},
+    {"call": "KFNB", "net": "FOX", "src": "fcc"},
+    {"call": "KFNE", "net": "FOX", "src": "fcc"},
+    {"call": "KGWC", "net": "CBS", "src": "fcc", "verify": true, "note": "FCC lists CBS/ABC"},
+    {"call": "KGWL", "net": "CBS", "src": "fcc", "verify": true, "note": "FCC lists CBS/ABC"},
+    {"call": "KGWR", "net": "CBS", "src": "fcc", "verify": true, "note": "FCC lists CBS/ABC"},
+    {"call": "KPTW", "net": "PBS", "src": "fcc"},
+    {"call": "KTWO", "net": "ABC", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 737,
+   "rank": 199,
+   "name": "Mankato",
+   "states": ["IA", "MN"],
+   "home": "MN",
+   "cities": [],
+   "ambiguousCities": ["Mankato"],
+   "stations": [
+    {"call": "KEYC", "net": "CBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 631,
+   "rank": 200,
+   "name": "Ottumwa–Kirksville",
+   "states": ["IA", "MO"],
+   "home": "IA",
+   "cities": ["Ottumwa", "Kirksville"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KTVO", "net": "ABC", "src": "fcc"},
+    {"call": "KYOU", "net": "FOX", "src": "fcc", "verify": true, "note": "FCC lists FOX/NBC/CW"}
+   ]
+  },
+  {
+   "code": 638,
+   "rank": 201,
+   "name": "St. Joseph",
+   "states": ["KS", "MO"],
+   "home": "MO",
+   "cities": ["St Joseph"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KCJO", "net": "CBS", "src": "fcc", "classA": true},
+    {"call": "KNPG", "net": "NBC", "src": "fcc", "classA": true},
+    {"call": "KNPN", "net": "FOX", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 745,
+   "rank": 202,
+   "name": "Fairbanks",
+   "states": ["AK"],
+   "home": "AK",
+   "cities": ["Fairbanks"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KATN", "net": "ABC", "src": "fcc", "verify": true, "note": "FCC lists ABC/CW"},
+    {"call": "KJNP", "net": "IND", "src": "fcc"},
+    {"call": "KTVF", "net": "NBC", "src": "fcc"},
+    {"call": "KUAC", "net": "PBS", "src": "fcc"},
+    {"call": "KXDF", "net": "CBS", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 596,
+   "rank": 203,
+   "name": "Zanesville",
+   "states": ["OH"],
+   "home": "OH",
+   "cities": ["Zanesville"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WHIZ", "net": "NBC", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 626,
+   "rank": 204,
+   "name": "Victoria",
+   "states": ["TX"],
+   "home": "TX",
+   "cities": [],
+   "ambiguousCities": ["Victoria"],
+   "stations": [
+    {"call": "KVCT", "net": "FOX", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 766,
+   "rank": 205,
+   "name": "Helena",
+   "states": ["MT"],
+   "home": "MT",
+   "cities": [],
+   "ambiguousCities": ["Helena"],
+   "stations": [
+    {"call": "KTVH", "net": "NBC", "src": "fcc"},
+    {"call": "KUHM", "net": "CW", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 552,
+   "rank": 206,
+   "name": "Presque Isle",
+   "states": ["ME"],
+   "home": "ME",
+   "cities": ["Presque Isle"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WAGM", "net": "CBS", "src": "fcc", "verify": true, "note": "FCC lists CBS/FOX/CW"},
+    {"call": "WMEM", "net": "PBS", "src": "fcc"},
+    {"call": "WWPI", "net": "NBC", "src": "fcc", "classA": true}
+   ]
+  },
+  {
+   "code": 747,
+   "rank": 207,
+   "name": "Juneau",
+   "states": ["AK"],
+   "home": "AK",
+   "cities": ["Juneau"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KJUD", "net": "ABC", "src": "fcc"},
+    {"call": "KTNL", "net": "IND", "src": "fcc"},
+    {"call": "KTOO", "net": "PBS", "src": "fcc"},
+    {"call": "KUBD", "net": "NBC", "src": "fcc", "verify": true, "note": "FCC lists NBC/CBS/MNT"}
+   ]
+  },
+  {
+   "code": 583,
+   "rank": 208,
+   "name": "Alpena",
+   "states": ["MI"],
+   "home": "MI",
+   "cities": ["Alpena"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "WBKB", "net": "CBS", "src": "fcc"},
+    {"call": "WCML", "net": "PBS", "src": "fcc"}
+   ]
+  },
+  {
+   "code": 740,
+   "rank": 209,
+   "name": "North Platte",
+   "states": ["NE"],
+   "home": "NE",
+   "cities": ["North Platte"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KNOP", "net": "NBC", "src": "fcc", "verify": true, "note": "FCC lists NBC/FOX"},
+    {"call": "KPNE", "net": "PBS", "src": "fcc"},
+    {"call": "KHGI", "net": "ABC", "src": "fcc", "classA": true},
+    {"call": "KIIT", "net": "FOX", "src": "fcc", "verify": true, "note": "FCC lists FOX/CW", "classA": true}
+   ]
+  },
+  {
+   "code": 798,
+   "rank": 210,
+   "name": "Glendive",
+   "states": ["MT"],
+   "home": "MT",
+   "cities": ["Glendive"],
+   "ambiguousCities": [],
+   "stations": [
+    {"call": "KXGN", "net": "CBS", "src": "fcc", "verify": true, "note": "FCC lists CBS/NBC"}
+   ]
+  }
+ ]
+}

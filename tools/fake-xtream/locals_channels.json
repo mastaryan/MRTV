@@ -1,0 +1,25 @@
+{
+ "_comment": "Test fixture: provider-style US local channel names across several Nielsen markets, plus look-alike national feeds that must NOT count as locals. Used by server.py (category 'US Locals') and LocalsFlowTest.",
+ "categories": {
+  "10": "US Locals",
+  "11": "US LOCALS | DALLAS",
+  "12": "USA Networks"
+ },
+ "channels": [
+  ["10", "US: ABC 7 CHICAGO (WLS) HD"], ["10", "US| NBC 5 CHICAGO WMAQ"], ["10", "CHICAGO CBS 2 HD"], ["10", "US: FOX 32 CHICAGO"],
+  ["10", "US: WGN 9 HD"], ["10", "US: WTTW PBS CHICAGO"], ["10", "US: TELEMUNDO CHICAGO (WSNS)"], ["10", "US: ABC 7 CHICAGO (WLS) SD"],
+  ["10", "US: ABC 7 NEW YORK WABC"], ["10", "US: NBC 4 NEW YORK WNBC"], ["10", "US: CBS 2 NEW YORK WCBS"], ["10", "US: FOX 5 NEW YORK WNYW"], ["10", "US: PIX11 WPIX NEW YORK"],
+  ["10", "US: KABC 7 LOS ANGELES"], ["10", "US: KNBC 4 LOS ANGELES"], ["10", "US: KTLA 5 LOS ANGELES"],
+  ["10", "US: WSB-TV ABC 2 ATLANTA"], ["10", "US: 11 ALIVE WXIA NBC ATLANTA"], ["10", "US: FOX 5 ATLANTA WAGA"],
+  ["10", "US: WJLA ABC 7 DC"], ["10", "US: NBC 4 WASHINGTON WRC"], ["10", "US: WUSA 9 CBS WASHINGTON DC"], ["10", "US: FOX 5 DC WTTG"], ["10", "US: WDCW DC50"],
+  ["10", "US: WLEX 18 NBC LEXINGTON"], ["10", "US: WKYT 27 CBS LEXINGTON KY"], ["10", "US: WTVQ ABC 36"], ["10", "US: FOX 56 LEXINGTON WDKY"],
+  ["10", "US: KOMO 4 ABC SEATTLE"], ["10", "US: KING 5 NBC SEATTLE"], ["10", "US: KIRO 7 CBS SEATTLE"], ["10", "US: Q13 FOX SEATTLE KCPQ"],
+  ["10", "US: ABC 13 HOUSTON KTRK"], ["10", "US: KHOU 11 CBS HOUSTON"], ["10", "US: FOX 26 HOUSTON TX"],
+  ["10", "US: NBC 4 COLUMBUS OHIO WCMH"], ["10", "US: 10TV WBNS CBS COLUMBUS"], ["10", "US: ABC 6 COLUMBUS WSYX"],
+  ["10", "US: WTVM ABC 9 COLUMBUS GA"], ["10", "US: WRBL CBS 3 COLUMBUS GA"],
+  ["10", "US: 6ABC PHILADELPHIA WPVI"], ["10", "US: NBC 10 PHILADELPHIA WCAU"], ["10", "US: CBS 3 PHILADELPHIA KYW"],
+  ["11", "ABC 8 HD"], ["11", "NBC 5 HD"], ["11", "CBS 11 HD"], ["11", "FOX 4 HD"], ["11", "KERA PBS 13"],
+  ["12", "US: FOX SPORTS 1"], ["12", "US: CBS SPORTS NETWORK"], ["12", "US: NBC NEWS NOW"], ["12", "US: ABC NEWS LIVE"], ["12", "US: FOX NEWS"],
+  ["12", "US: KING OF QUEENS 24/7"], ["12", "US: NBC SPORTS CHICAGO"], ["12", "US: ESPN"], ["12", "US: CNN"]
+ ]
+}

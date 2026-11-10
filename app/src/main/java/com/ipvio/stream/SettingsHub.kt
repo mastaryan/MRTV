@@ -1082,6 +1082,9 @@ private fun LivePage(ctx: Context) {
     Text("Programm bei $xtream von ${counts.first} Sendern möglich", color = Muted, fontSize = 15.sp)
     Text("XMLTV: ${Xmltv.status}", color = Accent2, fontSize = 15.sp)
     ToggleRow("Sender-Qualitäten bündeln", "Derselbe Sender in 8K, 4K, FHD, HD und SD erscheint als eine Zeile. OK startet die beste Qualität, die anderen wählst du im Menü des Senders (OK gedrückt halten).", General.bundleLive) { General.setBundleLive(ctx, it) }
+    // US local channels by Nielsen market (locals package; off by default unless the build turns it on)
+    com.ipvio.stream.locals.LocalsFeature.init(ctx)
+    ToggleRow("US-Lokalsender", "Zeigt in Live TV „Meine Lokalsender“: Bundesstaat und Nielsen-Markt (DMA) wählen, dann alle Lokalsender dieses Marktes aus deiner Playlist.", com.ipvio.stream.locals.LocalsFeature.enabled) { com.ipvio.stream.locals.LocalsFeature.set(ctx, it) }
     Hint("Die App sucht die Programmdaten automatisch (Xtream-Schnittstelle oder XMLTV-Adresse aus der Playlist). Wenn dein Anbieter eine eigene XMLTV-Adresse nennt, trage sie hier ein.")
     Field(url, { url = it }, "https://…/xmltv.php?username=…&password=…")
     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
