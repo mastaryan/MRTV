@@ -1,10 +1,10 @@
 """NCAA Division I men's basketball: schools of the power conferences (ACC, Big Ten, Big 12, SEC, Big East) and
-notable mid-majors, with their 2025-26 conference and the Nielsen market (DMA) of the campus county
+notable mid-majors, with their 2026-27 conference (checked against the Pac-12's July 2026 announcement and
+ESPN's 2026-27 realignment list; power conferences unchanged from 2025-26) and the Nielsen market (DMA) of the campus county
 (county -> DMA from the county list used for dmas.json). Public facts only.
-Row: (id, school, mascot, conference 2025-26, market name in dmas.json, aliases, verify note or None)
+Row: (id, school, mascot, conference 2026-27, market name in dmas.json, aliases, verify note or None)
 aliases = other names guides use (abbreviations, "St." spellings, nicknames); the finder decides when they count."""
 
-P26 = "moves to the rebuilt Pac-12 for 2026-27"
 
 SCHOOLS = [
  # ACC (18)
@@ -92,19 +92,22 @@ SCHOOLS = [
  ("HALL", "Seton Hall", "Pirates", "Big East", "New York", [], None),
  ("NOVA", "Villanova", "Wildcats", "Big East", "Philadelphia", ["Nova"], None),
  ("XAV", "Xavier", "Musketeers", "Big East", "Cincinnati", [], None),
+ # Pac-12 (9, rebuilt from 2026-27)
+ ("GONZ", "Gonzaga", "Bulldogs", "Pac-12", "Spokane", ["Zags"], None),
+ ("WSU", "Washington State", "Cougars", "Pac-12", "Spokane", ["Washington St.", "Wazzu"], None),
+ ("ORST", "Oregon State", "Beavers", "Pac-12", "Eugene", ["Oregon St."], None),
+ ("SDSU", "San Diego State", "Aztecs", "Pac-12", "San Diego", ["SDSU", "San Diego St."], None),
+ ("USU", "Utah State", "Aggies", "Pac-12", "Salt Lake City", ["Utah St."], None),
+ ("BSU", "Boise State", "Broncos", "Pac-12", "Boise", ["Boise St."], None),
+ ("CSU", "Colorado State", "Rams", "Pac-12", "Denver", ["Colorado St."], None),
+ ("FRES", "Fresno State", "Bulldogs", "Pac-12", "Fresno–Visalia", ["Fresno St."], None),
+ ("TXST", "Texas State", "Bobcats", "Pac-12", "Austin", ["Texas St."], None),
  # notable mid-majors
- ("GONZ", "Gonzaga", "Bulldogs", "WCC", "Spokane", ["Zags"], P26),
  ("SMC", "Saint Mary's", "Gaels", "WCC", "San Francisco–Oakland–San Jose", ["St. Mary's"], None),
- ("WSU", "Washington State", "Cougars", "WCC", "Spokane", ["Washington St.", "Wazzu"], "WCC affiliate for 2025-26; Pac-12 again from 2026-27"),
- ("ORST", "Oregon State", "Beavers", "WCC", "Eugene", ["Oregon St."], "WCC affiliate for 2025-26; Pac-12 again from 2026-27"),
- ("SDSU", "San Diego State", "Aztecs", "Mountain West", "San Diego", ["SDSU", "San Diego St."], P26),
- ("USU", "Utah State", "Aggies", "Mountain West", "Salt Lake City", ["Utah St."], P26),
- ("BSU", "Boise State", "Broncos", "Mountain West", "Boise", ["Boise St."], P26),
- ("CSU", "Colorado State", "Rams", "Mountain West", "Denver", ["Colorado St."], P26),
  ("UNM", "New Mexico", "Lobos", "Mountain West", "Albuquerque–Santa Fe", ["UNM"], None),
  ("UNLV", "UNLV", "Rebels", "Mountain West", "Las Vegas", [], None),
  ("NEV", "Nevada", "Wolf Pack", "Mountain West", "Reno", [], None),
- ("GCU", "Grand Canyon", "Antelopes", "Mountain West", "Phoenix", ["GCU", "Lopes"], "joined the Mountain West from the WAC in July 2025"),
+ ("GCU", "Grand Canyon", "Antelopes", "Mountain West", "Phoenix", ["GCU", "Lopes"], None),
  ("MEM", "Memphis", "Tigers", "American", "Memphis", [], None),
  ("WICH", "Wichita State", "Shockers", "American", "Wichita–Hutchinson Plus", ["Wichita St."], None),
  ("FAU", "Florida Atlantic", "Owls", "American", "West Palm Beach–Fort Pierce", ["FAU"], None),

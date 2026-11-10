@@ -1,8 +1,8 @@
 {
   "schema": "ipvio.locals.leagues/1",
-  "version": 2,
+  "version": 3,
   "updated": "2026-11-10",
-  "notes": "US teams only (Canadian teams left out); dma = Nielsen DMA code of the home market (college: of the campus county); NCAAB conferences as of 2025-26; verify = check before relying on it",
+  "notes": "US teams only (Canadian teams left out); dma = Nielsen DMA code of the home market (college: of the campus county); NCAAB conferences as of 2026-27; verify = check before relying on it",
   "leagues": [
     {"id": "NFL", "teams": [
       {"id": "ARI", "name": "Arizona Cardinals", "short": "Cardinals", "dma": 753},
@@ -156,7 +156,7 @@
       {"id": "SEA", "name": "Seattle Sounders FC", "short": "Sounders", "dma": 819},
       {"id": "STL", "name": "St. Louis City SC", "short": "St. Louis City", "dma": 609}
     ]},
-    {"id": "NCAAB", "name": "College Basketball", "college": true, "season": "2025-26", "teams": [
+    {"id": "NCAAB", "name": "College Basketball", "college": true, "season": "2026-27", "teams": [
       {"id": "BC", "name": "Boston College Eagles", "short": "Boston College", "mascot": "Eagles", "conf": "ACC", "dma": 506, "aliases": ["BC Eagles"]},
       {"id": "CAL", "name": "California Golden Bears", "short": "California", "mascot": "Golden Bears", "conf": "ACC", "dma": 807, "aliases": ["Cal", "Cal Bears", "UC Berkeley"]},
       {"id": "CLEM", "name": "Clemson Tigers", "short": "Clemson", "mascot": "Tigers", "conf": "ACC", "dma": 567},
@@ -236,18 +236,20 @@
       {"id": "HALL", "name": "Seton Hall Pirates", "short": "Seton Hall", "mascot": "Pirates", "conf": "Big East", "dma": 501},
       {"id": "NOVA", "name": "Villanova Wildcats", "short": "Villanova", "mascot": "Wildcats", "conf": "Big East", "dma": 504, "aliases": ["Nova"]},
       {"id": "XAV", "name": "Xavier Musketeers", "short": "Xavier", "mascot": "Musketeers", "conf": "Big East", "dma": 515},
-      {"id": "GONZ", "name": "Gonzaga Bulldogs", "short": "Gonzaga", "mascot": "Bulldogs", "conf": "WCC", "dma": 881, "aliases": ["Zags"], "verify": true, "note": "moves to the rebuilt Pac-12 for 2026-27"},
+      {"id": "GONZ", "name": "Gonzaga Bulldogs", "short": "Gonzaga", "mascot": "Bulldogs", "conf": "Pac-12", "dma": 881, "aliases": ["Zags"]},
+      {"id": "WSU", "name": "Washington State Cougars", "short": "Washington State", "mascot": "Cougars", "conf": "Pac-12", "dma": 881, "aliases": ["Washington St.", "Wazzu"]},
+      {"id": "ORST", "name": "Oregon State Beavers", "short": "Oregon State", "mascot": "Beavers", "conf": "Pac-12", "dma": 801, "aliases": ["Oregon St."]},
+      {"id": "SDSU", "name": "San Diego State Aztecs", "short": "San Diego State", "mascot": "Aztecs", "conf": "Pac-12", "dma": 825, "aliases": ["SDSU", "San Diego St."]},
+      {"id": "USU", "name": "Utah State Aggies", "short": "Utah State", "mascot": "Aggies", "conf": "Pac-12", "dma": 770, "aliases": ["Utah St."]},
+      {"id": "BSU", "name": "Boise State Broncos", "short": "Boise State", "mascot": "Broncos", "conf": "Pac-12", "dma": 757, "aliases": ["Boise St."]},
+      {"id": "CSU", "name": "Colorado State Rams", "short": "Colorado State", "mascot": "Rams", "conf": "Pac-12", "dma": 751, "aliases": ["Colorado St."]},
+      {"id": "FRES", "name": "Fresno State Bulldogs", "short": "Fresno State", "mascot": "Bulldogs", "conf": "Pac-12", "dma": 866, "aliases": ["Fresno St."]},
+      {"id": "TXST", "name": "Texas State Bobcats", "short": "Texas State", "mascot": "Bobcats", "conf": "Pac-12", "dma": 635, "aliases": ["Texas St."]},
       {"id": "SMC", "name": "Saint Mary's Gaels", "short": "Saint Mary's", "mascot": "Gaels", "conf": "WCC", "dma": 807, "aliases": ["St. Mary's"]},
-      {"id": "WSU", "name": "Washington State Cougars", "short": "Washington State", "mascot": "Cougars", "conf": "WCC", "dma": 881, "aliases": ["Washington St.", "Wazzu"], "verify": true, "note": "WCC affiliate for 2025-26; Pac-12 again from 2026-27"},
-      {"id": "ORST", "name": "Oregon State Beavers", "short": "Oregon State", "mascot": "Beavers", "conf": "WCC", "dma": 801, "aliases": ["Oregon St."], "verify": true, "note": "WCC affiliate for 2025-26; Pac-12 again from 2026-27"},
-      {"id": "SDSU", "name": "San Diego State Aztecs", "short": "San Diego State", "mascot": "Aztecs", "conf": "Mountain West", "dma": 825, "aliases": ["SDSU", "San Diego St."], "verify": true, "note": "moves to the rebuilt Pac-12 for 2026-27"},
-      {"id": "USU", "name": "Utah State Aggies", "short": "Utah State", "mascot": "Aggies", "conf": "Mountain West", "dma": 770, "aliases": ["Utah St."], "verify": true, "note": "moves to the rebuilt Pac-12 for 2026-27"},
-      {"id": "BSU", "name": "Boise State Broncos", "short": "Boise State", "mascot": "Broncos", "conf": "Mountain West", "dma": 757, "aliases": ["Boise St."], "verify": true, "note": "moves to the rebuilt Pac-12 for 2026-27"},
-      {"id": "CSU", "name": "Colorado State Rams", "short": "Colorado State", "mascot": "Rams", "conf": "Mountain West", "dma": 751, "aliases": ["Colorado St."], "verify": true, "note": "moves to the rebuilt Pac-12 for 2026-27"},
       {"id": "UNM", "name": "New Mexico Lobos", "short": "New Mexico", "mascot": "Lobos", "conf": "Mountain West", "dma": 790, "aliases": ["UNM"]},
       {"id": "UNLV", "name": "UNLV Rebels", "short": "UNLV", "mascot": "Rebels", "conf": "Mountain West", "dma": 839},
       {"id": "NEV", "name": "Nevada Wolf Pack", "short": "Nevada", "mascot": "Wolf Pack", "conf": "Mountain West", "dma": 811},
-      {"id": "GCU", "name": "Grand Canyon Antelopes", "short": "Grand Canyon", "mascot": "Antelopes", "conf": "Mountain West", "dma": 753, "aliases": ["GCU", "Lopes"], "verify": true, "note": "joined the Mountain West from the WAC in July 2025"},
+      {"id": "GCU", "name": "Grand Canyon Antelopes", "short": "Grand Canyon", "mascot": "Antelopes", "conf": "Mountain West", "dma": 753, "aliases": ["GCU", "Lopes"]},
       {"id": "MEM", "name": "Memphis Tigers", "short": "Memphis", "mascot": "Tigers", "conf": "American", "dma": 640},
       {"id": "WICH", "name": "Wichita State Shockers", "short": "Wichita State", "mascot": "Shockers", "conf": "American", "dma": 678, "aliases": ["Wichita St."]},
       {"id": "FAU", "name": "Florida Atlantic Owls", "short": "Florida Atlantic", "mascot": "Owls", "conf": "American", "dma": 548, "aliases": ["FAU"]},

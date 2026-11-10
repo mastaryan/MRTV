@@ -110,11 +110,11 @@ for sid, school, mascot, conf, mkt, aliases, note in ncaab.SCHOOLS:
     if aliases: t["aliases"] = aliases
     if note: t["verify"] = True; t["note"] = note
     out.append(t)
-leagues.append({"id": "NCAAB", "name": "College Basketball", "college": True, "season": "2025-26", "teams": out})
-doc = {"schema": "ipvio.locals.leagues/1", "version": 2, "updated": datetime.date.today().isoformat(),
-       "notes": "US teams only (Canadian teams left out); dma = Nielsen DMA code of the home market (college: of the campus county); NCAAB conferences as of 2025-26; verify = check before relying on it",
+leagues.append({"id": "NCAAB", "name": "College Basketball", "college": True, "season": "2026-27", "teams": out})
+doc = {"schema": "ipvio.locals.leagues/1", "version": 3, "updated": datetime.date.today().isoformat(),
+       "notes": "US teams only (Canadian teams left out); dma = Nielsen DMA code of the home market (college: of the campus county); NCAAB conferences as of 2026-27; verify = check before relying on it",
        "leagues": leagues}
-lines = ['{', f'  "schema": "{doc["schema"]}",', f'  "version": 2,', f'  "updated": "{doc["updated"]}",', f'  "notes": {json.dumps(doc["notes"])},', '  "leagues": [']
+lines = ['{', f'  "schema": "{doc["schema"]}",', f'  "version": 3,', f'  "updated": "{doc["updated"]}",', f'  "notes": {json.dumps(doc["notes"])},', '  "leagues": [']
 for i, l in enumerate(leagues):
     head = {k: v for k, v in l.items() if k != "teams"}
     lines.append('    ' + json.dumps(head, ensure_ascii=False)[:-1] + ', "teams": [')

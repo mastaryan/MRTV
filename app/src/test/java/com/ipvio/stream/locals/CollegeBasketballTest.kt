@@ -17,13 +17,13 @@ class CollegeBasketballTest {
     private val ncaab get() = cfg.teams.filter { it.league == "NCAAB" }
     private fun f(s: String) = TeamFinder.find(cfg.teams, s).map { (if (it.college) "" else it.league + ":") + it.id }.toSet()
 
-    @Test fun league_conferences_2025_26_andMarkets() {
+    @Test fun league_conferences_2026_27_andMarkets() {
         assertEquals("College Basketball", cfg.leagueName("NCAAB"))
         assertEquals("NFL", cfg.leagueName("NFL"))
         assertTrue(ncaab.all { it.college && it.mascot != null && it.conf != null })
         val conf = ncaab.groupingBy { it.conf!! }.eachCount()
         assertEquals(18, conf["ACC"]); assertEquals(18, conf["Big Ten"]); assertEquals(16, conf["Big 12"])
-        assertEquals(16, conf["SEC"]); assertEquals(11, conf["Big East"])
+        assertEquals(16, conf["SEC"]); assertEquals(11, conf["Big East"]); assertEquals(9, conf["Pac-12"])
         for (id in listOf("GONZ", "MEM", "SDSU", "DAY", "VCU", "SMC")) assertNotNull(id, ncaab.firstOrNull { it.id == id })
         assertEquals(ncaab.size, ncaab.map { it.id }.toSet().size)
         fun dma(id: String) = ncaab.first { it.id == id }.dma
@@ -31,7 +31,10 @@ class CollegeBasketballTest {
         assertEquals(533, dma("CONN")); assertEquals(881, dma("GONZ")); assertEquals(581, dma("INST")); assertEquals(515, dma("M-OH"))
         assertEquals(setOf("UK"), cfg.teamsIn(541).filter { it.college }.map { it.id }.toSet())
         assertTrue(ncaab.first { it.id == "WVU" }.verify)
-        assertTrue(ncaab.first { it.id == "GONZ" }.note!!.contains("Pac-12"))
+        for (id in listOf("GONZ", "SDSU", "USU", "BSU", "CSU", "WSU", "ORST", "FRES", "TXST"))
+            ncaab.first { it.id == id }.let { assertEquals(id, "Pac-12", it.conf); assertFalse(id, it.verify) }
+        ncaab.first { it.id == "GCU" }.let { assertEquals("Mountain West", it.conf); assertFalse(it.verify) }
+        assertEquals("WCC", ncaab.first { it.id == "SMC" }.conf)
     }
 
     @Test fun gameLines_schoolsAndMascots() {
